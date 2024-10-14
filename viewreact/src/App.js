@@ -7,16 +7,17 @@ function App() {
     <div className="App">
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
+        <h1 className="display-4">Chào Mừng Đến Với Ứng Dụng Của Chúng Tôi!</h1>
+        <p className="lead">
+          Chỉnh sửa <code>src/App.js</code> và lưu để tải lại.
         </p>
         <a
-          className="App-link"
+          className="btn btn-primary"
           href="https://reactjs.org"
           target="_blank"
           rel="noopener noreferrer"
         >
-          Learn React
+          Học React
         </a>
       </header>
     </div>

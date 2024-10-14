@@ -1,0 +1,6 @@
+# Đối với tất cả các tệp
+* text=auto
+
+# Đối với các tệp cụ thể
+*.cs text eol=lf
+*.json text eol=lf
