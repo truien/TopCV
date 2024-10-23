@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("TopCV")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+1b97e73b83d358b227c294734305674b85dd4113")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+bc7018ed931ecb61a6cf969ff4ffc33935f6a85b")]
 [assembly: System.Reflection.AssemblyProductAttribute("TopCV")]
 [assembly: System.Reflection.AssemblyTitleAttribute("TopCV")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
