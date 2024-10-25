@@ -6,6 +6,7 @@ using TopCV.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Thêm các dịch vụ vào container
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -14,6 +15,7 @@ builder.Services.AddDbContext<TopcvContext>(options =>
     options.UseMySql(builder.Configuration.GetConnectionString("DefaultConnection"),
     ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("DefaultConnection"))));
 
+// Thêm dịch vụ Authentication và Authorization
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -21,18 +23,15 @@ builder.Services.AddAuthentication(options =>
 })
 .AddJwtBearer(options =>
 {
-    // Lấy các giá trị từ cấu hình
     var issuer = builder.Configuration["Jwt:Issuer"];
     var audience = builder.Configuration["Jwt:Audience"];
     var key = builder.Configuration["Jwt:Key"];
 
-    // Kiểm tra các giá trị có hợp lệ không
     if (string.IsNullOrEmpty(issuer) || string.IsNullOrEmpty(audience) || string.IsNullOrEmpty(key))
     {
-        throw new InvalidOperationException("JWT configuration is missing or invalid.");
+        throw new InvalidOperationException("Cấu hình JWT bị thiếu hoặc không hợp lệ.");
     }
 
-    // Cấu hình token validation parameters
     options.TokenValidationParameters = new TokenValidationParameters
     {
         ValidateIssuer = true,
@@ -41,17 +40,32 @@ builder.Services.AddAuthentication(options =>
         ValidateIssuerSigningKey = true,
         ValidIssuer = issuer,
         ValidAudience = audience,
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key)) // Chỉ gọi GetBytes nếu key không phải là null
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key))
     };
 });
 
+// Thêm Authorization
+builder.Services.AddAuthorization();
+
+// Thêm dịch vụ CORS
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", builder =>
+    {
+        builder.AllowAnyOrigin()
+               .AllowAnyMethod()
+               .AllowAnyHeader();
+    });
+});
+
+// Cấu hình Swagger
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo { Title = "Truyen dep zai", Version = "v1" });
     c.AddSecurityDefinition("Bearer", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
     {
         In = Microsoft.OpenApi.Models.ParameterLocation.Header,
-        Description = "Please enter into field the word 'Bearer' followed by a space and the JWT value.",
+        Description = "Vui lòng nhập vào trường từ 'Bearer' theo sau là một khoảng trắng và giá trị JWT.",
         Name = "Authorization",
         Type = Microsoft.OpenApi.Models.SecuritySchemeType.ApiKey,
         Scheme = "Bearer"
@@ -72,25 +86,25 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
+// Thêm controller
+builder.Services.AddControllers();
+builder.Logging.AddConsole();
 var app = builder.Build();
 
+// Cấu hình middleware
+app.UseRouting();
+app.UseCors("AllowAll");
 app.UseAuthentication();
 app.UseAuthorization();
 
-// Configure the HTTP request pipeline.
+// Cấu hình Swagger và chuyển hướng HTTPS
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
-// CORS
-app.UseCors(options =>
-{
-    options.AllowAnyOrigin()
-           .AllowAnyMethod()
-           .AllowAnyHeader();
-});
-
 app.UseHttpsRedirection();
+app.MapControllers();
+
 app.Run();
