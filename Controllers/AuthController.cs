@@ -26,7 +26,6 @@ namespace TopCV.Controllers
         [HttpPost("login")]
         public IActionResult Login ([FromBody] User user)
         {
-             Console.WriteLine($"Attempting login for user: {user.UserName}");
             var existingUser = _context.Users
             .FirstOrDefault(u=>u.UserName == user.UserName && u.Password == user.Password);
 
@@ -37,39 +36,38 @@ namespace TopCV.Controllers
 
                 return Ok(new {token, userType});
             }
-              Console.WriteLine("Login failed: User not found or password incorrect.");
             return Unauthorized("Thông tin đăng nhập không chính xác.");
         }
 
         private string GenerateToken(string userName)
-{
-    var key = _configuration["Jwt:Key"];
+        {
+            var key = _configuration["Jwt:Key"];
     
-    if (string.IsNullOrEmpty(key))
-    {
-        throw new InvalidOperationException("JWT key không thể null hoặc rỗng.");
-    }
+            if (string.IsNullOrEmpty(key))
+            {
+                throw new InvalidOperationException("JWT key không thể null hoặc rỗng.");
+            }
     
-    var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
-    var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+                var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
+                var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
-    var claims = new[]
-    {
-        new Claim(JwtRegisteredClaimNames.Sub, userName),
-        new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-        new Claim(ClaimTypes.Role, GetUserType(userName))
-    };
+            var claims = new[]
+            {
+                new Claim(JwtRegisteredClaimNames.Sub, userName),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new Claim(ClaimTypes.Role, GetUserType(userName))
+            };
 
-    var token = new JwtSecurityToken(
-        issuer: _configuration["Jwt:Issuer"],
-        audience: _configuration["Jwt:Audience"],
-        claims: claims,
-        expires: DateTime.Now.AddMinutes(60),
-        signingCredentials: credentials
+            var token = new JwtSecurityToken(
+                issuer: _configuration["Jwt:Issuer"],
+                audience: _configuration["Jwt:Audience"],
+                claims: claims,
+                expires: DateTime.Now.AddMinutes(60),
+                signingCredentials: credentials
     );
 
-    return new JwtSecurityTokenHandler().WriteToken(token);
-}
+            return new JwtSecurityTokenHandler().WriteToken(token);
+    }
 
         private string GetUserType(string userName)
         {

@@ -21,11 +21,13 @@ public partial class Jobpost
 
     public DateOnly? PostDate { get; set; }
 
-    public string? JobType { get; set; }
+    public int? JobType { get; set; }
 
     public int? Status { get; set; }
 
     public virtual ICollection<Application> Applications { get; set; } = new List<Application>();
+
+    public virtual Jobtype? JobTypeNavigation { get; set; }
 
     public virtual Jobpoststatus? StatusNavigation { get; set; }
 }
