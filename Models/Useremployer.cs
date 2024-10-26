@@ -13,5 +13,7 @@ public partial class Useremployer
 
     public string? Address { get; set; }
 
+    public virtual ICollection<Jobpost> Jobposts { get; set; } = new List<Jobpost>();
+
     public virtual User UserNameNavigation { get; set; } = null!;
 }

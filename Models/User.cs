@@ -15,5 +15,7 @@ public partial class User
 
     public virtual Adminuser? Adminuser { get; set; }
 
+    public virtual Useremployer? Useremployer { get; set; }
+
     public virtual Userjobseeker? Userjobseeker { get; set; }
 }

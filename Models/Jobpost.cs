@@ -21,13 +21,17 @@ public partial class Jobpost
 
     public DateOnly? PostDate { get; set; }
 
-    public int? JobType { get; set; }
-
     public int? Status { get; set; }
+
+    public string UserEmployer { get; set; } = null!;
 
     public virtual ICollection<Application> Applications { get; set; } = new List<Application>();
 
-    public virtual Jobtype? JobTypeNavigation { get; set; }
-
     public virtual Jobpoststatus? StatusNavigation { get; set; }
+
+    public virtual Useremployer UserEmployerNavigation { get; set; } = null!;
+
+    public virtual ICollection<Employmenttype> IdemploymentTypes { get; set; } = new List<Employmenttype>();
+
+    public virtual ICollection<Jobfield> JobFields { get; set; } = new List<Jobfield>();
 }

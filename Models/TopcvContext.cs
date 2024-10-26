@@ -22,17 +22,13 @@ public partial class TopcvContext : DbContext
 
     public virtual DbSet<Applicationstatus> Applicationstatuses { get; set; }
 
-    public virtual DbSet<Category> Categories { get; set; }
+    public virtual DbSet<Employmenttype> Employmenttypes { get; set; }
 
-    public virtual DbSet<Efmigrationshistory> Efmigrationshistories { get; set; }
+    public virtual DbSet<Jobfield> Jobfields { get; set; }
 
     public virtual DbSet<Jobpost> Jobposts { get; set; }
 
-    public virtual DbSet<Jobpostcategory> Jobpostcategories { get; set; }
-
     public virtual DbSet<Jobpoststatus> Jobpoststatuses { get; set; }
-
-    public virtual DbSet<Jobtype> Jobtypes { get; set; }
 
     public virtual DbSet<User> Users { get; set; }
 
@@ -41,7 +37,6 @@ public partial class TopcvContext : DbContext
     public virtual DbSet<Userjobseeker> Userjobseekers { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
         => optionsBuilder.UseMySql("server=localhost;database=topcv;uid=root;pwd=admin", Microsoft.EntityFrameworkCore.ServerVersion.Parse("8.0.39-mysql"));
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -108,24 +103,47 @@ public partial class TopcvContext : DbContext
             entity.Property(e => e.StatusName).HasMaxLength(50);
         });
 
-        modelBuilder.Entity<Category>(entity =>
+        modelBuilder.Entity<Employmenttype>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("category");
+            entity.ToTable("employmenttype");
 
             entity.Property(e => e.Id).HasColumnName("ID");
-            entity.Property(e => e.CategoryName).HasMaxLength(100);
+            entity.Property(e => e.EmploymentTypeName).HasMaxLength(100);
+
+            entity.HasMany(d => d.IdjobPosts).WithMany(p => p.IdemploymentTypes)
+                .UsingEntity<Dictionary<string, object>>(
+                    "Jobpostemployment",
+                    r => r.HasOne<Jobpost>().WithMany()
+                        .HasForeignKey("IdjobPost")
+                        .HasConstraintName("JobPost"),
+                    l => l.HasOne<Employmenttype>().WithMany()
+                        .HasForeignKey("IdemploymentType")
+                        .OnDelete(DeleteBehavior.ClientSetNull)
+                        .HasConstraintName("employment"),
+                    j =>
+                    {
+                        j.HasKey("IdemploymentType", "IdjobPost")
+                            .HasName("PRIMARY")
+                            .HasAnnotation("MySql:IndexPrefixLength", new[] { 0, 0 });
+                        j.ToTable("jobpostemployment");
+                        j.HasIndex(new[] { "IdjobPost" }, "JobPost_idx");
+                        j.IndexerProperty<int>("IdemploymentType").HasColumnName("IDEmploymentType");
+                        j.IndexerProperty<int>("IdjobPost").HasColumnName("IDJobPost");
+                    });
         });
 
-        modelBuilder.Entity<Efmigrationshistory>(entity =>
+        modelBuilder.Entity<Jobfield>(entity =>
         {
-            entity.HasKey(e => e.MigrationId).HasName("PRIMARY");
+            entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("__efmigrationshistory");
+            entity.ToTable("jobfield");
 
-            entity.Property(e => e.MigrationId).HasMaxLength(150);
-            entity.Property(e => e.ProductVersion).HasMaxLength(32);
+            entity.Property(e => e.Id).HasColumnName("ID");
+            entity.Property(e => e.JobField1)
+                .HasMaxLength(100)
+                .HasColumnName("JobField");
         });
 
         modelBuilder.Entity<Jobpost>(entity =>
@@ -136,7 +154,7 @@ public partial class TopcvContext : DbContext
 
             entity.HasIndex(e => e.Status, "Status");
 
-            entity.HasIndex(e => e.JobType, "jobtype_idx");
+            entity.HasIndex(e => e.UserEmployer, "UserEmploy_idx");
 
             entity.Property(e => e.Id).HasColumnName("ID");
             entity.Property(e => e.Company).HasMaxLength(100);
@@ -145,39 +163,39 @@ public partial class TopcvContext : DbContext
             entity.Property(e => e.Requirements).HasColumnType("text");
             entity.Property(e => e.SalaryRange).HasMaxLength(50);
             entity.Property(e => e.Title).HasMaxLength(100);
-
-            entity.HasOne(d => d.JobTypeNavigation).WithMany(p => p.Jobposts)
-                .HasForeignKey(d => d.JobType)
-                .HasConstraintName("jobtype");
+            entity.Property(e => e.UserEmployer).HasMaxLength(50);
 
             entity.HasOne(d => d.StatusNavigation).WithMany(p => p.Jobposts)
                 .HasForeignKey(d => d.Status)
                 .OnDelete(DeleteBehavior.SetNull)
                 .HasConstraintName("jobpost_ibfk_1");
-        });
 
-        modelBuilder.Entity<Jobpostcategory>(entity =>
-        {
-            entity
-                .HasNoKey()
-                .ToTable("jobpostcategory");
+            entity.HasOne(d => d.UserEmployerNavigation).WithMany(p => p.Jobposts)
+                .HasForeignKey(d => d.UserEmployer)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("UserEmploy");
 
-            entity.HasIndex(e => e.CategoryId, "CategoryID");
-
-            entity.HasIndex(e => e.JobPostId, "JobPostID");
-
-            entity.Property(e => e.CategoryId).HasColumnName("CategoryID");
-            entity.Property(e => e.JobPostId).HasColumnName("JobPostID");
-
-            entity.HasOne(d => d.Category).WithMany()
-                .HasForeignKey(d => d.CategoryId)
-                .OnDelete(DeleteBehavior.Cascade)
-                .HasConstraintName("jobpostcategory_ibfk_2");
-
-            entity.HasOne(d => d.JobPost).WithMany()
-                .HasForeignKey(d => d.JobPostId)
-                .OnDelete(DeleteBehavior.Cascade)
-                .HasConstraintName("jobpostcategory_ibfk_1");
+            entity.HasMany(d => d.JobFields).WithMany(p => p.JobPosts)
+                .UsingEntity<Dictionary<string, object>>(
+                    "Jobpostfield",
+                    r => r.HasOne<Jobfield>().WithMany()
+                        .HasForeignKey("JobFieldId")
+                        .OnDelete(DeleteBehavior.ClientSetNull)
+                        .HasConstraintName("jobfield"),
+                    l => l.HasOne<Jobpost>().WithMany()
+                        .HasForeignKey("JobPostId")
+                        .OnDelete(DeleteBehavior.ClientSetNull)
+                        .HasConstraintName("jobpost_fk"),
+                    j =>
+                    {
+                        j.HasKey("JobPostId", "JobFieldId")
+                            .HasName("PRIMARY")
+                            .HasAnnotation("MySql:IndexPrefixLength", new[] { 0, 0 });
+                        j.ToTable("jobpostfield");
+                        j.HasIndex(new[] { "JobFieldId" }, "jobfield");
+                        j.IndexerProperty<int>("JobPostId").HasColumnName("JobPostID");
+                        j.IndexerProperty<int>("JobFieldId").HasColumnName("JobFieldID");
+                    });
         });
 
         modelBuilder.Entity<Jobpoststatus>(entity =>
@@ -188,18 +206,6 @@ public partial class TopcvContext : DbContext
 
             entity.Property(e => e.Id).HasColumnName("ID");
             entity.Property(e => e.StatusName).HasMaxLength(50);
-        });
-
-        modelBuilder.Entity<Jobtype>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("PRIMARY");
-
-            entity.ToTable("jobtype");
-
-            entity.Property(e => e.Id)
-                .ValueGeneratedNever()
-                .HasColumnName("ID");
-            entity.Property(e => e.JobTypeName).HasMaxLength(100);
         });
 
         modelBuilder.Entity<User>(entity =>
@@ -216,19 +222,17 @@ public partial class TopcvContext : DbContext
 
         modelBuilder.Entity<Useremployer>(entity =>
         {
-            entity
-                .HasNoKey()
-                .ToTable("useremployer");
+            entity.HasKey(e => e.UserName).HasName("PRIMARY");
 
-            entity.HasIndex(e => e.UserName, "UserName");
+            entity.ToTable("useremployer");
 
+            entity.Property(e => e.UserName).HasMaxLength(50);
             entity.Property(e => e.Address).HasMaxLength(255);
             entity.Property(e => e.CompanyInfo).HasColumnType("text");
             entity.Property(e => e.CompanyName).HasMaxLength(100);
-            entity.Property(e => e.UserName).HasMaxLength(50);
 
-            entity.HasOne(d => d.UserNameNavigation).WithMany()
-                .HasForeignKey(d => d.UserName)
+            entity.HasOne(d => d.UserNameNavigation).WithOne(p => p.Useremployer)
+                .HasForeignKey<Useremployer>(d => d.UserName)
                 .HasConstraintName("useremployer_ibfk_1");
         });
 
