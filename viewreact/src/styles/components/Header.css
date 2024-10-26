@@ -1,0 +1,39 @@
+.custom-text {
+    color: #212f3f !important;           
+    font-size: 16px !important;        
+    font-weight: 600 !important;         
+    letter-spacing: 0.235px !important; 
+    line-height: 20px !important;        
+  }
+  .btn-outline-custom {
+    color: #00b14f !important;                  
+    border-color: #00b14f !important          
+}
+
+.btn-outline-custom:hover {
+    background-color: #00b14f !important;      
+    color: white !important;                    
+}
+.btn-primary-custom {
+    background-color: #00b14f !important;     
+    color: white !important;                  
+    border: none !important;                   
+}
+
+.btn-primary-custom:hover {
+    background-color: darken(#00b14f, 10%) !important;  
+    color: white !important;                  
+}
+
+.nav-link {
+    color: black !important; 
+    transition: color 0.3s ease !important; 
+}
+
+.nav-link:hover {
+    color: #00b14f !important; 
+}
+.navbar {
+    padding-bottom: 0 !important;
+    padding-top: 0 !important;
+}
