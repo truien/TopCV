@@ -1,1 +1,60 @@
-@import '~font-awesome/css/font-awesome.css';
+.btn-success {
+    background-color: #28a745;
+    border-color: #28a745;
+    color: white;
+  }
+  
+  .btn-outline-secondary {
+    color: #6c757d;
+    border-color: #6c757d;
+  }
+  
+  .btn-outline-secondary:hover {
+    background-color: #e2e6ea;
+    border-color: #dae0e5;
+  }
+  
+  .job-card {
+    border: none;
+    border-radius: 8px;
+  }
+  
+  .job-title {
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+  }
+  
+  .company-name {
+    font-size: 14px;
+    color: #555;
+  }
+  
+  .job-salary, .job-location {
+    font-size: 13px;
+    color: #888;
+  }
+  
+  .pagination span {
+    font-size: 14px;
+    font-weight: 500;
+  }
+  
+  .pagination button {
+    border: none;
+    background-color: transparent;
+    color: #007bff;
+  }
+  
+  .pagination button:disabled {
+    color: #ccc;
+  }
+  .btn-filter {
+    border-radius: 20px;
+    padding: 0.5rem 1rem;
+}
+.btn-filter-active {
+    background-color: #00b14f;
+    color: white;
+}
+  
