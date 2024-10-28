@@ -8,7 +8,6 @@ C:\Users\admin\TopCV\obj\Debug\net8.0\TopCV.MvcApplicationPartsAssemblyInfo.cach
 C:\Users\admin\TopCV\obj\Debug\net8.0\TopCV.sourcelink.json
 C:\Users\admin\TopCV\bin\Debug\net8.0\appsettings.Development.json
 C:\Users\admin\TopCV\bin\Debug\net8.0\appsettings.json
-C:\Users\admin\TopCV\bin\Debug\net8.0\viewreact\package.json
 C:\Users\admin\TopCV\bin\Debug\net8.0\TopCV.exe
 C:\Users\admin\TopCV\bin\Debug\net8.0\TopCV.deps.json
 C:\Users\admin\TopCV\bin\Debug\net8.0\TopCV.runtimeconfig.json
@@ -119,4 +118,4 @@ C:\Users\admin\TopCV\obj\Debug\net8.0\refint\TopCV.dll
 C:\Users\admin\TopCV\obj\Debug\net8.0\TopCV.pdb
 C:\Users\admin\TopCV\obj\Debug\net8.0\TopCV.genruntimeconfig.cache
 C:\Users\admin\TopCV\obj\Debug\net8.0\ref\TopCV.dll
-C:\Users\admin\TopCV\bin\Debug\net8.0\viewreact\jsconfig.json
+C:\Users\admin\TopCV\bin\Debug\net8.0\interface\package.json

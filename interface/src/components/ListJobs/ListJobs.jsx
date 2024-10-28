@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
-import './styles/App.css';
-import 'bootstrap-icons/font/bootstrap-icons.css';
+import './styles.css';
+import logo from '@images/topcv-logo-10-year.png';
 
 const JobCard = ({ job }) => (
   <div className="col-md-3 mb-4">
@@ -9,7 +9,7 @@ const JobCard = ({ job }) => (
       <div className="card-body d-flex">
         <div className="company-logo me-3">
           <img
-            src={job.avatar || '/assets/images/topcv-logo-10-year.png'}
+            src={job.avatar || logo}
             alt="Company Logo"
             style={{ width: '70px', height: '70px', objectFit: 'contain' }}
           />
@@ -67,7 +67,7 @@ const App = () => {
   useEffect(() => {
     const fetchJobs = async () => {
       try {
-        const response = await axios.get(`http://localhost:5224/api/JobPosts`, {
+        const response = await axios.get('http://localhost:5224/api/JobPosts', {
           params: {
             page: currentPage,
             pageSize: jobsPerPage,

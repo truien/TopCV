@@ -1,0 +1,81 @@
+/* Màu sắc */
+:root {
+    --success-color: #28a745;
+    --secondary-color: #6c757d;
+    --hover-color: #e2e6ea;
+    --disabled-color: #ccc;
+    --text-dark: #333;
+    --text-medium: #555;
+    --text-light: #888;
+}
+
+/* Nút thành công */
+.btn-success {
+    background-color: var(--success-color);
+    border-color: var(--success-color);
+    color: white;
+}
+
+/* Nút thứ cấp */
+.btn-outline-secondary {
+    color: var(--secondary-color);
+    border-color: var(--secondary-color);
+}
+
+.btn-outline-secondary:hover {
+    background-color: var(--hover-color);
+    border-color: #5a6268; /* Kết quả của `darken($secondary-color, 10%)` */
+}
+
+/* Nút bộ lọc */
+.btn-filter {
+    border-radius: 20px;
+    padding: 0.5rem 1rem;
+}
+
+.btn-filter-active {
+    background-color: #00b14f;
+    color: white;
+}
+
+/* Thẻ công việc */
+.job-card {
+    border: none;
+    border-radius: 8px;
+}
+
+/* Tiêu đề công việc */
+.job-title {
+    font-size: 16px;
+    font-weight: bold;
+    color: var(--text-dark);
+}
+
+/* Tên công ty */
+.company-name {
+    font-size: 14px;
+    color: var(--text-medium);
+}
+
+/* Mức lương và địa điểm */
+.job-salary,
+.job-location {
+    font-size: 13px;
+    color: var(--text-light);
+}
+
+/* Phân trang */
+.pagination span {
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.pagination button {
+    border: none;
+    background-color: transparent;
+    color: #007bff;
+}
+
+.pagination button:disabled {
+    color: var(--disabled-color);
+}

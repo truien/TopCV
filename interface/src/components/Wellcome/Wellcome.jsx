@@ -1,8 +1,11 @@
-import React, { useState } from 'react';
-import 'bootstrap-icons/font/bootstrap-icons.css';
+import { useState } from 'react';
 import { BsChevronDown, BsSearch } from 'react-icons/bs';
 import { CiLocationOn } from 'react-icons/ci';
-import '../styles/components/wellcome.css';
+import './styles.css';
+import headerBg from '@images/header-bg.png';
+import Banner_1 from '@images/Banner 1.png';
+import Concentrix_Banner from '@images/Concentrix_Banner.png';
+import f88 from '@images/f88.png';
 
 const Wellcome = () => {
   const [selectedCity, setSelectedCity] = useState('');
@@ -17,7 +20,7 @@ const Wellcome = () => {
     <div
       className="container-fluid d-flex pt-3"
       style={{
-        background: 'url("/assets/images/header-bg.png") no-repeat center center',
+        background: `url(${headerBg}) no-repeat center center`,
         backgroundSize: 'cover',
         minHeight: '400px',
       }}
@@ -37,7 +40,7 @@ const Wellcome = () => {
           <form className="col-8 mx-2">
             <input
               type="text"
-              className="form-control border-0"
+              className="form-control border-0 input-custom"
               placeholder="Vị trí tuyển dụng, tên công ty"
               style={{ borderRadius: '20px' }}
             />
@@ -84,13 +87,13 @@ const Wellcome = () => {
         </div>
         <div className="carousel-inner">
           <div className="carousel-item active">
-            <img src="/assets/images/Banner 1.png" className="d-block w-100" alt="Slide 1" />
+            <img src={Banner_1} className="d-block w-100" alt="Slide 1" />
           </div>
           <div className="carousel-item">
-            <img src="/assets/images/Concentrix_Banner.png" className="d-block w-100" alt="Slide 2" />
+            <img src={Concentrix_Banner} className="d-block w-100" alt="Slide 2" />
           </div>
           <div className="carousel-item">
-            <img src="/assets/images/f88.png" className="d-block w-100" alt="Slide 3" />
+            <img src={f88} className="d-block w-100" alt="Slide 3" />
           </div>
         </div>
         <button className="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
