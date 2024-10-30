@@ -12,7 +12,11 @@ export default defineConfig({
         alias: {
             '@': Path.resolve(__dirname, 'src'),
             '@components': Path.resolve(__dirname, 'src/components'),
+            '@layouts': Path.resolve(__dirname, 'src/layouts'),
             '@images': Path.resolve(__dirname, 'src/assets/images'),
+            '@adminlayout': Path.resolve(__dirname, 'src/components/AdminLayout'),
+            '@employerlayout': Path.resolve(__dirname, 'src/components/Employer'),
+            '@mainlayout': Path.resolve(__dirname, 'src/components/MainLayout'),
         },
     },
 });
