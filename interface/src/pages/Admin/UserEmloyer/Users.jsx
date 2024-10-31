@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import Axios from 'axios';
 import logo from '@images/avatar-default.jpg';
 import './styles.css';
-import { AiOutlineDelete, AiOutlineEdit } from 'react-icons/ai';
+import { AiOutlineDelete, AiOutlineEyeInvisible } from 'react-icons/ai';
 function Users() {
     const [activeCollapse, setActiveCollapse] = useState(null);
     const [jobSeekerData, setJobSeekerData] = useState(null);
@@ -38,7 +38,7 @@ function Users() {
     return (
         <>
             <div className='container-custome '>
-                <div className='container container-fluid py-3 mb-5 mt-3  '>
+                <div className='container container-fluid py-2 mb-5 mt-3  '>
                     <h1 className='text-custom fs-1'>Quản lý tài khoản</h1>
                 </div>
                 <p>
@@ -94,11 +94,11 @@ function Users() {
                                                     <td>{jobSeeker.email}</td>
                                                     <td>
                                                         <div className='d-flex'>
-                                                            <button className='me-1'>
+                                                            <button className='btn btn-danger me-1'>
                                                                 <AiOutlineDelete />
                                                             </button>
-                                                            <button>
-                                                                <AiOutlineEdit />
+                                                            <button className='btn btn-warning'>
+                                                                < AiOutlineEyeInvisible />
                                                             </button>
                                                         </div>
                                                     </td>
@@ -145,10 +145,10 @@ function Users() {
                                                 <td>{employer.email}</td>
                                                 <td>
                                                     <div className='d-flex'>
-                                                        <button className='me-1'>
+                                                        <button className='btn btn-danger me-1'>
                                                             <AiOutlineDelete />
                                                         </button>
-                                                        <button>
+                                                        <button className='btn btn-warning'>
                                                             <AiOutlineEdit />
                                                         </button>
                                                     </div>

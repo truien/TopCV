@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
     FaBars,
     FaBell,
@@ -8,16 +8,27 @@ import {
     FaBriefcase,
     FaCog,
 } from 'react-icons/fa';
+import { Link } from 'react-router-dom'; 
 import logo from '@images/logo-birthday-10.09ebdc6.png';
 import './styles.css';
 
 const AdminLayout = () => {
     const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
-    const [activeLink, setActiveLink] = useState('/');
+    const [activeLink, setActiveLink] = useState(localStorage.getItem('activeLink') || '/admin'); 
 
     const toggleSidebar = () => setIsSidebarCollapsed(!isSidebarCollapsed);
 
-    const handleLinkClick = (link) => setActiveLink(link);
+    const handleLinkClick = (link) => {
+        setActiveLink(link);
+        localStorage.setItem('activeLink', link);
+    };
+
+    useEffect(() => {
+        const savedLink = localStorage.getItem('activeLink');
+        if (savedLink) {
+            setActiveLink(savedLink);
+        }
+    }, []);
 
     return (
         <div className='admin-layout d-flex'>
@@ -26,51 +37,48 @@ const AdminLayout = () => {
                 <button className='btn text-white me-2' onClick={toggleSidebar}>
                     <FaBars />
                 </button>
-                <a href='/' className='navbar-brand d-flex align-items-center'>
+                <Link to='/' className='navbar-brand d-flex align-items-center'>
                     <img src={logo} alt='Logo' height='40' className='me-2' />
-                </a>
+                </Link>
                 <div className='header-icons d-flex align-items-center'>
-                    <button className='bg-transparent border-0'><FaBell className='text-white mx-2' /></button>
-                    <button className='bg-transparent border-0'><FaShoppingCart className='text-white mx-2' /></button>
-                    <button className='bg-transparent border-0'><FaUser className='text-white mx-2' /></button>
+                    <button className='bg-transparent border-0'>
+                        <FaBell className='text-white mx-2' />
+                    </button>
+                    <button className='bg-transparent border-0'>
+                        <FaShoppingCart className='text-white mx-2' />
+                    </button>
+                    <button className='bg-transparent border-0'>
+                        <FaUser className='text-white mx-2' />
+                    </button>
                 </div>
             </header>
 
-           
-            <aside
-                className={`sidebar ${isSidebarCollapsed ? 'collapsed' : ''}`}
-            >
+            <aside className={`sidebar ${isSidebarCollapsed ? 'collapsed' : ''}`}>
                 <nav className='nav flex-column pt-4'>
-                    <a
-                        href=''
-                        className={`nav-link ${
-                            activeLink === '/' ? 'active' : ''
-                        }`}
-                        onClick={() => handleLinkClick('/')}
+                    <Link
+                        to='/admin'
+                        className={`nav-link ${activeLink === '/admin' ? 'active' : ''}`}
+                        onClick={() => handleLinkClick('/admin')}
                     >
-                        <FaChartLine className='icon' />{' '}
-                        <span className='link-text'>Quản lý tài khoản</span>
-                    </a>
-                    <a
-                        href='#jobs'
-                        className={`nav-link ${
-                            activeLink === '#jobs' ? 'active' : ''
-                        }`}
-                        onClick={() => handleLinkClick('#jobs')}
+                        <FaChartLine className='icon' />
+                        <span className='link-text fw-bolder'>Quản lý tài khoản</span>
+                    </Link>
+                    <Link
+                        to='/admin/job-post-manage'
+                        className={`nav-link ${activeLink === '/admin/job-post-manage' ? 'active' : ''}`}
+                        onClick={() => handleLinkClick('/admin/job-post-manage')}
                     >
-                        <FaBriefcase className='icon' />{' '}
-                        <span className='link-text'>Quản lý bài tuyển dụng </span>
-                    </a>
-                    <a
-                        href='#settings'
-                        className={`nav-link ${
-                            activeLink === '#settings' ? 'active' : ''
-                        }`}
-                        onClick={() => handleLinkClick('#settings')}
+                        <FaBriefcase className='icon' />
+                        <span className='link-text fw-bolder'>Quản lý bài tuyển dụng</span>
+                    </Link>
+                    <Link
+                        to='/admin/settings'
+                        className={`nav-link ${activeLink === '/admin/settings' ? 'active' : ''}`}
+                        onClick={() => handleLinkClick('/admin/settings')}
                     >
-                        <FaCog className='icon' />{' '}
-                        <span className='link-text'>Cài đặt tài khoản</span>
-                    </a>
+                        <FaCog className='icon' />
+                        <span className='link-text fw-bolder'>Cài đặt tài khoản</span>
+                    </Link>
                 </nav>
             </aside>
         </div>
