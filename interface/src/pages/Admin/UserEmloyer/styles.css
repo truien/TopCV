@@ -1,0 +1,23 @@
+.btn-outline-custom {
+    color: #fff !important; 
+    border-color: #00b14f !important; 
+    background-color: #00b14f !important; 
+}
+
+.btn-outline-custom:hover {
+    color: white !important;
+
+}
+/* .text-custom{
+    
+} */
+.container-custome{
+    height: 100vh;
+
+}
+.container{
+    background-color: #fff;
+    color: #00b14f;
+    color: #fff !important;
+    font-size: 32px !important;
+}

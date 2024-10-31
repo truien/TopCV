@@ -92,17 +92,37 @@ namespace TopCV.Controllers
         {
             return Ok (new {Data = "Dữ liệu chỉ dành cho admin " });
         }
-        [Authorize(Roles ="Employer")]
-        [HttpGet("employer-data")]
-        public IActionResult GetEmployerData()
+        
+        [HttpGet("get-all-employer")]
+        public IActionResult GetAllEmployers()
         {
-            return Ok (new {Data = "Dữ liệu chỉ dành cho Employer " });
+            var employers = from i in _context.Useremployers 
+                            join j in _context.Users on i.UserName equals j.UserName
+                            select new{
+                                i.UserName,
+                                j.Email,
+                                j.Avatar,
+                                i.CompanyName
+                            };
+            employers.ToList();
+            return Ok(employers);
         }
-        [Authorize(Roles ="JobSeeker")]
-        [HttpGet("jobSeeker-data")]
-        public IActionResult GetJobSeekerData()
+        // [Authorize(Roles ="JobSeeker")]
+        [HttpGet("get-all-jobSeeker")]
+        public IActionResult GetAllJobSeekers()
         {
-            return Ok (new {Data = "Dữ liệu chỉ dành cho JobSeeker " });
+            var jobSeekers = from i in _context.Userjobseekers
+                             join j in _context.Users on i.UserName equals j.UserName
+                             select new{
+                                i.UserName,
+                                j.Email,
+                                j.Avatar,
+                                i.FullName
+                             };
+            jobSeekers.ToList();
+
+
+            return Ok (jobSeekers);
         }
     }
     }

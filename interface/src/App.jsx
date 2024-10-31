@@ -3,22 +3,22 @@ import MainLayout from '@layouts/MainLayout';
 import Adminlayout from '@layouts/AdminLayout';
 import Home from './pages/Main/Home/Home.jsx';
 import Joblist from './pages/Main/JobList/JobList.jsx';
-import UserEmployer from './pages/Admin/UserEmloyer/UserEmloyer.jsx';
+import Users from './pages/Admin/UserEmloyer/Users.jsx';
 
 function App() {
-  return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<MainLayout />}>
-          <Route index element={<Home />} /> 
-          <Route path="/job-post" element={<Joblist />} />
-        </Route>
-        <Route path="/admin" element={<Adminlayout />}>
-        <Route index element={<UserEmployer />}/>
-        </Route>
-      </Routes>
-    </Router>
-  );
+    return (
+        <Router>
+            <Routes>
+                <Route path='/' element={<MainLayout />}>
+                    <Route index element={<Home />} />
+                    <Route path='/job-post' element={<Joblist />} />
+                </Route>
+                <Route path='/admin' element={<Adminlayout />}>
+                    <Route index element={<Users />} />
+                </Route>
+            </Routes>
+        </Router>
+    );
 }
 
 export default App;

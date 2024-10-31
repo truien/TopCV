@@ -12,8 +12,8 @@ import logo from '@images/logo-birthday-10.09ebdc6.png';
 import './styles.css';
 
 const AdminLayout = () => {
-    const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(true);
-    const [activeLink, setActiveLink] = useState('#dashboard');
+    const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
+    const [activeLink, setActiveLink] = useState('/');
 
     const toggleSidebar = () => setIsSidebarCollapsed(!isSidebarCollapsed);
 
@@ -36,17 +36,17 @@ const AdminLayout = () => {
                 </div>
             </header>
 
-            {/* Sidebar */}
+           
             <aside
                 className={`sidebar ${isSidebarCollapsed ? 'collapsed' : ''}`}
             >
                 <nav className='nav flex-column pt-4'>
                     <a
-                        href='#dashboard'
+                        href=''
                         className={`nav-link ${
-                            activeLink ===  'active'  
+                            activeLink === '/' ? 'active' : ''
                         }`}
-                        onClick={() => handleLinkClick('#dashboard')}
+                        onClick={() => handleLinkClick('/')}
                     >
                         <FaChartLine className='icon' />{' '}
                         <span className='link-text'>Quản lý tài khoản</span>
