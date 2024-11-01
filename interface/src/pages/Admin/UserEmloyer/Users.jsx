@@ -149,7 +149,7 @@ function Users() {
                                                             <AiOutlineDelete />
                                                         </button>
                                                         <button className='btn btn-warning'>
-                                                            <AiOutlineEdit />
+                                                            <AiOutlineEyeInvisible />
                                                         </button>
                                                     </div>
                                                 </td>
