@@ -8,6 +8,7 @@ using System.Text;
 using System.Linq;
 using System;
 using TopCV.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace TopCV.Controllers
 {
@@ -17,24 +18,26 @@ namespace TopCV.Controllers
     {
         private readonly TopcvContext _context;
         private readonly IConfiguration _configuration;
-         
-        public AuthController(TopcvContext context, IConfiguration configuration){
+
+        public AuthController(TopcvContext context, IConfiguration configuration)
+        {
             _context = context;
             _configuration = configuration;
         }
 
+
         [HttpPost("login")]
-        public IActionResult Login ([FromBody] User user)
+        public IActionResult Login([FromBody] User user)
         {
             var existingUser = _context.Users
-            .FirstOrDefault(u=>u.UserName == user.UserName && u.Password == user.Password);
+            .FirstOrDefault(u => u.UserName == user.UserName && u.Password == user.Password);
 
             if (existingUser != null)
             {
                 var token = GenerateToken(existingUser.UserName);
                 string userType = GetUserType(existingUser.UserName);
-
-                return Ok(new {token, userType});
+                string ?avatar = existingUser.Avatar?.ToString();
+                return Ok(new { token, userType,avatar });
             }
             return Unauthorized("Thông tin đăng nhập không chính xác.");
         }
@@ -42,14 +45,14 @@ namespace TopCV.Controllers
         private string GenerateToken(string userName)
         {
             var key = _configuration["Jwt:Key"];
-    
+
             if (string.IsNullOrEmpty(key))
             {
                 throw new InvalidOperationException("JWT key không thể null hoặc rỗng.");
             }
-    
-                var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
-                var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+
+            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
+            var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
             var claims = new[]
             {
@@ -67,7 +70,7 @@ namespace TopCV.Controllers
     );
 
             return new JwtSecurityTokenHandler().WriteToken(token);
-    }
+        }
 
         private string GetUserType(string userName)
         {
@@ -86,43 +89,32 @@ namespace TopCV.Controllers
             return "Unknown";
         }
 
-        [Authorize(Roles ="Admin")]
+        [Authorize(Roles = "Admin")]
         [HttpGet("admin-data")]
         public IActionResult GetAdminData()
         {
-            return Ok (new {Data = "Dữ liệu chỉ dành cho admin " });
+            return Ok(new { Data = "Dữ liệu chỉ dành cho admin " });
         }
-        
-        [HttpGet("get-all-employer")]
-        public IActionResult GetAllEmployers()
+
+        [Authorize]
+        [HttpGet("user-info")]
+        public IActionResult GetUserInfo()
         {
-            var employers = from i in _context.Useremployers 
-                            join j in _context.Users on i.UserName equals j.UserName
-                            select new{
-                                i.UserName,
-                                j.Email,
-                                j.Avatar,
-                                i.CompanyName
-                            };
-            employers.ToList();
-            return Ok(employers);
+            var userName = User.Identity?.Name; 
+            var existingUser = _context.Users.FirstOrDefault(u => u.UserName == userName);
+
+            if (existingUser != null)
+            {
+                return Ok(new
+                {
+                    existingUser.UserName,
+                    existingUser.Email, 
+                });
+            }
+
+            return NotFound("Người dùng không tìm thấy.");
         }
         // [Authorize(Roles ="JobSeeker")]
-        [HttpGet("get-all-jobSeeker")]
-        public IActionResult GetAllJobSeekers()
-        {
-            var jobSeekers = from i in _context.Userjobseekers
-                             join j in _context.Users on i.UserName equals j.UserName
-                             select new{
-                                i.UserName,
-                                j.Email,
-                                j.Avatar,
-                                i.FullName
-                             };
-            jobSeekers.ToList();
 
-
-            return Ok (jobSeekers);
-        }
     }
-    }
+}

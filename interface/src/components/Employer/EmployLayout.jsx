@@ -13,10 +13,10 @@ import { Link } from 'react-router-dom';
 import logo from '@images/logo-birthday-10.09ebdc6.png';
 import './styles.css';
 
-const AdminLayout = () => {
+const EmployerLayout = () => {
     const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
     const [activeLink, setActiveLink] = useState(
-        sessionStorage.getItem('activeLink') || '/admin'
+        sessionStorage.getItem('activeLink') || '/employer'
     );
 
     const toggleSidebar = () => setIsSidebarCollapsed(!isSidebarCollapsed);
@@ -34,7 +34,7 @@ const AdminLayout = () => {
     }, []);
 
     return (
-        <div className='admin-layout d-flex'>
+        <div className='employer-layout d-flex'>
             {/* Header */}
             <header className='header navbar navbar-expand-lg navbar-dark fixed-top'>
                 <button className='btn text-white me-2' onClick={toggleSidebar}>
@@ -61,49 +61,49 @@ const AdminLayout = () => {
             >
                 <nav className='nav flex-column pt-4'>
                     <Link
-                        to='/admin'
+                        to='/employer'
                         className={`nav-link ${
-                            activeLink === '/admin' ? 'active' : ''
+                            activeLink === '/employer' ? 'active' : ''
                         }`}
-                        onClick={() => handleLinkClick('/admin')}
+                        onClick={() => handleLinkClick('/employer')}
                     >
                         <FaChartLine className='icon' />
-                        <span className='link-text fw-bolder'>
-                            Quản lý tài khoản
-                        </span>
-                    </Link>
-                    <Link
-                        to='/admin/job-post-manage'
-                        className={`nav-link ${
-                            activeLink === '/admin/job-post-manage'
-                                ? 'active'
-                                : ''
-                        }`}
-                        onClick={() =>
-                            handleLinkClick('/admin/job-post-manage')
-                        }
-                    >
-                        <FaBriefcase className='icon' />
                         <span className='link-text fw-bolder'>
                             Quản lý bài tuyển dụng
                         </span>
                     </Link>
                     <Link
-                        to='/admin/settings'
+                        to='/employer/job-post-manage'
                         className={`nav-link ${
-                            activeLink === '/admin/settings' ? 'active' : ''
+                            activeLink === '/employer/job-post-manage'
+                                ? 'active'
+                                : ''
                         }`}
-                        onClick={() => handleLinkClick('/admin/settings')}
+                        onClick={() =>
+                            handleLinkClick('/employer/job-post-manage')
+                        }
+                    >
+                        <FaBriefcase className='icon' />
+                        <span className='link-text fw-bolder'>
+                            Quản lý hồ sơ ứng viên
+                        </span>
+                    </Link>
+                    <Link
+                        to='/employer/settings'
+                        className={`nav-link ${
+                            activeLink === '/employer/settings' ? 'active' : ''
+                        }`}
+                        onClick={() => handleLinkClick('/employer/settings')}
                     >
                         <FaCog className='icon' />
                         <span className='link-text fw-bolder'>
-                            Cài đặt tài khoản
+                            Đăng bài tuyển dụng
                         </span>
                     </Link>
                     <Link
                         to='/'
                         className={`nav-link`}
-                        onClick={() => handleLinkClick('/admin')}
+                        onClick={() => handleLinkClick('/employer')}
                     >
                         <FaHome className='icon' />
                         <span className='link-text fw-bolder'>
@@ -116,4 +116,4 @@ const AdminLayout = () => {
     );
 };
 
-export default AdminLayout;
+export default EmployerLayout;

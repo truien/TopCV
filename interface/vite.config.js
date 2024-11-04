@@ -17,6 +17,7 @@ export default defineConfig({
             '@adminlayout': Path.resolve(__dirname, 'src/components/AdminLayout'),
             '@employerlayout': Path.resolve(__dirname, 'src/components/Employer'),
             '@mainlayout': Path.resolve(__dirname, 'src/components/MainLayout'),
+            '@hooks': Path.resolve(__dirname, 'src/hooks'),
         },
     },
 });

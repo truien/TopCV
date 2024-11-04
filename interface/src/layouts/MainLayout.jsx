@@ -1,4 +1,4 @@
-import {Header,Wellcome,Footer} from '@mainlayout'
+import {Header,Wellcome,Footer,Recommend} from '@mainlayout'
 import { Outlet } from 'react-router-dom';
 
 function MainLayout() {
@@ -6,6 +6,7 @@ function MainLayout() {
     <Header />
     <Wellcome/>
     <Outlet />
+    <Recommend/>
     <Footer/>
     </>;
 }

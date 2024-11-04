@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import '../UserEmloyer/styles.css';
-import { AiOutlineDelete } from 'react-icons/ai';
+import { AiOutlineDelete,AiOutlineEyeInvisible } from 'react-icons/ai';
 
 function ManageJobPosts() {
     const [jobPosts, setJobPosts] = useState([]);
@@ -58,9 +58,14 @@ function ManageJobPosts() {
                                         <td>{jobPost.postDate}</td>
                                         <td>{jobPost.userName}</td>
                                         <td>
-                                            <button className='btn btn-danger me-1'>
-                                                <AiOutlineDelete />
-                                            </button>
+                                        <div className='d-flex'>
+                                                            <button className='btn btn-danger me-1'>
+                                                                <AiOutlineDelete />
+                                                            </button>
+                                                            <button className='btn btn-warning'>
+                                                                < AiOutlineEyeInvisible />
+                                                            </button>
+                                                        </div>
                                         </td>
                                     </tr>
                                 ))}

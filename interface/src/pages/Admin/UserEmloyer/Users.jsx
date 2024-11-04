@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import Axios from 'axios';
 import logo from '@images/avatar-default.jpg';
 import './styles.css';
-import { AiOutlineDelete, AiOutlineEyeInvisible } from 'react-icons/ai';
+import { AiOutlineDelete, AiOutlineEdit } from 'react-icons/ai';
 function Users() {
     const [activeCollapse, setActiveCollapse] = useState(null);
     const [jobSeekerData, setJobSeekerData] = useState(null);
@@ -15,7 +15,7 @@ function Users() {
             if (activeCollapse == 'jobSeeker' && !jobSeekerData) {
                 try {
                     const response = await Axios.get(
-                        'http://localhost:5224/api/Auth/get-all-jobSeeker'
+                        'http://localhost:5224/api/JobSeeker/get-all-jobSeeker'
                     );
                     setJobSeekerData(response.data);
                 } catch (error) {
@@ -25,7 +25,7 @@ function Users() {
             if (activeCollapse == 'employer' && !EmployerData) {
                 try {
                     const response = await Axios.get(
-                        'http://localhost:5224/api/Auth/get-all-employer'
+                        'http://localhost:5224/api/Employer/get-all-employer'
                     );
                     setEmployerData(response.data);
                 } catch (error) {
@@ -35,10 +35,37 @@ function Users() {
         };
         fetchData();
     }, [activeCollapse, jobSeekerData, EmployerData]);
+
+    const handleDeleteJobSeeker = async (username) => {
+        try {
+            await Axios.delete(
+                `http://localhost:5224/api/JobSeeker/delete/${username}`
+            );
+            setJobSeekerData((prevData) =>
+                prevData.filter((jobSeeker) => jobSeeker.userName !== username)
+            );
+        } catch (e) {
+            console.warn(e);
+            alert('Xóa tài khoản không thành công');
+        }
+    };
+    const handleDeleteEmployer = async (username) => {
+        try {
+            await Axios.delete(
+                `http://localhost:5224/api/Employer/delete/${username}`
+            );
+            setEmployerData((prevData) =>
+                prevData.filter((employer) => employer.userName !== username)
+            );
+        } catch (e) {
+            console.warn(e);
+            alert('Xóa tài khoản không thành công');
+        }
+    };
     return (
         <>
             <div className='container-custome '>
-                <div className='container container-fluid py-2 mb-5 mt-3  '>
+                <div className='container manager container-fluid py-2 mb-5 mt-3  '>
                     <h1 className='text-custom fs-1'>Quản lý tài khoản</h1>
                 </div>
                 <p>
@@ -94,11 +121,18 @@ function Users() {
                                                     <td>{jobSeeker.email}</td>
                                                     <td>
                                                         <div className='d-flex'>
-                                                            <button className='btn btn-danger me-1'>
+                                                            <button
+                                                                onClick={() =>
+                                                                    handleDeleteJobSeeker(
+                                                                        jobSeeker?.userName
+                                                                    )
+                                                                }
+                                                                className='btn btn-danger me-1'
+                                                            >
                                                                 <AiOutlineDelete />
                                                             </button>
                                                             <button className='btn btn-warning'>
-                                                                < AiOutlineEyeInvisible />
+                                                                <AiOutlineEdit />
                                                             </button>
                                                         </div>
                                                     </td>
@@ -145,11 +179,18 @@ function Users() {
                                                 <td>{employer.email}</td>
                                                 <td>
                                                     <div className='d-flex'>
-                                                        <button className='btn btn-danger me-1'>
+                                                        <button
+                                                            className='btn btn-danger me-1'
+                                                            onClick={() =>
+                                                                handleDeleteEmployer(
+                                                                    employer?.userName
+                                                                )
+                                                            }
+                                                        >
                                                             <AiOutlineDelete />
                                                         </button>
                                                         <button className='btn btn-warning'>
-                                                            <AiOutlineEyeInvisible />
+                                                            <AiOutlineEdit />
                                                         </button>
                                                     </div>
                                                 </td>
