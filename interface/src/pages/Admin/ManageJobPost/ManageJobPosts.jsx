@@ -1,28 +1,44 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import '../UserEmloyer/styles.css';
-import { AiOutlineDelete,AiOutlineEyeInvisible } from 'react-icons/ai';
+import { AiOutlineDelete, AiOutlineEyeInvisible } from 'react-icons/ai';
 
 function ManageJobPosts() {
     const [jobPosts, setJobPosts] = useState([]);
-    const [loading, setLoading] = useState(true); 
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const response = await axios.get(
-                    'http://localhost:5224/api/JobPosts/get-all-jobpost'
-                );
-                const data = response.data;
-                setJobPosts(data);
-            } catch (error) {
-                console.log('Đã xảy ra lỗi', error);
-            } finally {
-                setLoading(false); // Đặt loading là false sau khi fetch hoàn tất
-            }
-        };
         fetchData();
     }, []);
+
+    const fetchData = async () => {
+        setLoading(true);
+        try {
+            const response = await axios.get(
+                'http://localhost:5224/api/JobPosts/get-all-jobpost'
+            );
+            setJobPosts(response.data);
+        } catch (error) {
+            console.log('Đã xảy ra lỗi', error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const handleDelete = async (postId) => {
+        if (window.confirm('Bạn có chắc chắn muốn xóa bài đăng này?')) {
+            try {
+                await axios.delete(
+                    `http://localhost:5224/api/JobPosts/delete-jobpost/${postId}`
+                );
+                setJobPosts((prevPosts) =>
+                    prevPosts.filter((post) => post.id !== postId)
+                );
+            } catch (error) {
+                console.log('Đã xảy ra lỗi khi xóa bài đăng', error);
+            }
+        }
+    };
 
     return (
         <div className='container-custome'>
@@ -30,7 +46,7 @@ function ManageJobPosts() {
                 <h1 className='text-custom fs-1'>Quản lý bài tuyển dụng</h1>
             </div>
             <div className='col'>
-                {loading ? ( // Hiển thị thông báo khi đang tải
+                {loading ? (
                     <p>Đang tải dữ liệu...</p>
                 ) : jobPosts.length > 0 ? (
                     <div className='card card-body'>
@@ -49,23 +65,30 @@ function ManageJobPosts() {
                             <tbody>
                                 {jobPosts.map((jobPost) => (
                                     <tr key={jobPost.id}>
-                                        {' '}
-                                        {/* Đảm bảo sử dụng id duy nhất */}
                                         <td>{jobPost.id}</td>
                                         <td>{jobPost.title}</td>
                                         <td>{jobPost.companyName}</td>
                                         <td>{jobPost.jobDescription}</td>
-                                        <td>{jobPost.postDate}</td>
+                                        <td>
+                                            {new Date(
+                                                jobPost.postDate
+                                            ).toLocaleDateString()}
+                                        </td>
                                         <td>{jobPost.userName}</td>
                                         <td>
-                                        <div className='d-flex'>
-                                                            <button className='btn btn-danger me-1'>
-                                                                <AiOutlineDelete />
-                                                            </button>
-                                                            <button className='btn btn-warning'>
-                                                                < AiOutlineEyeInvisible />
-                                                            </button>
-                                                        </div>
+                                            <div className='d-flex'>
+                                                <button
+                                                    className='btn btn-danger me-1'
+                                                    onClick={() =>
+                                                        handleDelete(jobPost.id)
+                                                    }
+                                                >
+                                                    <AiOutlineDelete />
+                                                </button>
+                                                <button className='btn btn-warning'>
+                                                    <AiOutlineEyeInvisible />
+                                                </button>
+                                            </div>
                                         </td>
                                     </tr>
                                 ))}

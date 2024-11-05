@@ -1,0 +1,22 @@
+.customQuill {
+    position: relative;
+    scrollbar-width: none; /* Ẩn thanh cuộn trên Firefox */
+    -ms-overflow-style: none; /* Ẩn thanh cuộn trên IE và Edge */
+    width: 100% !important;
+    padding: 0 !important;
+}
+
+.customQuill .ql-editor {
+    overflow-y: scroll;
+    max-height: 45rem;
+    min-height: 30rem;
+}
+
+.customQuill .ql-editor::-webkit-scrollbar-thumb {
+    background-color: #d2d2d7;
+    border-radius: 1.2rem;
+}
+
+.customQuill .ql-tooltip {
+    left: 1rem !important;
+}

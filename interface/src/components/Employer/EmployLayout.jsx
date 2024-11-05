@@ -89,7 +89,7 @@ const EmployerLayout = () => {
                         </span>
                     </Link>
                     <Link
-                        to='/employer/settings'
+                        to='/employer/createjobpost'
                         className={`nav-link ${
                             activeLink === '/employer/settings' ? 'active' : ''
                         }`}

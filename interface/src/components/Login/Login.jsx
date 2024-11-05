@@ -39,6 +39,7 @@ function SignInForm() {
             sessionStorage.setItem('token', data.token);
             sessionStorage.setItem('userType', data.userType);
             sessionStorage.setItem('avatar', data.avatar);
+            sessionStorage.setItem('username', email);
 
             navigate(
                 data.userType === 'Admin'

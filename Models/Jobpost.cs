@@ -33,5 +33,8 @@ public partial class Jobpost
 
     public virtual ICollection<Employmenttype> IdemploymentTypes { get; set; } = new List<Employmenttype>();
 
-    public virtual ICollection<Jobfield> JobFields { get; set; } = new List<Jobfield>();
+    public virtual ICollection<Jobpostfield> Jobpostfields { get; set; } = new List<Jobpostfield>(); // Danh sách các Jobpostfield liên quan
+
+    public ICollection<Jobpostemployment> JobpostEmployments { get; set; } = new List<Jobpostemployment>();
+
 }
