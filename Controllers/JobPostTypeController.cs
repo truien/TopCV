@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using TopCV.Models;
 
 namespace TopCV.Controllers
@@ -28,7 +29,7 @@ namespace TopCV.Controllers
             {
                 _context.Jobpostfields.Add(jobPostField);
                 await _context.SaveChangesAsync();
-                return CreatedAtAction(nameof(AddJobPostField), new { id = jobPostField.JobPostId }, jobPostField);
+                return CreatedAtAction(nameof(AddJobPostField), new { id = jobPostField.JobPostID }, jobPostField);
             }
             catch (Exception ex)
             {
@@ -41,8 +42,8 @@ namespace TopCV.Controllers
         public async Task<ActionResult<Jobpostemployment>> CreateJobpostemployment(Jobpostemployment jobpostemployment)
         {
 
-            var jobPost = await _context.Jobposts.FindAsync(jobpostemployment.JobPostId);
-            var employmentType = await _context.Employmenttypes.FindAsync(jobpostemployment.EmploymentId);
+            var jobPost = await _context.Jobposts.FindAsync(jobpostemployment.JobPostID);
+            var employmentType = await _context.Employmenttypes.FindAsync(jobpostemployment.EmploymentID);
 
             if (jobPost == null || employmentType == null)
             {
@@ -52,7 +53,7 @@ namespace TopCV.Controllers
             _context.Jobpostemployments.Add(jobpostemployment);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(CreateJobpostemployment), new { id = jobpostemployment.JobPostId }, jobpostemployment);
+            return CreatedAtAction(nameof(CreateJobpostemployment), new { id = jobpostemployment.JobPostID }, jobpostemployment);
         }
     }
 }

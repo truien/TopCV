@@ -7,8 +7,8 @@ namespace TopCV.Models
 {
     public class Jobpostemployment
     {
-        public int JobPostId { get; set; }
-        public int EmploymentId { get; set; }
+        public int JobPostID { get; set; }
+        public int EmploymentID { get; set; }
 
         public Employmenttype EmploymentType { get; set; } = null!;
         public Jobpost JobPost { get; set; } = null!;

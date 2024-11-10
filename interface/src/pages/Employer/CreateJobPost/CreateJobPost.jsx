@@ -7,7 +7,7 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 function JobPostForm() {
-    const employerUsername = sessionStorage.getItem('username');
+    const Username = sessionStorage.getItem('username');
     const [formData, setFormData] = useState({
         company: '',
         title: '',
@@ -16,13 +16,14 @@ function JobPostForm() {
         salaryRange: '',
         location: '',
         status: 1,
-        postDate: new Date().toISOString(),
-        userEmployer: employerUsername,
+        postDate: new Date().toISOString().split('T')[0],
+        userEmployer: Username,
     });
     const [employmentTypes, setEmploymentTypes] = useState([]);
     const [jobFields, setJobFields] = useState([]);
     const [selectedEmploymentTypes, setSelectedEmploymentTypes] = useState([]);
     const [selectedJobFields, setSelectedJobFields] = useState([]);
+    console.log(selectedJobFields);
     const [errors, setErrors] = useState({});
 
     useEffect(() => {
@@ -73,9 +74,9 @@ function JobPostForm() {
         if (!formData.requirements)
             newErrors.requirements = 'Yêu cầu công việc không được để trống';
         if (selectedEmploymentTypes.length === 0)
-            newErrors.employmentTypeId = 'Vui lòng chọn kiểu công việc';
+            newErrors.employmentTypeID = 'Vui lòng chọn kiểu công việc';
         if (selectedJobFields.length === 0)
-            newErrors.jobFieldId = 'Vui lòng chọn lĩnh vực công việc';
+            newErrors.JobfieldID = 'Vui lòng chọn lĩnh vực công việc';
 
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
@@ -99,7 +100,6 @@ function JobPostForm() {
     const handleJobFieldChange = (selectedOptions) => {
         setSelectedJobFields(selectedOptions || []);
     };
-
     const handleSubmit = async (e) => {
         e.preventDefault();
 
@@ -113,15 +113,15 @@ function JobPostForm() {
                 'http://localhost:5224/api/JobPosts/add-jobpost',
                 formData
             );
-            const jobPostId = jobPostResponse.data.id;
+            const JobPostID = jobPostResponse.data.id;
 
             const employmentPromises = selectedEmploymentTypes.map(
                 (employmentType) =>
                     axios.post(
                         'http://localhost:5224/api/JobPostType/add-jobpostemployment',
                         {
-                            IDEmploymentType: employmentType.value,
-                            IDJobPost: jobPostId,
+                            JobPostID: JobPostID,
+                            EmploymentID: employmentType.value,
                         }
                     )
             );
@@ -130,8 +130,8 @@ function JobPostForm() {
                 axios.post(
                     'http://localhost:5224/api/JobPostType/add-jobpostfield',
                     {
-                        JobFieldID: jobField.value,
-                        JobPostID: jobPostId,
+                        JobPostID: JobPostID,
+                        JobfieldID:jobField.value,
                     }
                 )
             );
@@ -148,7 +148,7 @@ function JobPostForm() {
                 location: '',
                 status: 1,
                 postDate: new Date().toISOString(),
-                userEmployer: employerUsername,
+                userEmployer: Username,
             });
             setSelectedEmploymentTypes([]);
             setSelectedJobFields([]);
@@ -225,7 +225,7 @@ function JobPostForm() {
 
                     <div className='mt-2 col'>
                         <label
-                            htmlFor='jobFieldId'
+                            htmlFor='JobfieldID'
                             className='form-label fs-6 fw-bolder'
                         >
                             Lĩnh vực công việc
@@ -237,8 +237,8 @@ function JobPostForm() {
                             onChange={handleJobFieldChange}
                             placeholder='Chọn lĩnh vực công việc'
                         />
-                        {errors.jobFieldId && (
-                            <p className='text-danger'>{errors.jobFieldId}</p>
+                        {errors.JobfieldID && (
+                            <p className='text-danger'>{errors.JobfieldID}</p>
                         )}
                     </div>
                 </div>

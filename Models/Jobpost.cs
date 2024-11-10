@@ -29,11 +29,11 @@ public partial class Jobpost
 
     public virtual Jobpoststatus? StatusNavigation { get; set; }
 
-    public virtual Useremployer UserEmployerNavigation { get; set; } = null!;
+    public virtual Useremployer? UserEmployerNavigation { get; set; }
 
     public virtual ICollection<Employmenttype> IdemploymentTypes { get; set; } = new List<Employmenttype>();
 
-    public virtual ICollection<Jobpostfield> Jobpostfields { get; set; } = new List<Jobpostfield>(); // Danh sách các Jobpostfield liên quan
+    public virtual ICollection<Jobpostfield> Jobpostfields { get; set; } = new List<Jobpostfield>(); 
 
     public ICollection<Jobpostemployment> JobpostEmployments { get; set; } = new List<Jobpostemployment>();
 

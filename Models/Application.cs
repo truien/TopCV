@@ -7,7 +7,7 @@ public partial class Application
 {
     public int Id { get; set; }
 
-    public int? JobPostId { get; set; }
+    public int? JobPostID { get; set; }
 
     public string? UserJobseeker { get; set; }
 
