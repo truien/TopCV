@@ -49,25 +49,25 @@ public partial class TopcvContext : DbContext
             .HasCharSet("utf8mb4");
         modelBuilder.Entity<Jobpostemployment>(entity =>
  {
-     entity.HasKey(e => new { e.JobPostID, e.EmploymentID }).HasName("PRIMARY");
+     entity.HasKey(e => new { e.IDJobPost, e.IDEmploymentType }).HasName("PRIMARY");
 
      entity.ToTable("jobpostemployment");
 
-     entity.HasIndex(e => e.JobPostID, "JobPost_idx");
-     entity.HasIndex(e => e.EmploymentID, "Employment_idx");
+     entity.HasIndex(e => e.IDJobPost, "JobPost_idx");
+     entity.HasIndex(e => e.IDEmploymentType, "Employment_idx");
 
-     entity.Property(e => e.JobPostID).HasColumnName("JobPostID");
-     entity.Property(e => e.EmploymentID).HasColumnName("EmploymentID");
+     entity.Property(e => e.IDJobPost).HasColumnName("IDJobPost");
+     entity.Property(e => e.IDEmploymentType).HasColumnName("IDEmploymentType");
 
      entity.HasOne(d => d.JobPost)
          .WithMany(p => p.JobpostEmployments)
-         .HasForeignKey(d => d.JobPostID)
+         .HasForeignKey(d => d.IDJobPost)
          .OnDelete(DeleteBehavior.ClientSetNull)
          .HasConstraintName("FK_JobPost_Jobpostemployment");
 
      entity.HasOne(d => d.EmploymentType)
          .WithMany(p => p.Jobpostemployments)
-         .HasForeignKey(d => d.EmploymentID)
+         .HasForeignKey(d => d.IDEmploymentType)
          .OnDelete(DeleteBehavior.ClientSetNull)
          .HasConstraintName("FK_Employment_Jobpostemployment");
  });
@@ -91,7 +91,7 @@ public partial class TopcvContext : DbContext
 
             entity.ToTable("application");
 
-            entity.HasIndex(e => e.JobPostID, "JobPostID");
+            entity.HasIndex(e => e.IDJobPost, "IDJobPost");
 
             entity.HasIndex(e => e.Status, "Status");
 
@@ -101,11 +101,11 @@ public partial class TopcvContext : DbContext
             entity.Property(e => e.Cvfile)
                 .HasMaxLength(255)
                 .HasColumnName("CVFile");
-            entity.Property(e => e.JobPostID).HasColumnName("JobPostID");
+            entity.Property(e => e.IDJobPost).HasColumnName("IDJobPost");
             entity.Property(e => e.UserJobseeker).HasMaxLength(50);
 
             entity.HasOne(d => d.JobPost).WithMany(p => p.Applications)
-                .HasForeignKey(d => d.JobPostID)
+                .HasForeignKey(d => d.IDJobPost)
                 .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("application_ibfk_1");
 
@@ -142,19 +142,19 @@ public partial class TopcvContext : DbContext
           .UsingEntity<Jobpostemployment>(
               j => j.HasOne(pt => pt.JobPost)
                     .WithMany(p => p.JobpostEmployments)
-                    .HasForeignKey(pt => pt.JobPostID)
+                    .HasForeignKey(pt => pt.IDJobPost)
                     .HasConstraintName("JobPost"),
               j => j.HasOne(pt => pt.EmploymentType)
                     .WithMany()
-                    .HasForeignKey(pt => pt.EmploymentID)
+                    .HasForeignKey(pt => pt.IDEmploymentType)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("employment"),
               j =>
               {
-                  j.HasKey(t => new { t.EmploymentID, t.JobPostID })
+                  j.HasKey(t => new { t.IDEmploymentType, t.IDJobPost })
                    .HasName("PRIMARY");
                   j.ToTable("jobpostemployment");
-                  j.HasIndex(pt => pt.JobPostID, "JobPost_idx");
+                  j.HasIndex(pt => pt.IDJobPost, "JobPost_idx");
               });
 });
 
@@ -200,26 +200,26 @@ public partial class TopcvContext : DbContext
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("UserEmploy");
         });
-      modelBuilder.Entity<Jobpostfield>(entity =>
-{
-    entity.HasKey(jp => new { jp.JobPostID, jp.JobfieldID });
+        modelBuilder.Entity<Jobpostfield>(entity =>
+  {
+      entity.HasKey(jp => new { jp.IDJobPost, jp.JobFieldID });
 
-    entity.ToTable("jobpostfield");
+      entity.ToTable("jobpostfield");
 
-    entity.Property(jp => jp.JobPostID).HasColumnName("JobPostID");
-    entity.Property(jp => jp.JobfieldID).HasColumnName("JobfieldID");
+      entity.Property(jp => jp.IDJobPost).HasColumnName("IDJobPost");
+      entity.Property(jp => jp.JobFieldID).HasColumnName("JobFieldID");
 
-    entity.HasOne(jp => jp.JobPost)
-        .WithMany(j => j.Jobpostfields)
-        .HasForeignKey(jp => jp.JobPostID)
-        .OnDelete(DeleteBehavior.Cascade);
+      entity.HasOne(jp => jp.JobPost)
+          .WithMany(j => j.Jobpostfields)
+          .HasForeignKey(jp => jp.IDJobPost)
+          .OnDelete(DeleteBehavior.Cascade);
 
-    entity.HasOne(jp => jp.JobField)
-        .WithMany(jf => jf.Jobpostfields) 
-        .HasForeignKey(jp => jp.JobfieldID)
-        .OnDelete(DeleteBehavior.ClientSetNull)
-        .HasConstraintName("FK_Jobfield_Jobpostfield");
-});
+      entity.HasOne(jp => jp.JobField)
+          .WithMany(jf => jf.Jobpostfields)
+          .HasForeignKey(jp => jp.JobFieldID)
+          .OnDelete(DeleteBehavior.ClientSetNull)
+          .HasConstraintName("FK_Jobfield_Jobpostfield");
+  });
 
 
         modelBuilder.Entity<Jobpoststatus>(entity =>

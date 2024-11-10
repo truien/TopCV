@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using TopCV.DTOs;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TopCV.Models;
@@ -13,47 +14,51 @@ namespace TopCV.Controllers
     public class JobPostTypeController : ControllerBase
     {
         private readonly TopcvContext _context;
+
         public JobPostTypeController(TopcvContext context)
         {
             _context = context;
         }
+
+        // POST: api/JobPostType/add-jobpostfield
         [HttpPost("add-jobpostfield")]
-        public async Task<IActionResult> AddJobPostField([FromBody] Jobpostfield jobPostField)
+        public async Task<ActionResult<Jobpostfield>> PostJobPostField(CreateJobPostFieldDto dto)
         {
-            if (jobPostField == null)
+            if (dto == null || dto.IDJobPost <= 0 || dto.JobFieldID <= 0)
             {
-                return BadRequest("Dữ liệu Job Post Field bị thiếu.");
+                return BadRequest("Invalid input data.");
             }
 
-            try
+            var jobPostField = new Jobpostfield
             {
-                _context.Jobpostfields.Add(jobPostField);
-                await _context.SaveChangesAsync();
-                return CreatedAtAction(nameof(AddJobPostField), new { id = jobPostField.JobPostID }, jobPostField);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest("Lỗi: " + ex.Message);
-            }
-        }
+                IDJobPost = dto.IDJobPost,
+                JobFieldID = dto.JobFieldID
+            };
 
-
-        [HttpPost("add-jobpostemployment")]
-        public async Task<ActionResult<Jobpostemployment>> CreateJobpostemployment(Jobpostemployment jobpostemployment)
-        {
-
-            var jobPost = await _context.Jobposts.FindAsync(jobpostemployment.JobPostID);
-            var employmentType = await _context.Employmenttypes.FindAsync(jobpostemployment.EmploymentID);
-
-            if (jobPost == null || employmentType == null)
-            {
-                return NotFound("JobPost hoặc EmploymentType không tồn tại.");
-            }
-
-            _context.Jobpostemployments.Add(jobpostemployment);
+            _context.Jobpostfields.Add(jobPostField);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(CreateJobpostemployment), new { id = jobpostemployment.JobPostID }, jobpostemployment);
+            return CreatedAtAction(nameof(PostJobPostField), new { id = jobPostField.IDJobPost }, jobPostField);
+        }
+
+        [HttpPost("add-jobpostemployment")]
+        public async Task<ActionResult<Jobpostemployment>> PostJobPostEmployment(CreateJobPostEmploymentDto dto)
+        {
+            if (dto == null || dto.IDJobPost <= 0 || dto.IDEmploymentType <= 0)
+            {
+                return BadRequest("Invalid input data.");
+            }
+
+            var jobPostEmployment = new Jobpostemployment
+            {
+                IDJobPost = dto.IDJobPost,
+                IDEmploymentType = dto.IDEmploymentType
+            };
+
+            _context.Jobpostemployments.Add(jobPostEmployment);
+            await _context.SaveChangesAsync();
+
+            return CreatedAtAction(nameof(PostJobPostEmployment), new { id = jobPostEmployment.IDJobPost }, jobPostEmployment);
         }
     }
 }

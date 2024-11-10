@@ -1,12 +1,13 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace TopCV.Models;
 
 public partial class Jobpostfield
 {
-    public int JobPostID { get; set; }
-    public int JobfieldID { get; set; }
+    public int IDJobPost { get; set; }
+    public int JobFieldID { get; set; }
 
-    public virtual Jobpost JobPost { get; set; } = null!;
-    public virtual Jobfield JobField { get; set; } = null!;
+    public virtual Jobpost? JobPost { get; set; }
+    public virtual Jobfield? JobField { get; set; } 
 }

@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace TopCV.Migrations
 {
     /// <inheritdoc />
-    public partial class Init : Migration
+    public partial class FixEmploymentTypeColumnName : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -222,7 +222,7 @@ namespace TopCV.Migrations
                 {
                     ID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    JobPostID = table.Column<int>(type: "int", nullable: true),
+                    IDJobPost = table.Column<int>(type: "int", nullable: true),
                     UserJobseeker = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: true, collation: "utf8mb4_0900_ai_ci")
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     ApplicationDate = table.Column<DateOnly>(type: "date", nullable: true),
@@ -235,7 +235,7 @@ namespace TopCV.Migrations
                     table.PrimaryKey("PRIMARY", x => x.ID);
                     table.ForeignKey(
                         name: "application_ibfk_1",
-                        column: x => x.JobPostID,
+                        column: x => x.IDJobPost,
                         principalTable: "jobpost",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Cascade);
@@ -259,13 +259,13 @@ namespace TopCV.Migrations
                 name: "jobpostemployment",
                 columns: table => new
                 {
-                    JobPostID = table.Column<int>(type: "int", nullable: false),
-                    EmploymentID = table.Column<int>(type: "int", nullable: false),
+                    IDJobPost = table.Column<int>(type: "int", nullable: false),
+                    IDEmploymentType = table.Column<int>(type: "int", nullable: false),
                     EmploymenttypeId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PRIMARY", x => new { x.EmploymentID, x.JobPostID });
+                    table.PrimaryKey("PRIMARY", x => new { x.IDEmploymentType, x.IDJobPost });
                     table.ForeignKey(
                         name: "FK_jobpostemployment_employmenttype_EmploymenttypeId",
                         column: x => x.EmploymenttypeId,
@@ -273,12 +273,12 @@ namespace TopCV.Migrations
                         principalColumn: "ID");
                     table.ForeignKey(
                         name: "JobPost",
-                        column: x => x.JobPostID,
+                        column: x => x.IDJobPost,
                         principalTable: "jobpost",
                         principalColumn: "ID");
                     table.ForeignKey(
                         name: "employment",
-                        column: x => x.EmploymentID,
+                        column: x => x.IDEmploymentType,
                         principalTable: "employmenttype",
                         principalColumn: "ID");
                 })
@@ -289,20 +289,20 @@ namespace TopCV.Migrations
                 name: "jobpostfield",
                 columns: table => new
                 {
-                    JobPostID = table.Column<int>(type: "int", nullable: false),
-                    JobfieldID = table.Column<int>(type: "int", nullable: false)
+                    IDJobPost = table.Column<int>(type: "int", nullable: false),
+                    JobFieldID = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_jobpostfield", x => new { x.JobPostID, x.JobfieldID });
+                    table.PrimaryKey("PK_jobpostfield", x => new { x.IDJobPost, x.JobFieldID });
                     table.ForeignKey(
                         name: "FK_Jobfield_Jobpostfield",
-                        column: x => x.JobfieldID,
+                        column: x => x.JobFieldID,
                         principalTable: "jobfield",
                         principalColumn: "ID");
                     table.ForeignKey(
-                        name: "FK_jobpostfield_jobpost_JobPostID",
-                        column: x => x.JobPostID,
+                        name: "FK_jobpostfield_jobpost_IDJobPost",
+                        column: x => x.IDJobPost,
                         principalTable: "jobpost",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Cascade);
@@ -311,9 +311,9 @@ namespace TopCV.Migrations
                 .Annotation("Relational:Collation", "utf8mb4_0900_ai_ci");
 
             migrationBuilder.CreateIndex(
-                name: "JobPostID",
+                name: "IDJobPost",
                 table: "application",
-                column: "JobPostID");
+                column: "IDJobPost");
 
             migrationBuilder.CreateIndex(
                 name: "Status",
@@ -338,7 +338,7 @@ namespace TopCV.Migrations
             migrationBuilder.CreateIndex(
                 name: "Employment_idx",
                 table: "jobpostemployment",
-                column: "EmploymentID");
+                column: "IDEmploymentType");
 
             migrationBuilder.CreateIndex(
                 name: "IX_jobpostemployment_EmploymenttypeId",
@@ -348,12 +348,12 @@ namespace TopCV.Migrations
             migrationBuilder.CreateIndex(
                 name: "JobPost_idx",
                 table: "jobpostemployment",
-                column: "JobPostID");
+                column: "IDJobPost");
 
             migrationBuilder.CreateIndex(
-                name: "IX_jobpostfield_JobfieldID",
+                name: "IX_jobpostfield_JobFieldID",
                 table: "jobpostfield",
-                column: "JobfieldID");
+                column: "JobFieldID");
         }
 
         /// <inheritdoc />

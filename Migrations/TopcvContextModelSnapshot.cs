@@ -53,9 +53,9 @@ namespace TopCV.Migrations
                         .HasColumnType("varchar(255)")
                         .HasColumnName("CVFile");
 
-                    b.Property<int?>("JobPostID")
+                    b.Property<int?>("IDJobPost")
                         .HasColumnType("int")
-                        .HasColumnName("JobPostID");
+                        .HasColumnName("IDJobPost");
 
                     b.Property<int?>("Status")
                         .HasColumnType("int");
@@ -67,7 +67,7 @@ namespace TopCV.Migrations
                     b.HasKey("Id")
                         .HasName("PRIMARY");
 
-                    b.HasIndex(new[] { "JobPostID" }, "JobPostID");
+                    b.HasIndex(new[] { "IDJobPost" }, "IDJobPost");
 
                     b.HasIndex(new[] { "Status" }, "Status");
 
@@ -189,42 +189,42 @@ namespace TopCV.Migrations
 
             modelBuilder.Entity("TopCV.Models.Jobpostemployment", b =>
                 {
-                    b.Property<int>("EmploymentID")
+                    b.Property<int>("IDEmploymentType")
                         .HasColumnType("int")
-                        .HasColumnName("EmploymentID");
+                        .HasColumnName("IDEmploymentType");
 
-                    b.Property<int>("JobPostID")
+                    b.Property<int>("IDJobPost")
                         .HasColumnType("int")
-                        .HasColumnName("JobPostID");
+                        .HasColumnName("IDJobPost");
 
                     b.Property<int?>("EmploymenttypeId")
                         .HasColumnType("int");
 
-                    b.HasKey("EmploymentID", "JobPostID")
+                    b.HasKey("IDEmploymentType", "IDJobPost")
                         .HasName("PRIMARY");
 
                     b.HasIndex("EmploymenttypeId");
 
-                    b.HasIndex(new[] { "EmploymentID" }, "Employment_idx");
+                    b.HasIndex(new[] { "IDEmploymentType" }, "Employment_idx");
 
-                    b.HasIndex(new[] { "JobPostID" }, "JobPost_idx");
+                    b.HasIndex(new[] { "IDJobPost" }, "JobPost_idx");
 
                     b.ToTable("jobpostemployment", (string)null);
                 });
 
             modelBuilder.Entity("TopCV.Models.Jobpostfield", b =>
                 {
-                    b.Property<int>("JobPostID")
+                    b.Property<int>("IDJobPost")
                         .HasColumnType("int")
-                        .HasColumnName("JobPostID");
+                        .HasColumnName("IDJobPost");
 
-                    b.Property<int>("JobfieldID")
+                    b.Property<int>("JobFieldID")
                         .HasColumnType("int")
-                        .HasColumnName("JobfieldID");
+                        .HasColumnName("JobFieldID");
 
-                    b.HasKey("JobPostID", "JobfieldID");
+                    b.HasKey("IDJobPost", "JobFieldID");
 
-                    b.HasIndex("JobfieldID");
+                    b.HasIndex("JobFieldID");
 
                     b.ToTable("jobpostfield", (string)null);
                 });
@@ -344,7 +344,7 @@ namespace TopCV.Migrations
                 {
                     b.HasOne("TopCV.Models.Jobpost", "JobPost")
                         .WithMany("Applications")
-                        .HasForeignKey("JobPostID")
+                        .HasForeignKey("IDJobPost")
                         .OnDelete(DeleteBehavior.Cascade)
                         .HasConstraintName("application_ibfk_1");
 
@@ -388,19 +388,19 @@ namespace TopCV.Migrations
 
             modelBuilder.Entity("TopCV.Models.Jobpostemployment", b =>
                 {
-                    b.HasOne("TopCV.Models.Employmenttype", "EmploymentType")
-                        .WithMany()
-                        .HasForeignKey("EmploymentID")
-                        .IsRequired()
-                        .HasConstraintName("employment");
-
                     b.HasOne("TopCV.Models.Employmenttype", null)
                         .WithMany("Jobpostemployments")
                         .HasForeignKey("EmploymenttypeId");
 
+                    b.HasOne("TopCV.Models.Employmenttype", "EmploymentType")
+                        .WithMany()
+                        .HasForeignKey("IDEmploymentType")
+                        .IsRequired()
+                        .HasConstraintName("employment");
+
                     b.HasOne("TopCV.Models.Jobpost", "JobPost")
                         .WithMany("JobpostEmployments")
-                        .HasForeignKey("JobPostID")
+                        .HasForeignKey("IDJobPost")
                         .IsRequired()
                         .HasConstraintName("JobPost");
 
@@ -413,13 +413,13 @@ namespace TopCV.Migrations
                 {
                     b.HasOne("TopCV.Models.Jobpost", "JobPost")
                         .WithMany("Jobpostfields")
-                        .HasForeignKey("JobPostID")
+                        .HasForeignKey("IDJobPost")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("TopCV.Models.Jobfield", "JobField")
                         .WithMany("Jobpostfields")
-                        .HasForeignKey("JobfieldID")
+                        .HasForeignKey("JobFieldID")
                         .IsRequired()
                         .HasConstraintName("FK_Jobfield_Jobpostfield");
 

@@ -23,7 +23,6 @@ function JobPostForm() {
     const [jobFields, setJobFields] = useState([]);
     const [selectedEmploymentTypes, setSelectedEmploymentTypes] = useState([]);
     const [selectedJobFields, setSelectedJobFields] = useState([]);
-    console.log(selectedJobFields);
     const [errors, setErrors] = useState({});
 
     useEffect(() => {
@@ -74,9 +73,9 @@ function JobPostForm() {
         if (!formData.requirements)
             newErrors.requirements = 'Yêu cầu công việc không được để trống';
         if (selectedEmploymentTypes.length === 0)
-            newErrors.employmentTypeID = 'Vui lòng chọn kiểu công việc';
+            newErrors.IDEmploymentType = 'Vui lòng chọn kiểu công việc';
         if (selectedJobFields.length === 0)
-            newErrors.JobfieldID = 'Vui lòng chọn lĩnh vực công việc';
+            newErrors.JobFieldID = 'Vui lòng chọn lĩnh vực công việc';
 
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
@@ -113,32 +112,7 @@ function JobPostForm() {
                 'http://localhost:5224/api/JobPosts/add-jobpost',
                 formData
             );
-            const JobPostID = jobPostResponse.data.id;
-
-            const employmentPromises = selectedEmploymentTypes.map(
-                (employmentType) =>
-                    axios.post(
-                        'http://localhost:5224/api/JobPostType/add-jobpostemployment',
-                        {
-                            JobPostID: JobPostID,
-                            EmploymentID: employmentType.value,
-                        }
-                    )
-            );
-
-            const fieldPromises = selectedJobFields.map((jobField) =>
-                axios.post(
-                    'http://localhost:5224/api/JobPostType/add-jobpostfield',
-                    {
-                        JobPostID: JobPostID,
-                        JobfieldID:jobField.value,
-                    }
-                )
-            );
-
-            await Promise.all([...employmentPromises, ...fieldPromises]);
-
-            // Reset form
+            const IDJobPost = jobPostResponse.data.idJobPost;
             setFormData({
                 company: '',
                 title: '',
@@ -150,8 +124,29 @@ function JobPostForm() {
                 postDate: new Date().toISOString(),
                 userEmployer: Username,
             });
-            setSelectedEmploymentTypes([]);
-            setSelectedJobFields([]);
+
+            const employmentPromises = selectedEmploymentTypes.map(
+                (employmentType) =>
+                    axios.post(
+                        'http://localhost:5224/api/JobPostType/add-jobpostemployment',
+                        {
+                            IDJobPost: IDJobPost,
+                            IDEmploymentType: employmentType.value,
+                        }
+                    )
+            );
+
+            const fieldPromises = selectedJobFields.map((jobField) =>
+                axios.post(
+                    'http://localhost:5224/api/JobPostType/add-jobpostfield',
+                    {
+                        IDJobPost: IDJobPost,
+                        JobFieldID: jobField.value,
+                    }
+                )
+            );
+
+            await Promise.all([...employmentPromises, ...fieldPromises]);
 
             toast.success('Đăng tin thành công!');
         } catch (error) {
@@ -204,7 +199,7 @@ function JobPostForm() {
                 <div className='row'>
                     <div className='mt-2 col'>
                         <label
-                            htmlFor='employmentTypeId'
+                            htmlFor='IDEmploymentType'
                             className='form-label fs-6 fw-bolder'
                         >
                             Kiểu công việc
@@ -216,16 +211,16 @@ function JobPostForm() {
                             onChange={handleEmploymentTypeChange}
                             placeholder='Chọn kiểu công việc'
                         />
-                        {errors.employmentTypeId && (
+                        {errors.IDEmploymentType && (
                             <p className='text-danger'>
-                                {errors.employmentTypeId}
+                                {errors.IDEmploymentType}
                             </p>
                         )}
                     </div>
 
                     <div className='mt-2 col'>
                         <label
-                            htmlFor='JobfieldID'
+                            htmlFor='JobFieldID'
                             className='form-label fs-6 fw-bolder'
                         >
                             Lĩnh vực công việc
@@ -237,8 +232,8 @@ function JobPostForm() {
                             onChange={handleJobFieldChange}
                             placeholder='Chọn lĩnh vực công việc'
                         />
-                        {errors.JobfieldID && (
-                            <p className='text-danger'>{errors.JobfieldID}</p>
+                        {errors.JobFieldID && (
+                            <p className='text-danger'>{errors.JobFieldID}</p>
                         )}
                     </div>
                 </div>

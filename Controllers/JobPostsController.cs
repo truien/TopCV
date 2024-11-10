@@ -97,6 +97,7 @@ namespace TopCV.Controllers
             {
                 return BadRequest("Thông tin bài đăng không hợp lệ.");
             }
+
             var newJobPost = new Jobpost
             {
                 Company = jobPost.Company,
@@ -112,8 +113,12 @@ namespace TopCV.Controllers
 
             _context.Jobposts.Add(newJobPost);
             _context.SaveChanges();
-            return Ok(new { message = "Thêm bài viết thành công.", newJobPost });
+
+            var createdJobPost = _context.Entry(newJobPost).Entity;
+
+            return Ok(new { IDJobPost = createdJobPost.Id, Message = "Tạo bài đăng thành công." });
         }
+
         [HttpDelete("delete-jobpost/{postId}")]
         public IActionResult DeleteJobPost(int postId)
         {
