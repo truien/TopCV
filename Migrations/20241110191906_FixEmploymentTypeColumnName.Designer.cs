@@ -200,13 +200,13 @@ namespace TopCV.Migrations
                         .HasColumnType("int")
                         .HasColumnName("IDJobPost");
 
-                    b.Property<int?>("EmploymenttypeId")
+                    b.Property<int?>("IDEmploymentType")
                         .HasColumnType("int");
 
                     b.HasKey("IDEmploymentType", "IDJobPost")
                         .HasName("PRIMARY");
 
-                    b.HasIndex("EmploymenttypeId");
+                    b.HasIndex("IDEmploymentType");
 
                     b.HasIndex(new[] { "IDEmploymentType" }, "Employment_idx");
 
@@ -393,7 +393,7 @@ namespace TopCV.Migrations
                 {
                     b.HasOne("TopCV.Models.Employmenttype", null)
                         .WithMany("Jobpostemployments")
-                        .HasForeignKey("EmploymenttypeId");
+                        .HasForeignKey("IDEmploymentType");
 
                     b.HasOne("TopCV.Models.Employmenttype", "EmploymentType")
                         .WithMany()

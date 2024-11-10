@@ -261,14 +261,14 @@ namespace TopCV.Migrations
                 {
                     IDJobPost = table.Column<int>(type: "int", nullable: false),
                     IDEmploymentType = table.Column<int>(type: "int", nullable: false),
-                    EmploymenttypeId = table.Column<int>(type: "int", nullable: true)
+                    IDEmploymentType = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PRIMARY", x => new { x.IDEmploymentType, x.IDJobPost });
                     table.ForeignKey(
-                        name: "FK_jobpostemployment_employmenttype_EmploymenttypeId",
-                        column: x => x.EmploymenttypeId,
+                        name: "FK_jobpostemployment_employmenttype_IDEmploymentType",
+                        column: x => x.IDEmploymentType,
                         principalTable: "employmenttype",
                         principalColumn: "ID");
                     table.ForeignKey(
@@ -341,9 +341,9 @@ namespace TopCV.Migrations
                 column: "IDEmploymentType");
 
             migrationBuilder.CreateIndex(
-                name: "IX_jobpostemployment_EmploymenttypeId",
+                name: "IX_jobpostemployment_IDEmploymentType",
                 table: "jobpostemployment",
-                column: "EmploymenttypeId");
+                column: "IDEmploymentType");
 
             migrationBuilder.CreateIndex(
                 name: "JobPost_idx",
