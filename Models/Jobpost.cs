@@ -7,13 +7,12 @@ public partial class Jobpost
 {
     public int Id { get; set; }
 
-    public string? Company { get; set; }
-
     public string? Title { get; set; }
 
     public string? JobDescription { get; set; }
 
     public string? Requirements { get; set; }
+    public string? Interest { get; set; }
 
     public string? SalaryRange { get; set; }
 
@@ -31,10 +30,10 @@ public partial class Jobpost
 
     public virtual Useremployer? UserEmployerNavigation { get; set; }
 
-    public virtual ICollection<Employmenttype> IdemploymentTypes { get; set; } = new List<Employmenttype>();
 
-    public virtual ICollection<Jobpostfield> Jobpostfields { get; set; } = new List<Jobpostfield>(); 
+    public virtual ICollection<Jobpostfield> Jobpostfields { get; set; } = new List<Jobpostfield>();
 
     public ICollection<Jobpostemployment> JobpostEmployments { get; set; } = new List<Jobpostemployment>();
+    public ICollection<Employmenttype>? EmploymentTypes { get; set; }
 
 }

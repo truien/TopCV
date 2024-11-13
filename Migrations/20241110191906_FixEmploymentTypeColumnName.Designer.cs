@@ -146,10 +146,6 @@ namespace TopCV.Migrations
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Company")
-                        .HasMaxLength(100)
-                        .HasColumnType("varchar(100)");
-
                     b.Property<string>("JobDescription")
                         .HasColumnType("text");
 
@@ -221,13 +217,13 @@ namespace TopCV.Migrations
                         .HasColumnType("int")
                         .HasColumnName("IDJobPost");
 
-                    b.Property<int>("JobFieldID")
+                    b.Property<int>("IDJobField")
                         .HasColumnType("int")
-                        .HasColumnName("JobFieldID");
+                        .HasColumnName("IDJobField");
 
-                    b.HasKey("IDJobPost", "JobFieldID");
+                    b.HasKey("IDJobPost", "IDJobField");
 
-                    b.HasIndex("JobFieldID");
+                    b.HasIndex("IDJobField");
 
                     b.ToTable("jobpostfield", (string)null);
                 });
@@ -422,7 +418,7 @@ namespace TopCV.Migrations
 
                     b.HasOne("TopCV.Models.Jobfield", "JobField")
                         .WithMany("Jobpostfields")
-                        .HasForeignKey("JobFieldID")
+                        .HasForeignKey("IDJobField")
                         .IsRequired()
                         .HasConstraintName("FK_Jobfield_Jobpostfield");
 

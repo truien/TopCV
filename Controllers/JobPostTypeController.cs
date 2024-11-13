@@ -24,7 +24,7 @@ namespace TopCV.Controllers
         [HttpPost("add-jobpostfield")]
         public async Task<ActionResult<Jobpostfield>> PostJobPostField(CreateJobPostFieldDto dto)
         {
-            if (dto == null || dto.IDJobPost <= 0 || dto.JobFieldID <= 0)
+            if (dto == null || dto.IDJobPost <= 0 || dto.IDJobField <= 0)
             {
                 return BadRequest("Invalid input data.");
             }
@@ -32,7 +32,7 @@ namespace TopCV.Controllers
             var jobPostField = new Jobpostfield
             {
                 IDJobPost = dto.IDJobPost,
-                JobFieldID = dto.JobFieldID
+                IDJobField = dto.IDJobField
             };
 
             _context.Jobpostfields.Add(jobPostField);

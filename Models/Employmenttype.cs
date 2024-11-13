@@ -10,6 +10,6 @@ public partial class Employmenttype
     public string? EmploymentTypeName { get; set; }
 
     public virtual ICollection<Jobpostemployment> Jobpostemployments { get; set; } = new List<Jobpostemployment>();
-    
-    public virtual ICollection<Jobpost> IdjobPosts { get; set; } = new List<Jobpost>();
+
+    public ICollection<Jobpost>? JobPosts { get; set; }
 }

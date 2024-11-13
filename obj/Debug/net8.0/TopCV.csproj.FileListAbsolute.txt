@@ -1,3 +1,11 @@
+C:\Users\admin\TopCV\obj\Debug\net8.0\TopCV.csproj.AssemblyReference.cache
+C:\Users\admin\TopCV\obj\Debug\net8.0\TopCV.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\admin\TopCV\obj\Debug\net8.0\TopCV.AssemblyInfoInputs.cache
+C:\Users\admin\TopCV\obj\Debug\net8.0\TopCV.AssemblyInfo.cs
+C:\Users\admin\TopCV\obj\Debug\net8.0\TopCV.csproj.CoreCompileInputs.cache
+C:\Users\admin\TopCV\obj\Debug\net8.0\TopCV.MvcApplicationPartsAssemblyInfo.cs
+C:\Users\admin\TopCV\obj\Debug\net8.0\TopCV.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\admin\TopCV\obj\Debug\net8.0\TopCV.sourcelink.json
 C:\Users\admin\TopCV\bin\Debug\net8.0\appsettings.Development.json
 C:\Users\admin\TopCV\bin\Debug\net8.0\appsettings.json
 C:\Users\admin\TopCV\bin\Debug\net8.0\interface\package.json
@@ -97,14 +105,6 @@ C:\Users\admin\TopCV\bin\Debug\net8.0\ru\Microsoft.CodeAnalysis.Workspaces.resou
 C:\Users\admin\TopCV\bin\Debug\net8.0\tr\Microsoft.CodeAnalysis.Workspaces.resources.dll
 C:\Users\admin\TopCV\bin\Debug\net8.0\zh-Hans\Microsoft.CodeAnalysis.Workspaces.resources.dll
 C:\Users\admin\TopCV\bin\Debug\net8.0\zh-Hant\Microsoft.CodeAnalysis.Workspaces.resources.dll
-C:\Users\admin\TopCV\obj\Debug\net8.0\TopCV.csproj.AssemblyReference.cache
-C:\Users\admin\TopCV\obj\Debug\net8.0\TopCV.GeneratedMSBuildEditorConfig.editorconfig
-C:\Users\admin\TopCV\obj\Debug\net8.0\TopCV.AssemblyInfoInputs.cache
-C:\Users\admin\TopCV\obj\Debug\net8.0\TopCV.AssemblyInfo.cs
-C:\Users\admin\TopCV\obj\Debug\net8.0\TopCV.csproj.CoreCompileInputs.cache
-C:\Users\admin\TopCV\obj\Debug\net8.0\TopCV.MvcApplicationPartsAssemblyInfo.cs
-C:\Users\admin\TopCV\obj\Debug\net8.0\TopCV.MvcApplicationPartsAssemblyInfo.cache
-C:\Users\admin\TopCV\obj\Debug\net8.0\TopCV.sourcelink.json
 C:\Users\admin\TopCV\obj\Debug\net8.0\staticwebassets.build.json
 C:\Users\admin\TopCV\obj\Debug\net8.0\staticwebassets.development.json
 C:\Users\admin\TopCV\obj\Debug\net8.0\staticwebassets\msbuild.TopCV.Microsoft.AspNetCore.StaticWebAssets.props

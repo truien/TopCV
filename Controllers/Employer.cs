@@ -57,20 +57,22 @@ namespace TopCV.Controllers
         [HttpGet("get-jobpost/{username}")]
         public IActionResult GetJobPost(string username)
         {
-            var jobposts = _context.Jobposts
-                .Where(i => i.UserEmployer == username)
-                .Select(i => new
+            var jobposts = from i in _context.Jobposts
+                join j in _context.Useremployers on i.UserEmployer equals j.UserName
+                where j.UserName == username
+                select new 
                 {
                     i.Id,
                     i.Title,
-                    i.Company,
+                    j.CompanyName,
                     i.JobDescription,
                     i.PostDate,
                     i.SalaryRange,
-                })
-                .ToList(); 
+                    i.Status,
+                };
+             var jobpostsList = jobposts.ToList();
 
-            if (jobposts.Count == 0)
+            if (jobpostsList.Count == 0)
             {
                 return NotFound("Không tìm thấy bài đăng nào."); 
             }

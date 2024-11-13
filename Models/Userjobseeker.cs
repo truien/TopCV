@@ -18,6 +18,8 @@ public partial class Userjobseeker
     public string? Skills { get; set; }
 
     public string? Address { get; set; }
+    public string? CVFile { get; set; }
+
 
     public virtual ICollection<Application> Applications { get; set; } = new List<Application>();
 

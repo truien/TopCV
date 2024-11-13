@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import {
     AiOutlineDelete,
     AiOutlineEyeInvisible,
+    AiOutlineEye,
     AiOutlineFileAdd,
 } from 'react-icons/ai';
 import { useNavigate } from 'react-router-dom';
@@ -22,7 +23,7 @@ function JobPostManage() {
                     `http://localhost:5224/api/Employer/get-jobpost/${username}`
                 );
                 setJobPosts(response.data);
-                setError(''); // Reset error if fetch is successful
+                setError('');
             } catch (error) {
                 setError('Đã xảy ra lỗi khi tải dữ liệu.');
                 console.error('Error:', error);
@@ -35,35 +36,43 @@ function JobPostManage() {
     }, [username]);
 
     const handleDelete = async (postId) => {
-        try {
-            await axios.delete(
-                `http://localhost:5224/api/JobPosts/delete-jobpost/${postId}`
-            );
-            setJobPosts(jobPosts.filter((post) => post.id !== postId));
-        } catch (error) {
-            setError('Không thể xóa bài đăng.');
-            console.error('Delete error:', error);
+        if (window.confirm('Bạn có chắc chắn muốn xóa bài đăng này?')){
+            try {
+                await axios.delete(
+                    `http://localhost:5224/api/JobPosts/delete-jobpost/${postId}`
+                );
+                setJobPosts(jobPosts.filter((post) => post.id !== postId));
+            } catch (error) {
+                setError('Không thể xóa bài đăng.');
+                console.error('Delete error:', error);
+            }
         }
     };
 
-    const handleHide = async (postId) => {
+    const handleToggleStatus = async (postId, currentStatus) => {
         try {
+            const newStatus = currentStatus === 1 ? 2 : 1;
             await axios.put(
-                `http://localhost:5224/api/Employer/hide-jobpost/${postId}`
+                `http://localhost:5224/api/JobPosts/update-jobpost-status/${postId}`,
+                newStatus, 
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                }
             );
             setJobPosts(
                 jobPosts.map((post) =>
-                    post.id === postId
-                        ? { ...post, status: post.status === 1 ? 0 : 1 }
-                        : post
+                    post.id === postId ? { ...post, status: newStatus } : post
                 )
             );
         } catch (error) {
             setError('Không thể cập nhật trạng thái bài đăng.');
-            console.error('Hide error:', error);
+            console.error('Toggle status error:', error);
         }
     };
-    const handClick = () => {
+
+    const handleCreateJobPost = () => {
         sessionStorage.setItem('activeLink', '/employer/settings');
         navigate('/employer/createjobpost');
     };
@@ -72,7 +81,10 @@ function JobPostManage() {
         <>
             <div className='d-flex justify-content-between'>
                 <h2>Quản lý bài đăng</h2>
-                <button className='btn btn-success' onClick={handClick}>
+                <button
+                    className='btn btn-success'
+                    onClick={handleCreateJobPost}
+                >
                     <AiOutlineFileAdd /> Tạo bài mới
                 </button>
             </div>
@@ -114,12 +126,31 @@ function JobPostManage() {
                                         >
                                             <AiOutlineDelete />
                                         </button>
-                                        <button
-                                            className='btn btn-warning'
-                                            onClick={() => handleHide(post.id)}
-                                        >
-                                            <AiOutlineEyeInvisible />
-                                        </button>
+                                        {post.status === 1 ? (
+                                            <button
+                                                className='btn btn-warning'
+                                                onClick={() =>
+                                                    handleToggleStatus(
+                                                        post.id,
+                                                        post.status
+                                                    )
+                                                }
+                                            >
+                                                <AiOutlineEyeInvisible />
+                                            </button>
+                                        ) : (
+                                            <button
+                                                className='btn btn-secondary'
+                                                onClick={() =>
+                                                    handleToggleStatus(
+                                                        post.id,
+                                                        post.status
+                                                    )
+                                                }
+                                            >
+                                                <AiOutlineEye />
+                                            </button>
+                                        )}
                                     </div>
                                 </td>
                             </tr>

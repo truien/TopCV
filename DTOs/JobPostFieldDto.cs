@@ -8,6 +8,6 @@ namespace TopCV.DTOs
     public class CreateJobPostFieldDto
     {
         public int IDJobPost { get; set; }
-        public int JobFieldID { get; set; }
+        public int IDJobField { get; set; }
     }
 }

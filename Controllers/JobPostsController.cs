@@ -74,21 +74,31 @@ namespace TopCV.Controllers
         }
 
         [HttpGet("get-all-jobpost")]
-        public IActionResult GetAllJobPosts()
+        public IActionResult GetAllJobPosts([FromQuery] int? status)
         {
-            var jobpost = from i in _context.Jobposts
-                          join j in _context.Useremployers on i.UserEmployer equals j.UserName
-                          select new
-                          {
-                              i.Id,
-                              i.Title,
-                              j.CompanyName,
-                              i.JobDescription,
-                              i.PostDate,
-                              j.UserName
-                          };
-            jobpost.ToList();
-            return Ok(jobpost);
+            var jobposts = from i in _context.Jobposts
+                           join j in _context.Useremployers on i.UserEmployer equals j.UserName
+                           select new
+                           {
+                               i.Id,
+                               i.Title,
+                               j.CompanyName,
+                               i.JobDescription,
+                               i.PostDate,
+                               j.UserName,
+                               i.Status
+                           };
+            if (status.HasValue)
+            {
+                jobposts = jobposts.Where(jp => jp.Status == status.Value);
+            }
+            else
+            {
+                jobposts = jobposts.Where(jp => jp.Status == 1 || jp.Status == 2);
+            }
+
+            var jobpostsList = jobposts.ToList();
+            return Ok(jobpostsList);
         }
         [HttpPost("add-jobpost")]
         public IActionResult AddJobPost([FromBody] Jobpost jobPost)
@@ -100,10 +110,10 @@ namespace TopCV.Controllers
 
             var newJobPost = new Jobpost
             {
-                Company = jobPost.Company,
                 Title = jobPost.Title,
                 JobDescription = jobPost.JobDescription,
                 Requirements = jobPost.Requirements,
+                Interest = jobPost.Interest,
                 SalaryRange = jobPost.SalaryRange,
                 Location = jobPost.Location,
                 PostDate = jobPost.PostDate,
@@ -135,6 +145,18 @@ namespace TopCV.Controllers
             return Ok(new { message = "Đã xóa bài đăng thành công." });
         }
 
+        [HttpPut("update-jobpost-status/{postId}")]
+        public IActionResult UpdateJobPostStatus(int postId, [FromBody] int newStatus)
+        {
+            var jobPost = _context.Jobposts.FirstOrDefault(jp => jp.Id == postId);
+            if (jobPost == null)
+            {
+                return NotFound(new { message = "Bài đăng không tồn tại." });
+            }
+            jobPost.Status = newStatus;
+            _context.SaveChanges();
+            return Ok(new { message = "Cập nhật trạng thái bài đăng thành công.", UpdatedStatus = newStatus });
+        }
 
     }
 }

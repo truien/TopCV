@@ -9,10 +9,10 @@ import 'react-toastify/dist/ReactToastify.css';
 function JobPostForm() {
     const Username = sessionStorage.getItem('username');
     const [formData, setFormData] = useState({
-        company: '',
         title: '',
         jobDescription: '',
         requirements: '',
+        interest: '',
         salaryRange: '',
         location: '',
         status: 1,
@@ -66,16 +66,19 @@ function JobPostForm() {
         const newErrors = {};
         if (!formData.title)
             newErrors.title = 'Tiêu đề công việc không được để trống';
-        if (!formData.company)
-            newErrors.company = 'Tên công ty không được để trống';
         if (!formData.jobDescription)
             newErrors.jobDescription = 'Mô tả công việc không được để trống';
         if (!formData.requirements)
             newErrors.requirements = 'Yêu cầu công việc không được để trống';
+        if (!formData.salaryRange)
+            newErrors.salaryRange = 'Khoảng lương không được để trống';
+        if (!formData.location) newErrors.location = 'Địa điểm là bắt buộc';
         if (selectedEmploymentTypes.length === 0)
             newErrors.IDEmploymentType = 'Vui lòng chọn kiểu công việc';
         if (selectedJobFields.length === 0)
             newErrors.JobFieldID = 'Vui lòng chọn lĩnh vực công việc';
+        if (!formData.interest)
+            newErrors.interest = 'Quyền lợi không được để trống'; // Thêm dòng này
 
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
@@ -114,13 +117,13 @@ function JobPostForm() {
             );
             const IDJobPost = jobPostResponse.data.idJobPost;
             setFormData({
-                company: '',
                 title: '',
                 jobDescription: '',
                 requirements: '',
+                interest: '',
                 salaryRange: '',
                 location: '',
-                status: 1,
+                status: 3,
                 postDate: new Date().toISOString(),
                 userEmployer: Username,
             });
@@ -141,7 +144,7 @@ function JobPostForm() {
                     'http://localhost:5224/api/JobPostType/add-jobpostfield',
                     {
                         IDJobPost: IDJobPost,
-                        JobFieldID: jobField.value,
+                        IDJobField: jobField.value,
                     }
                 )
             );
@@ -175,25 +178,6 @@ function JobPostForm() {
                     />
                     {errors.title && (
                         <p className='text-danger'>{errors.title}</p>
-                    )}
-                </div>
-
-                <div className='mt-2'>
-                    <label
-                        htmlFor='company'
-                        className='form-label fs-6 fw-bolder'
-                    >
-                        Công ty
-                    </label>
-                    <input
-                        className='form-control'
-                        type='text'
-                        name='company'
-                        value={formData.company}
-                        onChange={handleChange}
-                    />
-                    {errors.company && (
-                        <p className='text-danger'>{errors.company}</p>
                     )}
                 </div>
                 <div className='row'>
@@ -272,6 +256,20 @@ function JobPostForm() {
                     {errors.requirements && (
                         <p className='text-danger'>{errors.requirements}</p>
                     )}
+                </div>
+                <div className='mt-2'>
+                    <label
+                        htmlFor='interests'
+                        className='form-label fs-6 fw-bolder'
+                    >
+                        Quyền lợi
+                    </label>
+                    <CombinedEditor
+                        value={formData.interest}
+                        onChange={(content) =>
+                            handleEditorChange('interest', content)
+                        }
+                    />
                 </div>
 
                 <div className='mt-2'>

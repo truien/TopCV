@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using TopCV.DTOs;
 using TopCV.Models;
 
 namespace TopCV.Controllers
@@ -54,6 +55,38 @@ namespace TopCV.Controllers
 
 
             return Ok(jobSeekers);
+        }
+        [HttpGet("{username}")]
+        public async Task<IActionResult> GetJobSeekerInfo(string username)
+        {
+            var jobSeeker = await _context.Userjobseekers
+                .Where(js => js.UserName == username)
+                .Select(js => new JobSeekerDetailDto
+                {
+                    UserName = js.UserName,
+                    FullName = js.FullName,
+                    DateOfBirth = js.DateOfBirth,
+                    EducationLevel = js.EducationLevel,
+                    ExperienceYears = js.ExperienceYears,
+                    Skills = js.Skills,
+                    CVFile = js.CVFile,
+                    Email = _context.Users
+                                .Where(u => u.UserName == js.UserName)
+                                .Select(u => u.Email)
+                                .FirstOrDefault(),
+                    Avatar = _context.Users
+                                .Where(u => u.UserName == js.UserName)
+                                .Select(u => u.Avatar)
+                                .FirstOrDefault()
+                })
+                .FirstOrDefaultAsync();
+
+            if (jobSeeker == null)
+            {
+                return NotFound("Người tìm việc không tồn tại.");
+            }
+
+            return Ok(jobSeeker);
         }
 
     }

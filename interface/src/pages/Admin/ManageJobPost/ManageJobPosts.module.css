@@ -1,0 +1,10 @@
+.title{
+    color: #00b14f;
+    font-size: 42px !important;
+    font-weight: bold !important;
+}
+.btn-custom{
+    color: #fff !important;
+    border-color: #00b14f !important;
+    background-color: #00b14f !important;
+}
