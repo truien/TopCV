@@ -9,6 +9,7 @@ using System.Linq;
 using System;
 using TopCV.Models;
 using Microsoft.EntityFrameworkCore;
+using TopCV.DTOs;
 
 namespace TopCV.Controllers
 {
@@ -157,6 +158,44 @@ namespace TopCV.Controllers
             _context.SaveChanges();
             return Ok(new { message = "Cập nhật trạng thái bài đăng thành công.", UpdatedStatus = newStatus });
         }
+        [HttpGet("get-jobpost/{postId}")]
+        public IActionResult GetJobPost(int postId)
+        {
+            var jobPost = _context.Jobposts.FirstOrDefault(jp => jp.Id == postId);
+            if (jobPost == null)
+            {
+                return NotFound(new { message = "Bài đăng không tồn tại." });
+            }
+            return Ok(jobPost);
+        }
+        [HttpPut("update-jobpost/{id}")]
+        public async Task<IActionResult> UpdateJobPost(int id, [FromBody] JobPostDTO updatedJobPost)
+        {
+
+            var existingJobPost = await _context.Jobposts.FindAsync(id);
+            if (existingJobPost == null)
+            {
+                return NotFound("Không tìm thấy bài đăng công việc.");
+            }
+
+            existingJobPost.Title = updatedJobPost.Title;
+            existingJobPost.JobDescription = updatedJobPost.JobDescription;
+            existingJobPost.Requirements = updatedJobPost.Requirements;
+            existingJobPost.Interest = updatedJobPost.Interest;
+            existingJobPost.SalaryRange = updatedJobPost.SalaryRange;
+            existingJobPost.Location = updatedJobPost.Location;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+                return Ok("Cập nhật thành công.");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Lỗi khi cập nhật bài đăng: {ex.Message}");
+            }
+        }
+
 
     }
 }

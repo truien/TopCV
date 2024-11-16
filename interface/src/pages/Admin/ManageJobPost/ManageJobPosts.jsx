@@ -1,11 +1,14 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import styles from './ManageJobPosts.module.css';
+import { toast } from 'react-toastify';
+// import EditJobSeekerForm from '@components/EditJobSeekerForm/EditJobSeekerForm.jsx'
 import {
     AiOutlineDelete,
     AiOutlineEyeInvisible,
     AiOutlineCheckCircle,
     AiOutlineCloseCircle,
+    // AiOutlineEdit,
 } from 'react-icons/ai';
 
 function ManageJobPosts() {
@@ -26,6 +29,7 @@ function ManageJobPosts() {
             );
             setJobPosts(response.data);
         } catch (error) {
+            toast.error('Đã xảy ra lỗi');
             console.log('Đã xảy ra lỗi', error);
         } finally {
             setLoading(false);
@@ -39,16 +43,25 @@ function ManageJobPosts() {
             );
             setUnapprovedPosts(response.data);
         } catch (error) {
-            console.log('Đã xảy ra lỗi khi tải bài chưa phê duyệt', error);
+            toast.error('Đã xảy ra lỗi khi tải bài chưa phê duyệt');
+            console.log(error);
         }
     };
 
     const handleDelete = async (postId) => {
         if (window.confirm('Bạn có chắc chắn muốn xóa bài đăng này?')) {
+            const deletePromise = axios.delete(
+                `http://localhost:5224/api/JobPosts/delete-jobpost/${postId}`
+            );
+
+            toast.promise(deletePromise, {
+                pending: 'Đang xóa bài đăng...',
+                success: 'Xóa bài đăng thành công!',
+                error: 'Đã xảy ra lỗi khi xóa bài đăng',
+            });
+
             try {
-                await axios.delete(
-                    `http://localhost:5224/api/JobPosts/delete-jobpost/${postId}`
-                );
+                await deletePromise;
                 setJobPosts((prevPosts) =>
                     prevPosts.filter((post) => post.id !== postId)
                 );
@@ -56,7 +69,7 @@ function ManageJobPosts() {
                     prevPosts.filter((post) => post.id !== postId)
                 );
             } catch (error) {
-                console.log('Đã xảy ra lỗi khi xóa bài đăng', error);
+                console.log(error);
             }
         }
     };
@@ -72,7 +85,7 @@ function ManageJobPosts() {
                         },
                     }
                 );
-                setUnapprovedPosts((prevPosts) => 
+                setUnapprovedPosts((prevPosts) =>
                     prevPosts.filter((post) => post.id !== postId)
                 );
                 fetchData();
@@ -97,7 +110,7 @@ function ManageJobPosts() {
                     Bài đăng
                 </a>
                 <button
-                    className={styles['btn-custom'] + ' btn'}
+                    className={styles['btn-custom'] + ' btn position-relative'}
                     type='button'
                     data-bs-toggle='collapse'
                     data-bs-target='#approveJob'
@@ -105,6 +118,9 @@ function ManageJobPosts() {
                     aria-controls='approveJob'
                 >
                     Chưa phê duyệt
+                    <div className='position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger'>
+                        {unapprovedPosts.length || 0}
+                    </div>
                 </button>
             </p>
             <div id='accordionExample'>
@@ -179,9 +195,49 @@ function ManageJobPosts() {
                                                                 >
                                                                     <AiOutlineDelete />
                                                                 </button>
-                                                                <button className='btn btn-warning'>
+                                                                <button className='btn btn-warning me-1'>
                                                                     <AiOutlineEyeInvisible />
                                                                 </button>
+                                                                <div
+                                                                    className='btn-group'
+                                                                    role='group'
+                                                                >
+                                                                    {/* <button
+                                                                        type='button'
+                                                                        className='btn btn-info'
+                                                                    >
+                                                                    </button> */}
+                                                                    <button
+                                                                        type='button'
+                                                                        className='btn btn-primary dropdown-toggle'
+                                                                        data-bs-toggle='dropdown'
+                                                                        aria-expanded='false'
+                                                                    >
+                                                                        
+                                                                    </button>
+                                                                    <ul className='dropdown-menu'>
+                                                                        <li>
+                                                                            <button
+                                                                                className='dropdown-item'
+                                                                                // onClick={onEditPost}
+                                                                            >
+                                                                                Sửa
+                                                                                bài
+                                                                                viết
+                                                                            </button>
+                                                                        </li>
+                                                                        <li>
+                                                                            <button
+                                                                                className='dropdown-item'
+                                                                                // onClick={onEditCategory}
+                                                                            >
+                                                                                Sửa
+                                                                                danh
+                                                                                mục
+                                                                            </button>
+                                                                        </li>
+                                                                    </ul>
+                                                                </div>
                                                             </div>
                                                         </td>
                                                     </tr>
@@ -259,35 +315,6 @@ function ManageJobPosts() {
                         ) : (
                             <p>Không có bài đăng cần phê duyệt.</p>
                         )}
-                    </div>
-                </div>
-            </div>
-            <div
-                aria-live='polite'
-                aria-atomic='true'
-                className='position-relative'
-            >
-                <div className='toast-container position-absolute top-0 end-0 p-3'>
-                    <div
-                        id='toastSuccess'
-                        className='toast'
-                        role='alert'
-                        aria-live='assertive'
-                        aria-atomic='true'
-                    >
-                        <div className='toast-header'>
-                            <strong className='me-auto'>Thông báo</strong>
-                            <small className='text-muted'>just now</small>
-                            <button
-                                type='button'
-                                className='btn-close'
-                                data-bs-dismiss='toast'
-                                aria-label='Close'
-                            ></button>
-                        </div>
-                        <div className='toast-body'>
-                            Bài đăng đã được phê duyệt thành công!
-                        </div>
                     </div>
                 </div>
             </div>

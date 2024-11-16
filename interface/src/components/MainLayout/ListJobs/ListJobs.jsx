@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import './styles.css';
 import logo from '@images/topcv-logo-10-year.png';
+import { toast } from 'react-toastify';
 
 const JobCard = ({ job }) => (
     <div className='col-md-3 mb-4'>
@@ -105,6 +106,7 @@ const ListJobs = () => {
                 setJobs(response.data.jobs);
                 setTotalJobs(response.data.total);
             } catch (err) {
+                toast.error('Đã có lỗi xảy ra, vui lòng thử lại sau');
                 console.log('Lỗi', err);
             }
         };

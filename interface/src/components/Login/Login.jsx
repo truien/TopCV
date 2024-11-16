@@ -2,17 +2,19 @@ import { useState } from 'react';
 import styles from './styles.module.css';
 import { Link, useNavigate } from 'react-router-dom';
 import { useUserContext } from '@hooks/UserContext.js';
+import { toast } from "react-toastify";
 
 function SignInForm() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [errorMessage, setErrorMessage] = useState('');
     const navigate = useNavigate();
     const { setUserDetails } = useUserContext();
     const handleLogin = async (event) => {
         event.preventDefault();
         if (!email || !password) {
-            setErrorMessage('Vui lòng nhập tên đăng nhập và mật khẩu.');
+            toast.warning('Vui lòng nhập tên đăng nhập và mật khẩu.', {
+                position: 'top-right',
+            });
             return;
         }
 
@@ -32,7 +34,10 @@ function SignInForm() {
             );
 
             if (!response.ok) {
-                throw new Error('Thông tin đăng nhập không chính xác.');
+                const error = await response.json();
+                toast.error(error.message || 'Đăng nhập thất bại.', {
+                    position: 'top-right',
+                });
             }
 
             const data = await response.json();
@@ -40,7 +45,9 @@ function SignInForm() {
             sessionStorage.setItem('userType', data.userType);
             sessionStorage.setItem('avatar', data.avatar);
             sessionStorage.setItem('username', email);
-
+            toast.success('Đăng nhập thành công!', {
+                position: 'top-right',
+            });
             navigate(
                 data.userType === 'Admin'
                     ? '/admin'
@@ -54,7 +61,10 @@ function SignInForm() {
                 avatar: data.avatar,
             });
         } catch (error) {
-            setErrorMessage(error.message);
+            toast.error('Tài khoản hoặc mật khẩu không đúng.', {
+                position: 'top-right',
+            });
+            console.log(error);
         }
     };
 
@@ -75,11 +85,6 @@ function SignInForm() {
                                 cơ hội sự nghiệp lý tưởng
                             </p>
                             <form onSubmit={handleLogin}>
-                                {errorMessage && (
-                                    <div className='alert alert-danger'>
-                                        {errorMessage}
-                                    </div>
-                                )}
                                 <div className='mb-3'>
                                     <label
                                         htmlFor='email'
