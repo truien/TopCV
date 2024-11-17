@@ -15,7 +15,7 @@ function JobPostForm() {
         interest: '',
         salaryRange: '',
         location: '',
-        status: 1,
+        status: 3,
         postDate: new Date().toISOString().split('T')[0],
         userEmployer: Username,
     });
