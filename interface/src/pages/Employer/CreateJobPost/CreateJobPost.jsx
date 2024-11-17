@@ -161,7 +161,7 @@ function JobPostForm() {
     return (
         <form className={'container'} onSubmit={handleSubmit}>
             <h2 className={styles['title'] + ' mb-5'}>Đăng tin tuyển dụng</h2>
-            <div className='border p-5'>
+            <div className='border p-4'>
                 <div>
                     <label
                         htmlFor='title'

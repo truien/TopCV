@@ -7,9 +7,9 @@ const RichTextEditor = ({ value, onChange }) => {
         <ReactQuill
             value={value}
             onChange={onChange}
-            className={styles.customQuill}
-            theme='snow'
-            placeholder='Viết văn bản ở đây...'
+            className={styles.customQuill} 
+            theme="snow"
+            placeholder="Viết văn bản ở đây..."
             modules={{
                 toolbar: [
                     [{ header: '1' }, { header: '2' }, { font: [] }],
