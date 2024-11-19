@@ -1,5 +1,7 @@
 import { useUserContext } from '@hooks/UserContext';
+import ConfirmModal from '@components/ConfirmModal/ConfirmModal.jsx';
 import axios from 'axios';
+import { toast } from 'react-toastify';
 import { useEffect, useState } from 'react';
 import {
     AiOutlineDelete,
@@ -14,7 +16,20 @@ function JobPostManage() {
     const { user } = useUserContext();
     const username = user?.username;
     const [jobPosts, setJobPosts] = useState([]);
-    const [error, setError] = useState('');
+    const [postIdToDelete, setPostIdToDelete] = useState(null);
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+
+    const openDeleteModal = (postId) => {
+        document.getElementById("root").setAttribute("inert", "true");
+        setPostIdToDelete(postId);
+        setIsDeleteModalOpen(true);
+    };
+
+    const closeDeleteModal = () => {
+        document.getElementById("root").removeAttribute("inert");
+        setIsDeleteModalOpen(false);
+        setPostIdToDelete(null);
+    };
 
     useEffect(() => {
         const fetchData = async () => {
@@ -23,9 +38,8 @@ function JobPostManage() {
                     `http://localhost:5224/api/Employer/get-jobpost/${username}`
                 );
                 setJobPosts(response.data);
-                setError('');
             } catch (error) {
-                setError('Đã xảy ra lỗi khi tải dữ liệu.');
+                toast.error('Có lỗi xảy ra khi tải dữ liệu.');
                 console.error('Error:', error);
             }
         };
@@ -35,18 +49,18 @@ function JobPostManage() {
         }
     }, [username]);
 
-    const handleDelete = async (postId) => {
-        if (window.confirm('Bạn có chắc chắn muốn xóa bài đăng này?')){
+    const handleDelete = async () => {
+        
             try {
                 await axios.delete(
-                    `http://localhost:5224/api/JobPosts/delete-jobpost/${postId}`
+                    `http://localhost:5224/api/JobPosts/delete-jobpost/${postIdToDelete}`
                 );
-                setJobPosts(jobPosts.filter((post) => post.id !== postId));
+                setJobPosts(jobPosts.filter((post) => post.id !== postIdToDelete));
             } catch (error) {
-                setError('Không thể xóa bài đăng.');
+                toast.error('Có lỗi xảy ra khi xoá bài đăng.');
                 console.error('Delete error:', error);
             }
-        }
+            closeDeleteModal();
     };
 
     const handleToggleStatus = async (postId, currentStatus) => {
@@ -67,7 +81,7 @@ function JobPostManage() {
                 )
             );
         } catch (error) {
-            setError('Không thể cập nhật trạng thái bài đăng.');
+            toast.error('Có lỗi xảy ra khi thay đổi trạng thái.');
             console.error('Toggle status error:', error);
         }
     };
@@ -89,7 +103,6 @@ function JobPostManage() {
                 </button>
             </div>
 
-            {error && <p className='text-danger'>{error}</p>}
             {jobPosts.length > 0 ? (
                 <table className='table table-striped'>
                     <thead>
@@ -108,7 +121,7 @@ function JobPostManage() {
                             <tr key={post.id}>
                                 <td>{post.id}</td>
                                 <td>{post.title}</td>
-                                <td>{post.company}</td>
+                                <td>{post.companyName}</td>
                                 <td>{post.jobDescription}</td>
                                 <td>
                                     {new Date(
@@ -121,7 +134,9 @@ function JobPostManage() {
                                         <button
                                             className='btn btn-danger me-1'
                                             onClick={() =>
-                                                handleDelete(post.id)
+                                                openDeleteModal(
+                                                    post.id
+                                                )
                                             }
                                         >
                                             <AiOutlineDelete />
@@ -160,6 +175,12 @@ function JobPostManage() {
             ) : (
                 <p>Không có bài đăng nào</p>
             )}
+             <ConfirmModal
+                isOpen={isDeleteModalOpen}
+                onClose={closeDeleteModal}
+                onConfirm={handleDelete}
+                message='Bạn có chắc chắn muốn xoá bài đăng này?'
+            />
         </>
     );
 }

@@ -3,6 +3,7 @@ import axios from 'axios';
 import styles from './ManageJobPosts.module.css';
 import { toast } from 'react-toastify';
 import EditJobSeekerForm from '@components/EditJobSeekerForm/EditJobSeekerForm.jsx';
+import ConfirmModal from '@components/ConfirmModal/ConfirmModal.jsx';
 import {
     AiOutlineDelete,
     AiOutlineEyeInvisible,
@@ -16,6 +17,33 @@ function ManageJobPosts() {
     const [loading, setLoading] = useState(true);
     const [isEditing, setIsEditing] = useState(false);
     const [currentPostId, setCurrentPostId] = useState(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [postIdToApprove, setPostIdToApprove] = useState(null);
+    const [postIdToDelete, setPostIdToDelete] = useState(null);
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+
+    const openDeleteModal = (postId) => {
+        document.getElementById("root").setAttribute("inert", "true");
+        setPostIdToDelete(postId);
+        setIsDeleteModalOpen(true);
+    };
+
+    const closeDeleteModal = () => {
+        document.getElementById("root").removeAttribute("inert");
+        setIsDeleteModalOpen(false);
+        setPostIdToDelete(null);
+    };
+
+    const openModal = (postId) => {
+        document.getElementById("root").setAttribute("inert", "true");
+        setPostIdToApprove(postId);
+        setIsModalOpen(true);
+    };
+    const closeModal = () => {
+        document.getElementById("root").removeAttribute("inert");
+        setIsModalOpen(false);
+        setPostIdToApprove(null);
+    };
 
     const onEditPost = (Id) => {
         setIsEditing(true);
@@ -57,10 +85,10 @@ function ManageJobPosts() {
         }
     };
 
-    const handleDelete = async (postId) => {
-        if (window.confirm('Bạn có chắc chắn muốn xóa bài đăng này?')) {
+    const handleDelete = async () => {
+        try {
             const deletePromise = axios.delete(
-                `http://localhost:5224/api/JobPosts/delete-jobpost/${postId}`
+                `http://localhost:5224/api/JobPosts/delete-jobpost/${postIdToDelete}`
             );
 
             toast.promise(deletePromise, {
@@ -69,38 +97,39 @@ function ManageJobPosts() {
                 error: 'Đã xảy ra lỗi khi xóa bài đăng',
             });
 
-            try {
-                await deletePromise;
-                setJobPosts((prevPosts) =>
-                    prevPosts.filter((post) => post.id !== postId)
-                );
-                setUnapprovedPosts((prevPosts) =>
-                    prevPosts.filter((post) => post.id !== postId)
-                );
-            } catch (error) {
-                console.log(error);
-            }
+            await deletePromise;
+
+            setJobPosts((prevPosts) =>
+                prevPosts.filter((post) => post.id !== postIdToDelete)
+            );
+            setUnapprovedPosts((prevPosts) =>
+                prevPosts.filter((post) => post.id !== postIdToDelete)
+            );
+
+            closeDeleteModal();
+        } catch (error) {
+            console.error(error);
         }
     };
-    const handleApprove = async (postId) => {
-        if (window.confirm('Bạn muốn phê duyệt bài đăng này?')) {
-            try {
-                await axios.put(
-                    `http://localhost:5224/api/JobPosts/update-jobpost-status/${postId}`,
-                    1,
-                    {
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                    }
-                );
-                setUnapprovedPosts((prevPosts) =>
-                    prevPosts.filter((post) => post.id !== postId)
-                );
-                fetchData();
-            } catch (error) {
-                console.log('Đã xảy ra lỗi khi phê duyệt bài đăng', error);
-            }
+    const handleApprove = async () => {
+        try {
+            await axios.put(
+                `http://localhost:5224/api/JobPosts/update-jobpost-status/${postIdToApprove}`,
+                1,
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                }
+            );
+            setUnapprovedPosts((prevPosts) =>
+                prevPosts.filter((post) => post.id !== postIdToApprove)
+            );
+            fetchData();
+            closeModal();
+        } catch (error) {
+            console.error('Đã xảy ra lỗi khi phê duyệt bài đăng', error);
+            alert('Không thể phê duyệt bài đăng. Vui lòng thử lại sau.');
         }
     };
     const onCancelEdit = () => {
@@ -229,7 +258,7 @@ function ManageJobPosts() {
                                                                                 <button
                                                                                     className='btn btn-danger me-1'
                                                                                     onClick={() =>
-                                                                                        handleDelete(
+                                                                                        openDeleteModal(
                                                                                             jobPost.id
                                                                                         )
                                                                                     }
@@ -354,7 +383,7 @@ function ManageJobPosts() {
                                                                     <button
                                                                         className='btn btn-success me-1'
                                                                         onClick={() =>
-                                                                            handleApprove(
+                                                                            openModal(
                                                                                 jobPost.id
                                                                             )
                                                                         }
@@ -364,7 +393,7 @@ function ManageJobPosts() {
                                                                     <button
                                                                         className='btn btn-danger'
                                                                         onClick={() =>
-                                                                            handleDelete(
+                                                                            openDeleteModal(
                                                                                 jobPost.id
                                                                             )
                                                                         }
@@ -393,6 +422,18 @@ function ManageJobPosts() {
                     />
                 )}
             </div>
+            <ConfirmModal
+                isOpen={isModalOpen}
+                onClose={closeModal}
+                onConfirm={handleApprove}
+                message='Bạn muốn phê duyệt bài đăng này?'
+            />
+            <ConfirmModal
+                isOpen={isDeleteModalOpen}
+                onClose={closeDeleteModal}
+                onConfirm={handleDelete}
+                message='Bạn có chắc chắn muốn xoá bài đăng này?'
+            />
         </>
     );
 }

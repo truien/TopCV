@@ -2,14 +2,40 @@ import { useState, useEffect } from 'react';
 import Axios from 'axios';
 import logo from '@images/avatar-default.jpg';
 import './styles.css';
+import ConfirmModal from '@components/ConfirmModal/ConfirmModal.jsx';
 import { AiOutlineDelete, AiOutlineEdit } from 'react-icons/ai';
 function Users() {
     const [activeCollapse, setActiveCollapse] = useState(null);
     const [jobSeekerData, setJobSeekerData] = useState(null);
     const [EmployerData, setEmployerData] = useState(null);
+
+    const [isModalOpenSeekerJob, setIsModalOpenSeekerJob] = useState(false);  
+    const [isModalOpenEmployer, setIsModalOpenEmployer] = useState(false);  
+    const [userNameSeekerJob, setUserNameSeekerJob] = useState(null);
+    const [userNameEmployer, setUserNameEmployer] = useState(null);
+    
+    const openDeleteSeekerJob = (userName) => {
+        document.getElementById("root").setAttribute("inert", "true");
+        setUserNameSeekerJob(userName);
+        setIsModalOpenSeekerJob(true);
+    };
+    const openDeleteEmployer = (userName) => {
+        document.getElementById("root").setAttribute("inert", "true");
+        setUserNameEmployer(userName);
+        setIsModalOpenEmployer(true);
+    };
+    const closeDeleteModal = () => {
+        document.getElementById("root").removeAttribute("inert");
+        setIsModalOpenSeekerJob(false);
+        setIsModalOpenEmployer(false);
+        setUserNameEmployer(null);
+        setUserNameSeekerJob(null);
+    };
+
     const handleCollapse = (collapseId) => {
         setActiveCollapse(activeCollapse === collapseId ? null : collapseId);
     };
+
     useEffect(() => {
         const fetchData = async () => {
             if (activeCollapse == 'jobSeeker' && !jobSeekerData) {
@@ -36,27 +62,29 @@ function Users() {
         fetchData();
     }, [activeCollapse, jobSeekerData, EmployerData]);
 
-    const handleDeleteJobSeeker = async (username) => {
+    const handleDeleteJobSeeker = async () => {
         try {
             await Axios.delete(
-                `http://localhost:5224/api/JobSeeker/delete/${username}`
+                `http://localhost:5224/api/JobSeeker/delete/${userNameSeekerJob}`
             );
             setJobSeekerData((prevData) =>
-                prevData.filter((jobSeeker) => jobSeeker.userName !== username)
+                prevData.filter((jobSeeker) => jobSeeker.userName !== userNameSeekerJob)
             );
+            closeDeleteModal();
         } catch (e) {
             console.warn(e);
             alert('Xóa tài khoản không thành công');
         }
     };
-    const handleDeleteEmployer = async (username) => {
+    const handleDeleteEmployer = async () => {
         try {
             await Axios.delete(
-                `http://localhost:5224/api/Employer/delete/${username}`
+                `http://localhost:5224/api/Employer/delete/${userNameEmployer}`
             );
             setEmployerData((prevData) =>
-                prevData.filter((employer) => employer.userName !== username)
+                prevData.filter((employer) => employer.userName !== userNameEmployer)
             );
+            closeDeleteModal();
         } catch (e) {
             console.warn(e);
             alert('Xóa tài khoản không thành công');
@@ -123,8 +151,8 @@ function Users() {
                                                         <div className='d-flex'>
                                                             <button
                                                                 onClick={() =>
-                                                                    handleDeleteJobSeeker(
-                                                                        jobSeeker?.userName
+                                                                    openDeleteSeekerJob(
+                                                                        jobSeeker.id
                                                                     )
                                                                 }
                                                                 className='btn btn-danger me-1'
@@ -182,8 +210,8 @@ function Users() {
                                                         <button
                                                             className='btn btn-danger me-1'
                                                             onClick={() =>
-                                                                handleDeleteEmployer(
-                                                                    employer?.userName
+                                                                openDeleteEmployer(
+                                                                    employer.id
                                                                 )
                                                             }
                                                         >
@@ -207,6 +235,18 @@ function Users() {
                     </div>
                 </div>
             </div>
+            <ConfirmModal
+                isOpen={isModalOpenEmployer}
+                onClose={closeDeleteModal}
+                onConfirm={handleDeleteEmployer}
+                message='Bạn có chắc chắn muốn xoá tài khoản này?'
+            />
+            <ConfirmModal
+                isOpen={isModalOpenSeekerJob}
+                onClose={closeDeleteModal}
+                onConfirm={handleDeleteJobSeeker}
+                message='Bạn có chắc chắn muốn xoá tài khoản này?'
+            />
         </>
     );
 }
