@@ -1,0 +1,80 @@
+@use "sass:math";
+@import url('https://fonts.googleapis.com/css2?family=Courgette&display=swap');
+
+@function multiple-shadow($length) {
+    $value: 2px -1px 0 #000;
+    @for $i from 2 through $length {
+        $ho: $i * 2;
+        $vo: -(math.div($ho, 2));
+        $col: hsl(0deg, 0%, $i * 2%);
+        $value: $value, #{$ho}px #{$vo}px 0 $col;
+    }
+    @return $value;
+}
+
+// Mixin tạo layout linh hoạt
+@mixin _flexbox($direction, $justify, $align, $text-align) {
+    display: flex;
+    flex-direction: $direction;
+    justify-content: $justify;
+    align-items: $align;
+    text-align: $text-align;
+}
+
+// Mixin tạo hiệu ứng pseudo-element
+@mixin _pseudo-uncomplete($bf, $bl1, $bl2) {
+    &::before {
+        content: '';
+        position: absolute;
+        background-color: $bf;
+        background-image: $bl1, $bl2; // Kết hợp 2 background-image
+        width: 100%;
+        height: 100%;
+        mix-blend-mode: screen;
+        animation: moving 5s linear infinite both;
+    }
+}
+
+// Keyframes cho animation
+@keyframes moving {
+    to {
+        background-position: 200vmin 40vmin, -200vmin -50vmin; // Di chuyển xa hơn
+    }
+}
+
+// Cấu hình chính
+.number {
+    background: #fff;
+    position: relative;
+    font: 700 10vmin 'Consolas' !important; // Giảm kích thước font-size và font-weight
+    letter-spacing: 2vmin; // Điều chỉnh khoảng cách chữ
+    text-shadow: multiple-shadow(6); // Giảm độ sâu của bóng
+    @include _pseudo-uncomplete(
+        #673ab7,
+        radial-gradient(
+            closest-side at 50% 50%,
+            #ffc107 100%,
+            rgba(0, 0, 0, 0)
+        ),
+        radial-gradient(closest-side at 50% 50%, #e91e63 100%, rgba(0, 0, 0, 0))
+    );
+    @include _flexbox(column, center, center, center);
+}
+
+.text {
+    font: 400 3vmin 'Courgette' !important; // Điều chỉnh kích thước font
+    @include _flexbox(column, center, center, center);
+    span {
+        font-size: 5vmin; // Giảm kích thước span
+    }
+}
+
+.link {
+    color: #673ab7;
+    text-decoration: none;
+    font-size: 1.5rem; // Điều chỉnh kích thước font-size cho liên kết
+    @include _flexbox(row, center, center, center);
+}
+.fist{
+    margin-top: 10rem;
+}

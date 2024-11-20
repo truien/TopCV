@@ -10,6 +10,7 @@ import Sign from './components/Sign/Sign.jsx';
 import EmployerLayout from '@layouts/EmployerLayout';
 import JobPostManage from './pages/Employer/JobPostManage/JobPostManage.jsx';
 import CreateJobPost from './pages/Employer/CreateJobPost/CreateJobPost.jsx';
+import NotFound from './pages/NotFound/NotFound.jsx';
 
 function App() {
     return (
@@ -32,6 +33,7 @@ function App() {
                 </Route>
                 <Route path='/login' element={<Login />} />
                 <Route path='/sign' element={<Sign />} />
+                <Route path='*' element={<NotFound />} />
             </Routes>
         </Router>
     );
