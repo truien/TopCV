@@ -2870,19 +2870,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\admin\\.nuget\\packages\\": {}
+    "C:\\Users\\Administrator.DESKTOP-98TGIBL\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\admin\\TopCV\\TopCV.csproj",
+      "projectUniqueName": "C:\\Users\\TopCV\\TopCV.csproj",
       "projectName": "TopCV",
-      "projectPath": "C:\\Users\\admin\\TopCV\\TopCV.csproj",
-      "packagesPath": "C:\\Users\\admin\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\admin\\TopCV\\obj\\",
+      "projectPath": "C:\\Users\\TopCV\\TopCV.csproj",
+      "packagesPath": "C:\\Users\\Administrator.DESKTOP-98TGIBL\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\TopCV\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\admin\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        "C:\\Users\\Administrator.DESKTOP-98TGIBL\\AppData\\Roaming\\NuGet\\NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net8.0"
@@ -2951,7 +2951,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.403/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.404/PortableRuntimeIdentifierGraph.json"
       }
     }
   }
