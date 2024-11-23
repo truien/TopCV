@@ -131,7 +131,7 @@ function JobPostForm() {
             const employmentPromises = selectedEmploymentTypes.map(
                 (employmentType) =>
                     axios.post(
-                        'http://localhost:5224/api/JobPostType/add-jobpostemployment',
+                        'http://localhost:5224/api/JobType/add-jobpostemployment',
                         {
                             IDJobPost: IDJobPost,
                             IDEmploymentType: employmentType.value,
@@ -141,7 +141,7 @@ function JobPostForm() {
 
             const fieldPromises = selectedJobFields.map((jobField) =>
                 axios.post(
-                    'http://localhost:5224/api/JobPostType/add-jobpostfield',
+                    'http://localhost:5224/api/JobType/add-jobpostfield',
                     {
                         IDJobPost: IDJobPost,
                         IDJobField: jobField.value,

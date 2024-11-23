@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\TopCV\\TopCV.csproj": {}
+    "C:\\Users\\admin\\TopCV\\TopCV.csproj": {}
   },
   "projects": {
-    "C:\\Users\\TopCV\\TopCV.csproj": {
+    "C:\\Users\\admin\\TopCV\\TopCV.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\TopCV\\TopCV.csproj",
+        "projectUniqueName": "C:\\Users\\admin\\TopCV\\TopCV.csproj",
         "projectName": "TopCV",
-        "projectPath": "C:\\Users\\TopCV\\TopCV.csproj",
-        "packagesPath": "C:\\Users\\Administrator.DESKTOP-98TGIBL\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\TopCV\\obj\\",
+        "projectPath": "C:\\Users\\admin\\TopCV\\TopCV.csproj",
+        "packagesPath": "C:\\Users\\admin\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\admin\\TopCV\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\Administrator.DESKTOP-98TGIBL\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\admin\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net8.0"

@@ -43,22 +43,23 @@ function JobPostManage() {
         setIsEditing(false);
         setCurrentPostId(null);
     };
-    const fetchData = async () => {
-        try {
-            const response = await axios.get(
-                `http://localhost:5224/api/Employer/get-jobpost/${username}`
-            );
-            setJobPosts(response.data);
-        } catch (error) {
-            toast.error('Có lỗi xảy ra khi tải dữ liệu.');
-            console.error('Error:', error);
-        }
-    };
     useEffect(() => {
-        if (username) {
+        if (!username) {
+            navigate('/login');
+        } else {
+            const fetchData = async () => {
+                try {
+                    const response = await axios.get(
+                        `http://localhost:5224/api/Employer/get-jobpost/${username}`
+                    );
+                    setJobPosts(response.data);
+                } catch (error) {
+                    console.error('Error:', error);
+                }
+            };
             fetchData();
         }
-    });
+    }, [username, navigate]);
 
     const handleDelete = async () => {
         try {

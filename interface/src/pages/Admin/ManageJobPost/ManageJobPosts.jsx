@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import styles from './ManageJobPosts.module.css';
 import { toast } from 'react-toastify';
+import DOMPurify from 'dompurify';
 import EditJobSeekerForm from '@components/EditJobSeekerForm/EditJobSeekerForm.jsx';
 import ConfirmModal from '@components/ConfirmModal/ConfirmModal.jsx';
 import {
@@ -9,6 +10,7 @@ import {
     AiOutlineEyeInvisible,
     AiOutlineCheckCircle,
     AiOutlineCloseCircle,
+    AiOutlineEye,
 } from 'react-icons/ai';
 
 function ManageJobPosts() {
@@ -23,24 +25,24 @@ function ManageJobPosts() {
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
     const openDeleteModal = (postId) => {
-        document.getElementById("root").setAttribute("inert", "true");
+        document.getElementById('root').setAttribute('inert', 'true');
         setPostIdToDelete(postId);
         setIsDeleteModalOpen(true);
     };
 
     const closeDeleteModal = () => {
-        document.getElementById("root").removeAttribute("inert");
+        document.getElementById('root').removeAttribute('inert');
         setIsDeleteModalOpen(false);
         setPostIdToDelete(null);
     };
 
     const openModal = (postId) => {
-        document.getElementById("root").setAttribute("inert", "true");
+        document.getElementById('root').setAttribute('inert', 'true');
         setPostIdToApprove(postId);
         setIsModalOpen(true);
     };
     const closeModal = () => {
-        document.getElementById("root").removeAttribute("inert");
+        document.getElementById('root').removeAttribute('inert');
         setIsModalOpen(false);
         setPostIdToApprove(null);
     };
@@ -130,6 +132,29 @@ function ManageJobPosts() {
         } catch (error) {
             console.error('Đã xảy ra lỗi khi phê duyệt bài đăng', error);
             alert('Không thể phê duyệt bài đăng. Vui lòng thử lại sau.');
+        }
+    };
+    const handleToggleStatus = async (postId, currentStatus) => {
+        try {
+            const newStatus = currentStatus === 1 ? 2 : 1;
+
+            // Gọi API để cập nhật trạng thái
+            await axios.put(
+                `http://localhost:5224/api/JobPosts/update-jobpost-status/${postId}`,
+                newStatus,
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                }
+            );
+            setJobPosts(
+                jobPosts.map((post) =>
+                    post.id === postId ? { ...post, status: newStatus } : post
+                )
+            );
+        } catch (ex) {
+            console.log(ex);
         }
     };
     const onCancelEdit = () => {
@@ -238,11 +263,13 @@ function ManageJobPosts() {
                                                                                 jobPost.companyName
                                                                             }
                                                                         </td>
-                                                                        <td>
-                                                                            {
-                                                                                jobPost.jobDescription
-                                                                            }
-                                                                        </td>
+                                                                        <td
+                                                                            dangerouslySetInnerHTML={{
+                                                                                __html: DOMPurify.sanitize(
+                                                                                    jobPost.jobDescription
+                                                                                ),
+                                                                            }}
+                                                                        ></td>
                                                                         <td>
                                                                             {new Date(
                                                                                 jobPost.postDate
@@ -265,9 +292,32 @@ function ManageJobPosts() {
                                                                                 >
                                                                                     <AiOutlineDelete />
                                                                                 </button>
-                                                                                <button className='btn btn-warning me-1'>
-                                                                                    <AiOutlineEyeInvisible />
-                                                                                </button>
+                                                                                {jobPost.status ===
+                                                                                1 ? (
+                                                                                    <button
+                                                                                        className='btn btn-warning'
+                                                                                        onClick={() =>
+                                                                                            handleToggleStatus(
+                                                                                                jobPost.id,
+                                                                                                jobPost.status
+                                                                                            )
+                                                                                        }
+                                                                                    >
+                                                                                        <AiOutlineEyeInvisible />
+                                                                                    </button>
+                                                                                ) : (
+                                                                                    <button
+                                                                                        className='btn btn-secondary'
+                                                                                        onClick={() =>
+                                                                                            handleToggleStatus(
+                                                                                                jobPost.id,
+                                                                                                jobPost.status
+                                                                                            )
+                                                                                        }
+                                                                                    >
+                                                                                        <AiOutlineEye />
+                                                                                    </button>
+                                                                                )}
                                                                                 <div
                                                                                     className='btn-group'
                                                                                     role='group'
