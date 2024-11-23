@@ -57,19 +57,19 @@ const Header = () => {
                 >
                     <ul className='navbar-nav'>
                         <li className='nav-item'>
-                            <Link to='/' className='nav-link custom-text'>
+                            <Link to='/' className='nav-link nav-link_custom custom-text'>
                                 Trang chủ
                             </Link>
                         </li>
                         <li className='nav-item'>
-                            <Link to='/jobs' className='nav-link custom-text'>
+                            <Link to='/jobs' className='nav-link nav-link_custom custom-text'>
                                 Tìm việc
                             </Link>
                         </li>
                         <li className='nav-item'>
                             <Link
                                 to='/employers'
-                                className='nav-link custom-text'
+                                className='nav-link nav-link_custom custom-text'
                             >
                                 Nhà tuyển dụng
                             </Link>
@@ -77,7 +77,7 @@ const Header = () => {
                         <li className='nav-item'>
                             <Link
                                 to='/create-cv'
-                                className='nav-link custom-text'
+                                className='nav-link nav-link_custom custom-text'
                             >
                                 Tạo CV
                             </Link>
@@ -85,7 +85,7 @@ const Header = () => {
                         <li className='nav-item'>
                             <Link
                                 to='/resources'
-                                className='nav-link custom-text'
+                                className='nav-link nav-link_custom custom-text'
                             >
                                 Tài nguyên
                             </Link>
@@ -94,7 +94,7 @@ const Header = () => {
                             <li className='nav-item'>
                                 <Link
                                     to='/admin'
-                                    className='nav-link custom-text'
+                                    className='nav-link nav-link_custom custom-text'
                                 >
                                     Quản lý
                                 </Link>
