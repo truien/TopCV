@@ -35,7 +35,7 @@ function App() {
                 <Route path='/login' element={<Login />} />
                 <Route path='/sign' element={<Sign />} />
                 <Route path='*' element={<NotFound />} />
-                <Route path='/settings' element={<MainSetting />} />
+                <Route path='account-settings' element={<MainSetting />} />
             </Routes>
         </Router>
     );
