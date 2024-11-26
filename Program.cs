@@ -47,6 +47,7 @@ builder.Services.AddAuthentication(options =>
 // Thêm Authorization
 builder.Services.AddAuthorization();
 
+
 // Thêm dịch vụ CORS
 builder.Services.AddCors(options =>
 {
@@ -96,6 +97,7 @@ app.UseRouting();
 app.UseCors("AllowAll");
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseStaticFiles();
 
 // Cấu hình Swagger và chuyển hướng HTTPS
 if (app.Environment.IsDevelopment())

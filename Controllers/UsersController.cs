@@ -41,17 +41,50 @@ namespace TopCV.Controllers
         return Ok(user);
     }
     [HttpPut("{userName}")]
-    public async Task<IActionResult> UpdateUser(string userName, [FromBody] User updatedUser)
+public async Task<IActionResult> UpdateUser(string userName, [FromForm] UserUpdateDto updatedUser)
+{
+    var user = await _context.Users.FindAsync(userName);
+    if (user == null)
     {
-        var user = await _context.Users.FindAsync(userName);
-        if (user == null) return NotFound("Người dùng không tồn tại.");
-
-        user.Email = updatedUser.Email ?? user.Email;
-        user.Avatar = updatedUser.Avatar ?? user.Avatar;
-
-        await _context.SaveChangesAsync();
-        return Ok(user);
+        return NotFound("Người dùng không tồn tại.");
     }
+
+    // Kiểm tra mật khẩu cũ nếu có
+    if (!string.IsNullOrEmpty(updatedUser.CurrentPassword))
+    {
+        if (updatedUser.CurrentPassword != user.Password)
+        {
+            return BadRequest("Mật khẩu hiện tại không đúng.");
+        }
+    }
+
+    // Cập nhật mật khẩu mới nếu có
+    if (!string.IsNullOrEmpty(updatedUser.NewPassword))
+    {
+        user.Password = updatedUser.NewPassword; 
+    }
+
+    user.Email = updatedUser.Email ?? user.Email;
+
+    if (updatedUser.Avatar != null)
+    {
+        var fileName = Guid.NewGuid().ToString() + Path.GetExtension(updatedUser.Avatar.FileName);
+        var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "avatar", fileName);
+
+        using (var stream = new FileStream(filePath, FileMode.Create))
+        {
+            await updatedUser.Avatar.CopyToAsync(stream);
+        }
+
+        user.Avatar = fileName;
+    }
+
+    // Lưu thay đổi vào cơ sở dữ liệu
+    await _context.SaveChangesAsync();
+
+    return Ok(user);
+}
+
     
 
     }

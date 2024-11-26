@@ -59,7 +59,7 @@ namespace TopCV.Controllers
         {
             var jobposts = from i in _context.Jobposts
                 join j in _context.Useremployers on i.UserEmployer equals j.UserName
-                where j.UserName == username
+                where j.UserName == username && i.Status ==1 || i.Status ==2
                 select new 
                 {
                     i.Id,

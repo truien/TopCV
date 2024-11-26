@@ -240,3 +240,4 @@ C:\Users\TopCV\obj\Debug\net8.0\refint\TopCV.dll
 C:\Users\TopCV\obj\Debug\net8.0\TopCV.pdb
 C:\Users\TopCV\obj\Debug\net8.0\TopCV.genruntimeconfig.cache
 C:\Users\TopCV\obj\Debug\net8.0\ref\TopCV.dll
+C:\Users\admin\TopCV\bin\Debug\net8.0\TopCV.staticwebassets.runtime.json

@@ -5,7 +5,7 @@ import logo from '@images/topcv-logo-10-year.png';
 import { toast } from 'react-toastify';
 
 const JobCard = ({ job }) => (
-    <div className='col-md-3 mb-4'>
+    <div className='col-md-4 mb-4'>
         <div className='card job-card shadow-sm'>
             <div className='card-body d-flex'>
                 <div className='company-logo me-3'>

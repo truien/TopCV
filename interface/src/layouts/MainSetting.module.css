@@ -1,0 +1,16 @@
+.main-container {
+    display: flex; /* Đặt flexbox để chia bố cục */
+    height: 100vh; /* Đặt chiều cao toàn màn hình nếu cần */
+}
+
+.content {
+    flex: 1; /* Nội dung chiếm phần còn lại */
+    padding: 16px; /* Tùy chỉnh padding nếu muốn */
+    overflow-y: auto; /* Cho phép cuộn nếu nội dung dài */
+}
+
+.SideBarSettings {
+    width: 250px; /* Đặt chiều rộng sidebar */
+    background-color: #f4f4f4; /* Màu nền sidebar */
+    border-right: 1px solid #ddd; /* Đường viền phải */
+}

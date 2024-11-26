@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import {
     FaBars,
     FaBell,
-    FaShoppingCart,
     FaUser,
     FaChartLine,
     FaBriefcase,
@@ -46,9 +45,6 @@ const AdminLayout = () => {
                 <div className='header-icons d-flex align-items-center'>
                     <button className='bg-transparent border-0'>
                         <FaBell className='text-white mx-2' />
-                    </button>
-                    <button className='bg-transparent border-0'>
-                        <FaShoppingCart className='text-white mx-2' />
                     </button>
                     <button className='bg-transparent border-0'>
                         <FaUser className='text-white mx-2' />

@@ -11,7 +11,8 @@ import EmployerLayout from '@layouts/EmployerLayout';
 import JobPostManage from './pages/Employer/JobPostManage/JobPostManage.jsx';
 import CreateJobPost from './pages/Employer/CreateJobPost/CreateJobPost.jsx';
 import NotFound from './pages/NotFound/NotFound.jsx';
-import  MainSetting from './layouts/MainSetting.jsx'
+import MainSetting from './layouts/MainSetting.jsx';
+import SettingAccount from './pages/Main/SettingAccount/SettingAccount.jsx';
 
 function App() {
     return (
@@ -27,6 +28,7 @@ function App() {
                         path='job-post-manage'
                         element={<ManageJobPosts />}
                     />
+                    <Route path='settings' element={<SettingAccount />} />
                 </Route>
                 <Route path='/employer' element={<EmployerLayout />}>
                     <Route index element={<JobPostManage />} />
@@ -35,7 +37,9 @@ function App() {
                 <Route path='/login' element={<Login />} />
                 <Route path='/sign' element={<Sign />} />
                 <Route path='*' element={<NotFound />} />
-                <Route path='account-settings' element={<MainSetting />} />
+                <Route path='account-settings' element={<MainSetting />}>
+                    <Route index element={<SettingAccount />} />
+                </Route>
             </Routes>
         </Router>
     );
