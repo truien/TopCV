@@ -1,15 +1,14 @@
 import { Link, useNavigate } from 'react-router-dom';
 import logo from '@images/topcv-logo-10-year.png';
 import avatarDefault from '@images/avatar-default.jpg';
-import { useUserContext } from '@hooks/UserContext';
 import './styles.css';
 import { useState } from 'react';
 
 const Header = () => {
     const navigate = useNavigate();
-    const { avatar } = useUserContext(); 
+    const avatar = sessionStorage.getItem('avatar');
     const userType = sessionStorage.getItem('userType');
-    const displayAvatar = avatar || avatarDefault; 
+    const displayAvatar = avatar || avatarDefault;
     const [showDropdown, setShowDropdown] = useState(false);
 
     const handleLogin = () => {
@@ -24,6 +23,8 @@ const Header = () => {
         sessionStorage.removeItem('token');
         sessionStorage.removeItem('userType');
         sessionStorage.removeItem('avatar');
+        sessionStorage.removeItem('username');
+        sessionStorage.removeItem('activeLink');
         navigate('/');
     };
 
@@ -57,12 +58,18 @@ const Header = () => {
                 >
                     <ul className='navbar-nav'>
                         <li className='nav-item'>
-                            <Link to='/' className='nav-link nav-link_custom custom-text'>
+                            <Link
+                                to='/'
+                                className='nav-link nav-link_custom custom-text'
+                            >
                                 Trang chủ
                             </Link>
                         </li>
                         <li className='nav-item'>
-                            <Link to='/jobs' className='nav-link nav-link_custom custom-text'>
+                            <Link
+                                to='/jobs'
+                                className='nav-link nav-link_custom custom-text'
+                            >
                                 Tìm việc
                             </Link>
                         </li>
@@ -112,8 +119,8 @@ const Header = () => {
                                     src={displayAvatar}
                                     alt='Avatar'
                                     style={{
-                                        width: '40px',
-                                        height: '40px',
+                                        width: '50px',
+                                        height: '50px',
                                         borderRadius: '50%',
                                     }}
                                     className='avatar'

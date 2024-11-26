@@ -42,15 +42,16 @@ namespace TopCV.Controllers
         [HttpGet("get-all-jobSeeker")]
         public IActionResult GetAllJobSeekers()
         {
+            var baseUrl = $"{Request.Scheme}://{Request.Host}/";
             var jobSeekers = from i in _context.Userjobseekers
-                             join j in _context.Users on i.UserName equals j.UserName
-                             select new
-                             {
-                                 i.UserName,
-                                 j.Email,
-                                 j.Avatar,
-                                 i.FullName
-                             };
+                            join j in _context.Users on i.UserName equals j.UserName
+                            select new
+                            {
+                                i.UserName,
+                                j.Email,
+                                Avatar = string.IsNullOrEmpty(j.Avatar) ? "" : baseUrl + "avatar/" + j.Avatar,
+                                i.FullName
+                            };
             jobSeekers.ToList();
 
 
@@ -59,27 +60,23 @@ namespace TopCV.Controllers
         [HttpGet("{username}")]
         public async Task<IActionResult> GetJobSeekerInfo(string username)
         {
-            var jobSeeker = await _context.Userjobseekers
-                .Where(js => js.UserName == username)
-                .Select(js => new JobSeekerDetailDto
-                {
-                    UserName = js.UserName,
-                    FullName = js.FullName,
-                    DateOfBirth = js.DateOfBirth,
-                    EducationLevel = js.EducationLevel,
-                    ExperienceYears = js.ExperienceYears,
-                    Skills = js.Skills,
-                    CVFile = js.CVFile,
-                    Email = _context.Users
-                                .Where(u => u.UserName == js.UserName)
-                                .Select(u => u.Email)
-                                .FirstOrDefault(),
-                    Avatar = _context.Users
-                                .Where(u => u.UserName == js.UserName)
-                                .Select(u => u.Avatar)
-                                .FirstOrDefault()
-                })
-                .FirstOrDefaultAsync();
+            var baseUrl = $"{Request.Scheme}://{Request.Host}/";
+            var jobSeeker = await (from js in _context.Userjobseekers
+                                join u in _context.Users on js.UserName equals u.UserName
+                                where js.UserName == username
+                                select new JobSeekerDetailDto
+                                {
+                                    UserName = js.UserName,
+                                    FullName = js.FullName,
+                                    DateOfBirth = js.DateOfBirth,
+                                    EducationLevel = js.EducationLevel,
+                                    ExperienceYears = js.ExperienceYears,
+                                    Skills = js.Skills,
+                                    CVFile = js.CVFile,
+                                    Email = u.Email,
+                                    Avatar = string.IsNullOrEmpty(u.Avatar) ? "" : baseUrl + "avatar/" + u.Avatar,
+                                })
+                                .FirstOrDefaultAsync();
 
             if (jobSeeker == null)
             {

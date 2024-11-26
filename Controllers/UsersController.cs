@@ -49,7 +49,6 @@ public async Task<IActionResult> UpdateUser(string userName, [FromForm] UserUpda
         return NotFound("Người dùng không tồn tại.");
     }
 
-    // Kiểm tra mật khẩu cũ nếu có
     if (!string.IsNullOrEmpty(updatedUser.CurrentPassword))
     {
         if (updatedUser.CurrentPassword != user.Password)
@@ -58,7 +57,6 @@ public async Task<IActionResult> UpdateUser(string userName, [FromForm] UserUpda
         }
     }
 
-    // Cập nhật mật khẩu mới nếu có
     if (!string.IsNullOrEmpty(updatedUser.NewPassword))
     {
         user.Password = updatedUser.NewPassword; 
@@ -79,7 +77,6 @@ public async Task<IActionResult> UpdateUser(string userName, [FromForm] UserUpda
         user.Avatar = fileName;
     }
 
-    // Lưu thay đổi vào cơ sở dữ liệu
     await _context.SaveChangesAsync();
 
     return Ok(user);

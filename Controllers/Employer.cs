@@ -21,13 +21,14 @@ namespace TopCV.Controllers
         [HttpGet("get-all-employer")]
         public IActionResult GetAllEmployers()
         {
+            var baseUrl = $"{Request.Scheme}://{Request.Host}/";
             var employers = from i in _context.Useremployers
                             join j in _context.Users on i.UserName equals j.UserName
                             select new
                             {
                                 i.UserName,
                                 j.Email,
-                                j.Avatar,
+                                Avatar = string.IsNullOrEmpty(j.Avatar) ? "" : baseUrl + "avatar/" + j.Avatar,
                                 i.CompanyName
                             };
             employers.ToList();
@@ -70,7 +71,7 @@ namespace TopCV.Controllers
                     i.SalaryRange,
                     i.Status,
                 };
-             var jobpostsList = jobposts.ToList();
+            var jobpostsList = jobposts.ToList();
 
             if (jobpostsList.Count == 0)
             {

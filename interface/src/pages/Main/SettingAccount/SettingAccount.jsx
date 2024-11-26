@@ -13,7 +13,7 @@ function SettingAccount() {
     });
     const [errors, setErrors] = useState({});
     const username = sessionStorage.getItem('username');
-    const [currentPassword, setCurrentPassword] = useState(''); 
+    const [currentPassword, setCurrentPassword] = useState('');
 
     useEffect(() => {
         if (username) {
@@ -70,8 +70,8 @@ function SettingAccount() {
         if (formData.passwordNew !== formData.passwordAgain) {
             newErrors.passwordAgain = 'Mật khẩu xác nhận không khớp.';
         }
-        if (formData.passwordOld !== currentPassword){
-            newErrors.passwordOld ='Mật khẩu không chính xác';
+        if (formData.passwordOld !== currentPassword) {
+            newErrors.passwordOld = 'Mật khẩu không chính xác';
         }
         return newErrors;
     };
@@ -83,20 +83,32 @@ function SettingAccount() {
             setErrors(validationErrors);
             return;
         }
-
         const payload = new FormData();
         payload.append('username', formData.username);
         payload.append('email', formData.email);
         payload.append('passwordNew', formData.passwordNew);
         if (formData.avatar) payload.append('avatar', formData.avatar);
-
         try {
-            await axios.put('http://localhost:5000/api/users/update', payload, {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                },
-            });
+            await axios.put(
+                `http://localhost:5224/api/Users/${username}`,
+                payload,
+                {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                    },
+                }
+            );
             toast.success('Cập nhật thành công');
+            const newAvatarURL = URL.createObjectURL(formData.avatar);
+            sessionStorage.setItem('avatar', newAvatarURL);
+            setFormData({
+                username: username, 
+                email: formData.email, 
+                passwordOld: '',
+                passwordNew: '',
+                passwordAgain: '',
+                avatar: null,
+            });
         } catch (error) {
             console.error('Lỗi khi cập nhật tài khoản:', error);
             toast.error('Vui lòng thử lại');
@@ -107,7 +119,7 @@ function SettingAccount() {
         <form onSubmit={handleSubmit}>
             <h2>Cài đặt tài khoản</h2>
             <div className='border p-4'>
-                <div >
+                <div>
                     <label
                         htmlFor='username'
                         className='form-label fs-6 fw-bolder'

@@ -26,14 +26,14 @@ namespace TopCV.Controllers
         public async Task<IActionResult> GetJobs(string location = "", int page = 1, int pageSize = 12)
         {
             int skip = (page - 1) * pageSize;
-
+            var baseUrl = $"{Request.Scheme}://{Request.Host}/";
             var query = from i in _context.Jobposts
                         join j in _context.Useremployers on i.UserEmployer equals j.UserName
                         join k in _context.Users on j.UserName equals k.UserName
                         where i.Status == 1
                         select new
                         {
-                            k.Avatar,
+                            Avatar = string.IsNullOrEmpty(k.Avatar) ? "" : baseUrl + "avatar/" + k.Avatar,
                             Company = j.CompanyName,
                             JobTitle = i.Title,
                             Salary = i.SalaryRange,
@@ -78,17 +78,17 @@ namespace TopCV.Controllers
         public IActionResult GetAllJobPosts([FromQuery] int? status)
         {
             var jobposts = from i in _context.Jobposts
-                           join j in _context.Useremployers on i.UserEmployer equals j.UserName
-                           select new
-                           {
-                               i.Id,
-                               i.Title,
-                               j.CompanyName,
-                               i.JobDescription,
-                               i.PostDate,
-                               j.UserName,
-                               i.Status
-                           };
+                            join j in _context.Useremployers on i.UserEmployer equals j.UserName
+                            select new
+                            {
+                                i.Id,
+                                i.Title,
+                                j.CompanyName,
+                                i.JobDescription,
+                                i.PostDate,
+                                j.UserName,
+                                i.Status
+                            };
             if (status.HasValue)
             {
                 jobposts = jobposts.Where(jp => jp.Status == status.Value);

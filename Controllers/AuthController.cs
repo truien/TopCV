@@ -36,7 +36,9 @@ namespace TopCV.Controllers
             {
                 var token = GenerateToken(existingUser.UserName);
                 string userType = GetUserType(existingUser.UserName);
-                string ?avatar = existingUser.Avatar?.ToString();
+                string avatar = string.IsNullOrEmpty(existingUser.Avatar) 
+                            ? "" 
+                            : $"{Request.Scheme}://{Request.Host}/avatar/{existingUser.Avatar}";
                 return Ok(new { token, userType,avatar });
             }
             return Unauthorized("Thông tin đăng nhập không chính xác.");
