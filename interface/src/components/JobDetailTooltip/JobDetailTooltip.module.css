@@ -8,10 +8,6 @@
     max-width: 500px;
     max-height: 500px;
     border-radius: 4px;
-    pointer-events: none;
-    opacity: 0;
-    transform: translateY(-10px);
-    transition: opacity 0.2s ease, transform 0.2s ease;
 }
 .job-detail-tooltip__h5 {
     margin-bottom: 10px;
