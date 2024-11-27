@@ -1,64 +1,34 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Component } from 'react';
 import axios from 'axios';
 import './styles.css';
-import logo from '@images/topcv-logo-10-year.png';
+import JobCard from './JobCard';
 import { toast } from 'react-toastify';
-// import DOMPurify from 'dompurify';
+import JobDetailTooltip from '@components/JobDetailTooltip/JobDetailTooltip.jsx';
+import Tooltip from 'rc-tooltip'; // Import rc-tooltip
 
-const JobCard = ({ job }) => (
-    <div className='col-md-4 mb-4' onMouseMove={()=>prefetchJobDetail(job.id)}>
-        <div className='card job-card shadow-sm'>
-            <div className='card-body d-flex'>
-                <div className='company-logo me-3'>
-                    <img
-                        src={job.avatar || logo}
-                        alt='Company Logo'
-                        style={{
-                            width: '70px',
-                            height: '70px',
-                            objectFit: 'contain',
-                        }}
-                    />
-                </div>
-                <div
-                    className='job-info flex-grow-1'
-                    style={{
-                        maxWidth: 'calc(100% - 80px)',
-                        overflow: 'hidden',
-                    }}
-                >
-                    <h5
-                        className='job-title text-truncate fs-5 fw-semibold'
-                        style={{ lineHeight: '20px' }}
-                    >
-                        {job.jobTitle}
-                    </h5>
-                    <p
-                        className='company-name text-truncate fs-6 fw-medium'
-                        style={{ height: '23px', lineHeight: '16px' }}
-                    >
-                        {job.company}
-                    </p>
-                    <div className='d-flex align-items-end'>
-                        <span
-                            className='job-salary text-muted me-3'
-                            style={{ fontSize: '12px' }}
-                        >
-                            {job.salary}
-                        </span>
-                        <span
-                            className='job-location text-muted'
-                            style={{ fontSize: '12px' }}
-                        >
-                            {job.location}
-                        </span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-);
-// const DetailForm =();
+class ErrorBoundary extends Component {
+    constructor(props) {
+        super(props);
+        this.state = { hasError: false };
+    }
+
+    static getDerivedStateFromError(error) {
+        return { hasError: true };
+    }
+
+    componentDidCatch(error, errorInfo) {
+        console.log(error, errorInfo);
+    }
+
+    render() {
+        if (this.state.hasError) {
+            return <h1>Something went wrong.</h1>;
+        }
+
+        return this.props.children;
+    }
+}
+
 const Pagination = ({ currentPage, totalPages, onPageChange }) => (
     <div className='d-flex justify-content-center align-items-center mt-4'>
         <button
@@ -78,24 +48,28 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => (
         </button>
     </div>
 );
-let JobDetailCache ={};
-    const prefetchJobDetail =async (id)=>{
-        if(!JobDetailCache[id]){
-            try {
-                const Job = await axios.get(`http://localhost:5224/api/JobPosts/get-jobpost/${id}`);
-                JobDetailCache[id]=Job.data;
-            } catch (error) {
-                console.log('Lỗi tải bài viết',error)
-            }
+
+let JobDetailCache = {};
+const prefetchJobDetail = async (id) => {
+    if (!JobDetailCache[id]) {
+        try {
+            const response = await axios.get(
+                `http://localhost:5224/api/JobPosts/get-jobpost/${id}`
+            );
+            JobDetailCache[id] = response.data;
+        } catch (error) {
+            console.log('Lỗi tải bài viết', error);
         }
-    }  
+    }
+};
+
 const ListJobs = () => {
     const [jobs, setJobs] = useState([]);
     const [totalJobs, setTotalJobs] = useState(0);
     const [currentPage, setCurrentPage] = useState(1);
     const [selectedFilter, setSelectedFilter] = useState('Ngẫu Nhiên');
     const jobsPerPage = 12;
-
+    const [tooltip, setTooltip] = useState({ show: false, jobDetail: null });
     const filters = ['Ngẫu Nhiên', 'Hà Nội', 'TP.HCM', 'Miền Bắc', 'Miền Nam'];
 
     useEffect(() => {
@@ -139,7 +113,27 @@ const ListJobs = () => {
         setSelectedFilter(filter);
         setCurrentPage(1);
     };
-    
+
+    let hoverTimeout;
+    const handleMouseOver = (jobId) => {
+        clearTimeout(hoverTimeout);
+        hoverTimeout = setTimeout(async () => {
+            if (!JobDetailCache[jobId]) {
+                await prefetchJobDetail(jobId);
+            }
+            const jobDetail = JobDetailCache[jobId];
+            setTooltip({ show: true, jobDetail });
+        }, 200);
+    };
+
+    const handleMouseOut = () => {
+        clearTimeout(hoverTimeout);
+        setTooltip({
+            show: false,
+            jobDetail: null,
+        });
+    };
+
     return (
         <div className='container mt-4'>
             <h2 className='mb-4'>Việc làm tốt nhất</h2>
@@ -160,15 +154,36 @@ const ListJobs = () => {
             </div>
             <div className='row job-listings'>
                 {jobs.map((job) => (
-                    <JobCard key={job.id} job={job} />
+                    <JobCard
+                        job={job}
+                        key={job.id}
+                        onMouseOver={() => handleMouseOver(job.id)}
+                        onMouseOut={handleMouseOut}
+                    />
                 ))}
-            </div> 
+            </div>
             {totalJobs > jobsPerPage && (
                 <Pagination
                     currentPage={currentPage}
                     totalPages={totalPages}
                     onPageChange={handlePageChange}
                 />
+            )}
+            {tooltip.show && (
+                <ErrorBoundary>
+                    <Tooltip
+                        overlay={
+                            <JobDetailTooltip jobDetail={tooltip.jobDetail} />
+                        }
+                        visible={tooltip.show}
+                        placement='right'
+                        onVisibleChange={(visible) =>
+                            setTooltip({ ...tooltip, show: visible })
+                        }
+                        trigger='hover'
+                        overlayStyle={{ maxHeight: '300px' }} 
+                    />
+                </ErrorBoundary>
             )}
         </div>
     );

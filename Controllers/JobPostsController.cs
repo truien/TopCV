@@ -33,6 +33,7 @@ namespace TopCV.Controllers
                         where i.Status == 1
                         select new
                         {
+                            Id = i.Id,
                             Avatar = string.IsNullOrEmpty(k.Avatar) ? "" : baseUrl + "avatar/" + k.Avatar,
                             Company = j.CompanyName,
                             JobTitle = i.Title,

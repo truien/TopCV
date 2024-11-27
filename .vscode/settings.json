@@ -8,7 +8,7 @@
     "sash.hoverBorder": "#87ffbc",
     "statusBar.foreground": "#f4f4f5",
     "statusBarItem.remoteForeground": "#15202b",
-    "titleBar.activeBackground": "#0c0c0c",
+    "titleBar.activeBackground": "#111111",
     "titleBar.activeForeground": "#f2f3f5",
     "titleBar.inactiveForeground": "#15202b99"
   },

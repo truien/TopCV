@@ -34,6 +34,9 @@ export default [
                 { allowConstantExport: true },
             ],
             'react/prop-types': 'off',
+            test: /\.mjs$/,
+            include: /node_modules/,
+            type: 'javascript/auto',
         },
     },
 ];
