@@ -3,9 +3,10 @@ import axios from 'axios';
 import './styles.css';
 import logo from '@images/topcv-logo-10-year.png';
 import { toast } from 'react-toastify';
+// import DOMPurify from 'dompurify';
 
 const JobCard = ({ job }) => (
-    <div className='col-md-4 mb-4'>
+    <div className='col-md-4 mb-4' onMouseMove={()=>prefetchJobDetail(job.id)}>
         <div className='card job-card shadow-sm'>
             <div className='card-body d-flex'>
                 <div className='company-logo me-3'>
@@ -57,7 +58,7 @@ const JobCard = ({ job }) => (
         </div>
     </div>
 );
-
+// const DetailForm =();
 const Pagination = ({ currentPage, totalPages, onPageChange }) => (
     <div className='d-flex justify-content-center align-items-center mt-4'>
         <button
@@ -77,7 +78,17 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => (
         </button>
     </div>
 );
-
+let JobDetailCache ={};
+    const prefetchJobDetail =async (id)=>{
+        if(!JobDetailCache[id]){
+            try {
+                const Job = await axios.get(`http://localhost:5224/api/JobPosts/get-jobpost/${id}`);
+                JobDetailCache[id]=Job.data;
+            } catch (error) {
+                console.log('Lỗi tải bài viết',error)
+            }
+        }
+    }  
 const ListJobs = () => {
     const [jobs, setJobs] = useState([]);
     const [totalJobs, setTotalJobs] = useState(0);
@@ -128,7 +139,7 @@ const ListJobs = () => {
         setSelectedFilter(filter);
         setCurrentPage(1);
     };
-
+    
     return (
         <div className='container mt-4'>
             <h2 className='mb-4'>Việc làm tốt nhất</h2>
@@ -151,7 +162,7 @@ const ListJobs = () => {
                 {jobs.map((job) => (
                     <JobCard key={job.id} job={job} />
                 ))}
-            </div>
+            </div> 
             {totalJobs > jobsPerPage && (
                 <Pagination
                     currentPage={currentPage}

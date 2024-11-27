@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "MltTvqoShKCIlccmjSbdG6rlPpi3HW5gUFrVKMIe7Bs=",
+  "Hash": "23wGKZYgbLf1VG6QDzYZiCsXutx4rtQSnlYE5ogH78w=",
   "Source": "TopCV",
   "BasePath": "_content/TopCV",
   "Mode": "Default",
@@ -15,5 +15,63 @@
       "Pattern": "**"
     }
   ],
-  "Assets": []
+  "Assets": [
+    {
+      "Identity": "C:\\Users\\admin\\TopCV\\wwwroot\\avatar\\20d3065e-319e-435f-a8e7-00749aa348fd.jpg",
+      "SourceId": "TopCV",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\admin\\TopCV\\wwwroot\\",
+      "BasePath": "_content/TopCV",
+      "RelativePath": "avatar/20d3065e-319e-435f-a8e7-00749aa348fd.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\avatar\\20d3065e-319e-435f-a8e7-00749aa348fd.jpg"
+    },
+    {
+      "Identity": "C:\\Users\\admin\\TopCV\\wwwroot\\avatar\\685ed672-4728-4c13-8697-5f81d7fb76a4.jpg",
+      "SourceId": "TopCV",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\admin\\TopCV\\wwwroot\\",
+      "BasePath": "_content/TopCV",
+      "RelativePath": "avatar/685ed672-4728-4c13-8697-5f81d7fb76a4.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\avatar\\685ed672-4728-4c13-8697-5f81d7fb76a4.jpg"
+    },
+    {
+      "Identity": "C:\\Users\\admin\\TopCV\\wwwroot\\avatar\\f5aa9fd6-5761-4479-9dbd-42f637ea8a99.jpg",
+      "SourceId": "TopCV",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\admin\\TopCV\\wwwroot\\",
+      "BasePath": "_content/TopCV",
+      "RelativePath": "avatar/f5aa9fd6-5761-4479-9dbd-42f637ea8a99.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\avatar\\f5aa9fd6-5761-4479-9dbd-42f637ea8a99.jpg"
+    }
+  ]
 }

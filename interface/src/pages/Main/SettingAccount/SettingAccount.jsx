@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
-
+import { FaEye, FaEyeSlash } from 'react-icons/fa6';
 function SettingAccount() {
+    const [showPasswordOld, setShowPasswordOld] = useState(false);
+    const [showPasswordNew, setShowPasswordNew] = useState(false);
     const [formData, setFormData] = useState({
         username: '',
         email: '',
@@ -102,13 +104,14 @@ function SettingAccount() {
             const newAvatarURL = URL.createObjectURL(formData.avatar);
             sessionStorage.setItem('avatar', newAvatarURL);
             setFormData({
-                username: username, 
-                email: formData.email, 
+                username: username,
+                email: formData.email,
                 passwordOld: '',
                 passwordNew: '',
                 passwordAgain: '',
                 avatar: null,
             });
+            navigator('/');
         } catch (error) {
             console.error('Lỗi khi cập nhật tài khoản:', error);
             toast.error('Vui lòng thử lại');
@@ -164,14 +167,23 @@ function SettingAccount() {
                     >
                         Mật khẩu hiện tại
                     </label>
-                    <input
-                        className='form-control'
-                        type='password'
-                        name='passwordOld'
-                        placeholder='Nhập mật khẩu hiện tại'
-                        value={formData.passwordOld}
-                        onChange={handleChange}
-                    />
+                    <div className='input-group'>
+                        <input
+                            className='form-control'
+                            type={showPasswordOld ? 'text' : 'password'}
+                            name='passwordOld'
+                            placeholder='Nhập mật khẩu hiện tại'
+                            value={formData.passwordOld}
+                            onChange={handleChange}
+                        />
+                        <span
+                            className='input-group-text'
+                            onClick={() => setShowPasswordOld(!showPasswordOld)}
+                        >
+                            {showPasswordOld ? <FaEye /> : <FaEyeSlash />}
+                        </span>
+                    </div>
+
                     {errors.passwordOld && (
                         <p className='text-danger'>{errors.passwordOld}</p>
                     )}
@@ -183,14 +195,23 @@ function SettingAccount() {
                     >
                         Mật khẩu mới
                     </label>
-                    <input
-                        className='form-control'
-                        type='password'
-                        name='passwordNew'
-                        placeholder='Nhập mật khẩu mới'
-                        value={formData.passwordNew}
-                        onChange={handleChange}
-                    />
+                    <div className='input-group'>
+                        <input
+                            className='form-control'
+                            type={showPasswordNew ? 'text' : 'password'}
+                            name='passwordNew'
+                            placeholder='Nhập mật khẩu mới'
+                            value={formData.passwordNew}
+                            onChange={handleChange}
+                        />
+                        <span
+                            className='input-group-text'
+                            onClick={() => setShowPasswordNew(!showPasswordNew)}
+                        >
+                            {showPasswordNew ? <FaEye /> : <FaEyeSlash />}
+                        </span>
+                    </div>
+
                     {errors.passwordNew && (
                         <p className='text-danger'>{errors.passwordNew}</p>
                     )}

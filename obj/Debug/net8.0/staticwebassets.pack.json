@@ -1,0 +1,33 @@
+{
+  "Files": [
+    {
+      "Id": "C:\\Users\\admin\\TopCV\\wwwroot\\avatar\\20d3065e-319e-435f-a8e7-00749aa348fd.jpg",
+      "PackagePath": "staticwebassets\\avatar\\20d3065e-319e-435f-a8e7-00749aa348fd.jpg"
+    },
+    {
+      "Id": "C:\\Users\\admin\\TopCV\\wwwroot\\avatar\\685ed672-4728-4c13-8697-5f81d7fb76a4.jpg",
+      "PackagePath": "staticwebassets\\avatar\\685ed672-4728-4c13-8697-5f81d7fb76a4.jpg"
+    },
+    {
+      "Id": "C:\\Users\\admin\\TopCV\\wwwroot\\avatar\\f5aa9fd6-5761-4479-9dbd-42f637ea8a99.jpg",
+      "PackagePath": "staticwebassets\\avatar\\f5aa9fd6-5761-4479-9dbd-42f637ea8a99.jpg"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.TopCV.Microsoft.AspNetCore.StaticWebAssets.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.build.TopCV.props",
+      "PackagePath": "build\\TopCV.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.buildMultiTargeting.TopCV.props",
+      "PackagePath": "buildMultiTargeting\\TopCV.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.buildTransitive.TopCV.props",
+      "PackagePath": "buildTransitive\\TopCV.props"
+    }
+  ],
+  "ElementsToRemove": []
+}
