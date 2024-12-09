@@ -3,8 +3,6 @@ import axios from 'axios';
 import './styles.css';
 import JobCard from './JobCard';
 import { toast } from 'react-toastify';
-import JobDetailTooltip from '@components/JobDetailTooltip/JobDetailTooltip.jsx';
-import Tooltip from 'rc-tooltip'; // Import rc-tooltip
 
 class ErrorBoundary extends Component {
     constructor(props) {
@@ -49,27 +47,12 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => (
     </div>
 );
 
-let JobDetailCache = {};
-const prefetchJobDetail = async (id) => {
-    if (!JobDetailCache[id]) {
-        try {
-            const response = await axios.get(
-                `http://localhost:5224/api/JobPosts/get-jobpost/${id}`
-            );
-            JobDetailCache[id] = response.data;
-        } catch (error) {
-            console.log('Lỗi tải bài viết', error);
-        }
-    }
-};
-
 const ListJobs = () => {
     const [jobs, setJobs] = useState([]);
     const [totalJobs, setTotalJobs] = useState(0);
     const [currentPage, setCurrentPage] = useState(1);
     const [selectedFilter, setSelectedFilter] = useState('Ngẫu Nhiên');
     const jobsPerPage = 12;
-    const [tooltip, setTooltip] = useState({ show: false, jobDetail: null });
     const filters = ['Ngẫu Nhiên', 'Hà Nội', 'TP.HCM', 'Miền Bắc', 'Miền Nam'];
 
     useEffect(() => {
@@ -114,24 +97,18 @@ const ListJobs = () => {
         setCurrentPage(1);
     };
 
-    let hoverTimeout;
-    const handleMouseOver = (jobId) => {
-        clearTimeout(hoverTimeout);
-        hoverTimeout = setTimeout(async () => {
-            if (!JobDetailCache[jobId]) {
-                await prefetchJobDetail(jobId);
+    let JobDetailCache = {};
+    const prefetchJobDetail = async (id) => {
+        if (!JobDetailCache[id]) {
+            try {
+                const response = await axios.get(
+                    `http://localhost:5224/api/JobPosts/get-jobpost/${id}`
+                );
+                JobDetailCache[id] = response.data;
+            } catch (error) {
+                console.log('Lỗi tải bài viết', error);
             }
-            const jobDetail = JobDetailCache[jobId];
-            setTooltip({ show: true, jobDetail });
-        }, 200);
-    };
-
-    const handleMouseOut = () => {
-        clearTimeout(hoverTimeout);
-        setTooltip({
-            show: false,
-            jobDetail: null,
-        });
+        }
     };
 
     return (
@@ -154,12 +131,7 @@ const ListJobs = () => {
             </div>
             <div className='row job-listings'>
                 {jobs.map((job) => (
-                    <JobCard
-                        job={job}
-                        key={job.id}
-                        onMouseOver={() => handleMouseOver(job.id)}
-                        onMouseOut={handleMouseOut}
-                    />
+                    <JobCard job={job} jobDetail={prefetchJobDetail(job.id)} />
                 ))}
             </div>
             {totalJobs > jobsPerPage && (
@@ -168,22 +140,6 @@ const ListJobs = () => {
                     totalPages={totalPages}
                     onPageChange={handlePageChange}
                 />
-            )}
-            {tooltip.show && (
-                <ErrorBoundary>
-                    <Tooltip
-                        overlay={
-                            <JobDetailTooltip jobDetail={tooltip.jobDetail} />
-                        }
-                        visible={tooltip.show}
-                        placement='right'
-                        onVisibleChange={(visible) =>
-                            setTooltip({ ...tooltip, show: visible })
-                        }
-                        trigger='hover'
-                        overlayStyle={{ maxHeight: '300px' }} 
-                    />
-                </ErrorBoundary>
             )}
         </div>
     );

@@ -6,8 +6,8 @@ import './index.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
-import { ToastContainer } from "react-toastify";
-
+import { ToastContainer } from 'react-toastify';
+import 'rc-tooltip/assets/bootstrap.css';
 
 createRoot(document.getElementById('root')).render(
     <StrictMode>

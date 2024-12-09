@@ -54,8 +54,8 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowAll", builder =>
     {
         builder.AllowAnyOrigin()
-               .AllowAnyMethod()
-               .AllowAnyHeader();
+            .AllowAnyMethod()
+            .AllowAnyHeader();
     });
 });
 
@@ -102,9 +102,22 @@ app.UseStaticFiles();
 // Cấu hình Swagger và chuyển hướng HTTPS
 if (app.Environment.IsDevelopment())
 {
+    // Cấu hình Swagger UI
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "API v1");
+        c.RoutePrefix = "swagger";  // Swagger UI sẽ có mặt tại /swagger
+    });
+
+    // Cấu hình ReDoc
+    app.UseReDoc(c =>
+    {
+        c.SpecUrl("/swagger/v1/swagger.json");  // Đường dẫn đến Swagger JSON
+        c.RoutePrefix = "docs";  // ReDoc sẽ có mặt tại /docs
+    });
 }
+
 
 app.UseHttpsRedirection();
 app.MapControllers();

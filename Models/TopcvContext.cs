@@ -136,24 +136,24 @@ public partial class TopcvContext : DbContext
                 entity.Property(e => e.EmploymentTypeName).HasMaxLength(100);
 
                 entity.HasMany(e => e.JobPosts)
-                      .WithMany(j => j.EmploymentTypes)
-                      .UsingEntity<Jobpostemployment>(
-                          j => j.HasOne(pt => pt.JobPost)
+                    .WithMany(j => j.EmploymentTypes)
+                    .UsingEntity<Jobpostemployment>(
+                        j => j.HasOne(pt => pt.JobPost)
                                 .WithMany(p => p.JobpostEmployments)
                                 .HasForeignKey(pt => pt.IDJobPost)
                                 .HasConstraintName("JobPost"),
-                          j => j.HasOne(pt => pt.EmploymentType)
+                        j => j.HasOne(pt => pt.EmploymentType)
                                 .WithMany(e => e.Jobpostemployments)
                                 .HasForeignKey(pt => pt.IDEmploymentType)
                                 .OnDelete(DeleteBehavior.ClientSetNull)
                                 .HasConstraintName("employment"),
-                          j =>
-                          {
-                              j.HasKey(t => new { t.IDEmploymentType, t.IDJobPost })
-                               .HasName("PRIMARY");
-                              j.ToTable("jobpostemployment");
-                              j.HasIndex(pt => pt.IDJobPost, "JobPost_idx");
-                          });
+                        j =>
+                        {
+                            j.HasKey(t => new { t.IDEmploymentType, t.IDJobPost })
+                            .HasName("PRIMARY");
+                            j.ToTable("jobpostemployment");
+                            j.HasIndex(pt => pt.IDJobPost, "JobPost_idx");
+                            });
             });
         modelBuilder.Entity<Jobfield>(entity =>
         {

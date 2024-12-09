@@ -1,15 +1,13 @@
 import { useState } from 'react';
-import Tooltip from 'rc-tooltip'; // Import rc-tooltip
-import 'rc-tooltip/assets/bootstrap.css'; // Import style của rc-tooltip
+import Tooltip from 'rc-tooltip';
+import JobDetailTooltip from '@components/JobDetailTooltip/JobDetailTooltip.jsx';
 import logo from '@images/topcv-logo-10-year.png';
 
-const JobCard = ({ job, onMouseOver, onMouseOut }) => {
-    const [visible, setVisible] = useState(false); // Để kiểm soát sự hiển thị của tooltip
-
+const JobCard = ({ job, jobDetail }) => {
+    const [visible, setVisible] = useState(false);
     const handleTooltipVisibleChange = (visible) => {
         setVisible(visible);
     };
-
     return (
         <div className='col-4 mb-4'>
             <div className='card job-card shadow-sm'>
@@ -33,18 +31,10 @@ const JobCard = ({ job, onMouseOver, onMouseOut }) => {
                         }}
                     >
                         <Tooltip
-                            visible={visible} // Hiển thị tooltip khi cần
-                            onVisibleChange={handleTooltipVisibleChange} // Cập nhật sự thay đổi của visibility
                             placement='right'
-                            overlay={<div>{job.jobTitle}</div>} // Nội dung của tooltip
+                            overlay={<JobDetailTooltip jobDetail={jobDetail} />}
                         >
-                            <h5
-                                className='job-title text-truncate fs-5 fw-semibold'
-                                onMouseEnter={() => onMouseOver(job.id)}
-                                onMouseLeave={onMouseOut}
-                                onFocus={() => onMouseOver(job.id)}
-                                onBlur={onMouseOut}
-                            >
+                            <h5 className='job-title text-truncate fs-5 fw-semibold'>
                                 {job.jobTitle}
                             </h5>
                         </Tooltip>

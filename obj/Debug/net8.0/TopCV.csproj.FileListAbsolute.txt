@@ -241,3 +241,5 @@ C:\Users\TopCV\obj\Debug\net8.0\TopCV.pdb
 C:\Users\TopCV\obj\Debug\net8.0\TopCV.genruntimeconfig.cache
 C:\Users\TopCV\obj\Debug\net8.0\ref\TopCV.dll
 C:\Users\admin\TopCV\bin\Debug\net8.0\TopCV.staticwebassets.runtime.json
+C:\Users\admin\TopCV\bin\Debug\net8.0\interface\package-lock.json
+C:\Users\admin\TopCV\bin\Debug\net8.0\Redoc.AspNetCore.dll
