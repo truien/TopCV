@@ -73,3 +73,6 @@
 .pagination button:disabled {
     color: var(--disabled-color);
 }
+.tippy-box[data-placement^=left]>.tippy-arrow {
+    left: 500px;
+}

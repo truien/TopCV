@@ -160,9 +160,18 @@ namespace TopCV.Controllers
             return Ok(new { message = "Cập nhật trạng thái bài đăng thành công.", UpdatedStatus = newStatus });
         }
         [HttpGet("get-jobpost/{postId}")]
-        public IActionResult GetJobPost(int postId)
+        public async Task<IActionResult> GetJobPost(int postId)
         {
-            var jobPost = _context.Jobposts.FirstOrDefault(jp => jp.Id == postId);
+            var baseUrl = $"{Request.Scheme}://{Request.Host}/";
+            var jobPost = await (from i in _context.Jobposts
+                        join j in _context.Useremployers on i.UserEmployer equals j.UserName
+                        join k in _context.Users on j.UserName equals k.UserName
+                        where i.Id == postId
+                        select new{
+                            i,
+                            j.CompanyName,
+                            Avatar = string.IsNullOrEmpty(k.Avatar) ? "" : baseUrl + "avatar/" + k.Avatar,
+                        }).FirstOrDefaultAsync();
             if (jobPost == null)
             {
                 return NotFound(new { message = "Bài đăng không tồn tại." });

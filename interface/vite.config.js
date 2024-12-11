@@ -7,6 +7,9 @@ const __dirname = Path.dirname(fileURLToPath(import.meta.url));
 
 // https://vite.dev/config/
 export default defineConfig({
+    css: {
+        additionalData: '@import "tippy.js/dist/tippy.css";', 
+        },
     plugins: [react()],
     resolve: {
         alias: {

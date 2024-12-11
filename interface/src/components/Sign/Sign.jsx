@@ -1,9 +1,11 @@
 import { useState } from 'react';
+import axois from 'axios';
 import styles from './styles.module.css';
 
 function Sign() {
     const [formData, setFormData] = useState({
         fullName: '',
+        username: '',
         email: '',
         password: '',
         confirmPassword: '',
@@ -13,6 +15,7 @@ function Sign() {
 
     const [errors, setErrors] = useState({
         fullName: '',
+        username: '',
         email: '',
         password: '',
         confirmPassword: '',
@@ -31,13 +34,16 @@ function Sign() {
         let validationErrors = {};
         let isValid = true;
 
-        // Họ tên
         if (!formData.fullName) {
             validationErrors.fullName = 'Họ và tên không được để trống';
             isValid = false;
         }
 
-        // Email
+        if (!formData.username) {
+            validationErrors.username = 'Tài khoản không được để trống';
+            isValid = false;
+        }
+
         if (!formData.email) {
             validationErrors.email = 'Email không được để trống';
         } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
@@ -45,7 +51,6 @@ function Sign() {
             isValid = false;
         }
 
-        // Mật khẩu
         if (!formData.password) {
             validationErrors.password = 'Mật khẩu không được để trống';
             isValid = false;
@@ -54,28 +59,41 @@ function Sign() {
             isValid = false;
         }
 
-        // Xác nhận mật khẩu
         if (formData.password !== formData.confirmPassword) {
             validationErrors.confirmPassword =
                 'Mật khẩu và xác nhận mật khẩu không khớp';
             isValid = false;
         }
 
-        // Điều khoản
         if (!formData.termsAccepted) {
             validationErrors.termsAccepted = 'Bạn phải đồng ý với điều khoản';
             isValid = false;
         }
-
         setErrors(validationErrors);
         return isValid;
     };
 
-    const handleSubmit = (e) => {
+    const payload = new FormData();
+    payload.append('username', formData.username);
+    payload.append('email', formData.email);
+    payload.append('password', formData.password);
+    payload.append('avatar', '');
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
         if (validate()) {
-            console.log('Form submitted:', formData);
-            // Gửi dữ liệu lên API hoặc xử lý tiếp
+            try {
+                const reponsive = await axois.post(
+                    'http://localhost:5224/api/Users',
+                    payload
+                );
+            } catch (error) {
+                console.log(error);
+            }
+            if (formData.accountType === 'seekerjob') {
+                const reponsive = await axois.post('')
+            } else {
+            }
         }
     };
 
@@ -107,7 +125,7 @@ function Sign() {
                                     className='form-control'
                                     id='fullName'
                                     name='fullName'
-                                    placeholder='Nhập họ tên'
+                                    placeholder='Nhập họ tên hoặc tên công ty'
                                     value={formData.fullName}
                                     onChange={handleChange}
                                 />
@@ -115,6 +133,30 @@ function Sign() {
                             {errors.fullName && (
                                 <small className='text-danger'>
                                     {errors.fullName}
+                                </small>
+                            )}
+                        </div>
+
+                        <div className='mb-3'>
+                            <label htmlFor='username' className='form-label'>
+                                Tài khoản
+                            </label>
+                            <div className='input-group'>
+                                <span className='input-group-text'>
+                                    <i className='bi bi-person-circle text-success'></i>
+                                </span>
+                                <input
+                                    className='form-control'
+                                    id='username'
+                                    name='username'
+                                    placeholder='Nhập tên tài khoản'
+                                    value={formData.username}
+                                    onChange={handleChange}
+                                />
+                            </div>
+                            {errors.username && (
+                                <small className='text-danger'>
+                                    {errors.username}
                                 </small>
                             )}
                         </div>
@@ -218,7 +260,7 @@ function Sign() {
                         </div>
 
                         <div className='mb-3'>
-                            <label className='form-label'>Loại tài khoản</label>
+                            <label className='form-label'>Bạn là</label>
                             <select
                                 className='form-select'
                                 name='accountType'

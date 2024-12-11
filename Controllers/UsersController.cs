@@ -40,6 +40,8 @@ namespace TopCV.Controllers
         await _context.SaveChangesAsync();
         return Ok(user);
     }
+    
+
     [HttpPut("{userName}")]
 public async Task<IActionResult> UpdateUser(string userName, [FromForm] UserUpdateDto updatedUser)
 {

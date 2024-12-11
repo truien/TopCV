@@ -12,6 +12,7 @@
     },
     "dependencies": {
         "@popperjs/core": "^2.11.8",
+        "@tippyjs/react": "^4.2.6",
         "axios": "^1.7.7",
         "bootstrap": "^5.3.3",
         "bootstrap-icons": "^1.11.3",
@@ -27,7 +28,8 @@
         "react-router-dom": "^6.27.0",
         "react-select": "^5.8.2",
         "react-toastify": "^10.0.6",
-        "react-tooltip": "^5.28.0"
+        "react-tooltip": "^5.28.0",
+        "tippy.js": "^6.3.7"
     },
     "devDependencies": {
         "@eslint/js": "^9.13.0",

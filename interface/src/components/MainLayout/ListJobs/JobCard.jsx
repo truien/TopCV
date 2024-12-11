@@ -1,13 +1,20 @@
 import { useState } from 'react';
-import Tooltip from 'rc-tooltip';
-import JobDetailTooltip from '@components/JobDetailTooltip/JobDetailTooltip.jsx';
+import Tippy from '@tippyjs/react';
+import JobDetailTooltip from '../../JobDetailTooltip/JobDetailTooltip.jsx';
 import logo from '@images/topcv-logo-10-year.png';
 
-const JobCard = ({ job, jobDetail }) => {
+const JobCard = ({ job, fetchJobDetail, JobDetailCache, index }) => {
     const [visible, setVisible] = useState(false);
-    const handleTooltipVisibleChange = (visible) => {
+
+    const handleTooltipVisibleChange = async (visible) => {
+        if (visible && !JobDetailCache[job.id]) {
+            await fetchJobDetail(job.id);
+        }
         setVisible(visible);
     };
+
+    const placement = (index + 1) % 3 === 1 ? 'right' : 'left';
+
     return (
         <div className='col-4 mb-4'>
             <div className='card job-card shadow-sm'>
@@ -30,14 +37,30 @@ const JobCard = ({ job, jobDetail }) => {
                             overflow: 'hidden',
                         }}
                     >
-                        <Tooltip
-                            placement='right'
-                            overlay={<JobDetailTooltip jobDetail={jobDetail} />}
+                        <Tippy
+                            delay={[200, 0]}
+                            theme='light'
+                            arrow
+                            offset={placement === 'left' ? [0, 250] : [0, 0]}
+                            interactive
+                            placement={placement}
+                            className='bg-transparent'
+                            content={
+                                JobDetailCache[job.id] ? (
+                                    <JobDetailTooltip
+                                        jobDetail={JobDetailCache[job.id]}
+                                    />
+                                ) : (
+                                    <span>Đang tải...</span>
+                                )
+                            }
+                            onShow={() => handleTooltipVisibleChange(true)}
+                            onHide={() => handleTooltipVisibleChange(false)}
                         >
                             <h5 className='job-title text-truncate fs-5 fw-semibold'>
                                 {job.jobTitle}
                             </h5>
-                        </Tooltip>
+                        </Tippy>
                         <p className='company-name text-truncate fs-6 fw-medium'>
                             {job.company}
                         </p>

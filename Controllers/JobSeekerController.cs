@@ -86,5 +86,10 @@ namespace TopCV.Controllers
             return Ok(jobSeeker);
         }
 
+        // [HttpPost]
+        // public async Task<IActionResult> PostJobSeeker(JobSeekerDetailDto seekerDetailDto)
+        // {
+        //     if(await _context.Userjobseekers.AddAsync(u => u.UserName == seekerDetailDto.UserName))
+        // }
     }
 }
