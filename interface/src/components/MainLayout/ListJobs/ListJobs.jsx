@@ -12,8 +12,10 @@ const ListJobs = () => {
     const jobsPerPage = 12;
     const filters = ['Ngẫu Nhiên', 'Hà Nội', 'TP.HCM', 'Miền Bắc', 'Miền Nam'];
 
-    const JobDetailCache = {}; 
-
+    const JobDetailCache = {};
+    const handleFilterChange = (filter) => {
+        console.log('filter', filter);
+    };
     useEffect(() => {
         const fetchJobs = async () => {
             try {
@@ -73,7 +75,7 @@ const ListJobs = () => {
                 ))}
             </div>
             <div className='row job-listings'>
-                {jobs.map((job,index) => (
+                {jobs.map((job, index) => (
                     <JobCard
                         key={job.id}
                         job={job}

@@ -30,12 +30,12 @@ function EditJobSeekerForm({ idPost, onCancel, onSave }) {
                     `http://localhost:5224/api/JobPosts/get-jobpost/${idPost}`
                 );
                 setFormData({
-                    title: response.data.title,
-                    jobDescription: response.data.jobDescription,
-                    requirements: response.data.requirements,
-                    interest: response.data.interest || '',
-                    salaryRange: response.data.salaryRange,
-                    location: response.data.location,
+                    title: response.data.i.title,
+                    jobDescription: response.data.i.jobDescription,
+                    requirements: response.data.i.requirements,
+                    interest: response.data.i.interest || '',
+                    salaryRange: response.data.i.salaryRange,
+                    location: response.data.i.location,
                 });
             } catch (error) {
                 console.error(error);
