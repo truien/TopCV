@@ -31,7 +31,7 @@ const JobDetailTooltip = ({ jobDetail }) => {
                     </p>
                     <p className={styles['deadline']}>
                         <i className= {styles['deadline__icon'] + ' bi bi-clock'}></i>
-                        {jobDetail.i.postDate}
+                        {jobDetail.i.applyDeadline}
                     </p>
                 </div>
                 

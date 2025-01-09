@@ -12,6 +12,9 @@ function EditJobSeekerForm({ idPost, onCancel, onSave }) {
         interest: '',
         salaryRange: '',
         location: '',
+        applyDeadline: '',
+        postDate: new Date().toISOString(),
+        jobOpeningCount: '',
     });
 
     useEffect(() => {
@@ -29,6 +32,7 @@ function EditJobSeekerForm({ idPost, onCancel, onSave }) {
                 const response = await axios.get(
                     `http://localhost:5224/api/JobPosts/get-jobpost/${idPost}`
                 );
+                const currentDate = new Date().toISOString().split('T')[0];
                 setFormData({
                     title: response.data.i.title,
                     jobDescription: response.data.i.jobDescription,
@@ -36,6 +40,9 @@ function EditJobSeekerForm({ idPost, onCancel, onSave }) {
                     interest: response.data.i.interest || '',
                     salaryRange: response.data.i.salaryRange,
                     location: response.data.i.location,
+                    applyDeadline: response.data.i.applyDeadline || currentDate,
+                    jobOpeningCount: response.data.i.jobOpeningCount || '',
+                    postDate: new Date().toISOString(),
                 });
             } catch (error) {
                 console.error(error);
@@ -174,6 +181,37 @@ function EditJobSeekerForm({ idPost, onCancel, onSave }) {
                             onChange={handleInputChange}
                         />
                     </div>
+                    <div>
+                        <label
+                            htmlFor='applyDeadline'
+                            className='form-label fs-6 fw-bolder'
+                        >
+                            Hạn nộp hồ sơ
+                        </label>
+                        <input
+                            type='date'
+                            className='form-control'
+                            name='applyDeadline'
+                            value={formData.applyDeadline}
+                            onChange={handleInputChange}
+                        />
+                    </div>
+                    <div>
+                        <label
+                            htmlFor='jobOpeningCount'
+                            className='form-label fs-6 fw-bolder'
+                        >
+                            Số lượng tuyển dụng
+                        </label>
+                        <input
+                            type='number'
+                            className='form-control'
+                            name='jobOpeningCount'
+                            value={formData.jobOpeningCount}
+                            onChange={handleInputChange}
+                        />
+                    </div>
+
                     <div className='mt-4'>
                         <button type='submit' className='btn btn-primary'>
                             Lưu

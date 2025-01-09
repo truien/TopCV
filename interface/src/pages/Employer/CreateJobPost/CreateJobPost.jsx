@@ -17,6 +17,8 @@ function JobPostForm() {
         location: '',
         status: 3,
         postDate: new Date().toISOString().split('T')[0],
+        applyDeadline: new Date().toISOString().split('T')[0],
+        jobOpeningCount: '',
         userEmployer: Username,
     });
     const [employmentTypes, setEmploymentTypes] = useState([]);
@@ -125,6 +127,8 @@ function JobPostForm() {
                 location: '',
                 status: 3,
                 postDate: new Date().toISOString(),
+                applyDeadline: new Date().toISOString(),
+                jobOpeningCount: '',
                 userEmployer: Username,
             });
 
@@ -302,6 +306,44 @@ function JobPostForm() {
                         value={formData.location}
                         onChange={handleChange}
                     />
+                </div>
+
+                <div className='mt-2'>
+                    <label
+                        htmlFor='applyDeadline'
+                        className='form-label fs-6 fw-bolder'
+                    >
+                        Hạn ứng tuyển
+                    </label>
+                    <input
+                        className='form-control'
+                        type='date'
+                        name='applyDeadline'
+                        value={formData.applyDeadline}
+                        onChange={handleChange}
+                    />
+                    {errors.applyDeadline && (
+                        <p className='text-danger'>{errors.applyDeadline}</p>
+                    )}
+                </div>
+
+                <div className='mt-2'>
+                    <label
+                        htmlFor='jobOpeningCount'
+                        className='form-label fs-6 fw-bolder'
+                    >
+                        Số lượng tuyển
+                    </label>
+                    <input
+                        className='form-control'
+                        type='number'
+                        name='jobOpeningCount'
+                        value={formData.jobOpeningCount}
+                        onChange={handleChange}
+                    />
+                    {errors.jobOpeningCount && (
+                        <p className='text-danger'>{errors.jobOpeningCount}</p>
+                    )}
                 </div>
 
                 <div className='mt-4'>

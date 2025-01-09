@@ -70,6 +70,8 @@ namespace TopCV.Controllers
                     i.PostDate,
                     i.SalaryRange,
                     i.Status,
+                    i.ApplyDeadline,
+                    i.JobOpeningCount
                 };
             var jobpostsList = jobposts.ToList();
 

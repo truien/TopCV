@@ -13,5 +13,7 @@ namespace TopCV.DTOs
         public string? Requirements { get; set; }
         public string? SalaryRange { get; set; }
         public string? Location { get; set; }
+        public DateOnly? ApplyDeadline { get; set;}
+        public int? JobOpeningCount { get; set; }
     }
 }

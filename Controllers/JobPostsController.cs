@@ -88,7 +88,9 @@ namespace TopCV.Controllers
                                 i.JobDescription,
                                 i.PostDate,
                                 j.UserName,
-                                i.Status
+                                i.Status,
+                                i.ApplyDeadline,
+                                i.JobOpeningCount
                             };
             if (status.HasValue)
             {
@@ -102,6 +104,44 @@ namespace TopCV.Controllers
             var jobpostsList = jobposts.ToList();
             return Ok(jobpostsList);
         }
+
+        [HttpGet("{id}")]
+        public IActionResult GetJobPostDetails(int id){
+            var baseUrl = $"{Request.Scheme}://{Request.Host}/";
+            var jobpost = _context.Jobposts
+            .Include(jp => jp.Jobpostfields).ThenInclude(jpf => jpf.JobField)
+            .Include(jp=> jp.JobpostEmployments).ThenInclude(jpe => jpe.EmploymentType)
+            .Include(jp => jp.UserEmployerNavigation!).ThenInclude(jpu => jpu.UserNameNavigation)
+            .Where(jp => jp.Id == id)
+            .Select (jp => new
+            {
+                jp.Id,
+                jp.Title,
+                jp.JobDescription,
+                jp.Requirements,
+                jp.SalaryRange,
+                jp.Location,
+                jp.PostDate,
+                jp.Interest,
+                jp.ApplyDeadline,
+                jp.JobOpeningCount,
+                jp.UserEmployer,
+                Employer = new
+                {
+                    jp.UserEmployerNavigation!.CompanyName,
+                    Avatar = string.IsNullOrEmpty( jp.UserEmployerNavigation.UserNameNavigation.Avatar) ? "" : baseUrl + "avatar/" +  jp.UserEmployerNavigation.UserNameNavigation.Avatar,
+                },
+                Fields = jp.Jobpostfields.Select(jpf => jpf.JobField!.JobField),
+                Employment = jp.JobpostEmployments.Select(jpe => jpe.EmploymentType.EmploymentTypeName)
+            }).FirstOrDefault();
+            if (jobpost == null)
+            {
+                return NotFound(new { message = "Bài đăng không tồn tại" });
+            }
+
+            return Ok(jobpost);
+        }
+
         [HttpPost("add-jobpost")]
         public IActionResult AddJobPost([FromBody] Jobpost jobPost)
         {
@@ -119,6 +159,8 @@ namespace TopCV.Controllers
                 SalaryRange = jobPost.SalaryRange,
                 Location = jobPost.Location,
                 PostDate = jobPost.PostDate,
+                ApplyDeadline = jobPost.ApplyDeadline,
+                JobOpeningCount = jobPost.JobOpeningCount,
                 Status = jobPost.Status,
                 UserEmployer = jobPost.UserEmployer
             };
@@ -194,6 +236,8 @@ namespace TopCV.Controllers
             existingJobPost.Interest = updatedJobPost.Interest;
             existingJobPost.SalaryRange = updatedJobPost.SalaryRange;
             existingJobPost.Location = updatedJobPost.Location;
+            existingJobPost.JobOpeningCount = updatedJobPost.JobOpeningCount;
+            existingJobPost.ApplyDeadline = updatedJobPost.ApplyDeadline;
 
             try
             {

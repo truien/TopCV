@@ -13,6 +13,7 @@ import CreateJobPost from './pages/Employer/CreateJobPost/CreateJobPost.jsx';
 import NotFound from './pages/NotFound/NotFound.jsx';
 import MainSetting from './layouts/MainSetting.jsx';
 import SettingAccount from './pages/Main/SettingAccount/SettingAccount.jsx';
+import JobPostDetails from './pages/Main/JobPostDetails/JobPostDetails';
 
 function App() {
     return (
@@ -35,6 +36,7 @@ function App() {
                     <Route path='createjobpost' element={<CreateJobPost />} />
                 </Route>
                 <Route path='/login' element={<Login />} />
+                <Route path="/jobposts/:id" element={<JobPostDetails />} />
                 <Route path='/sign' element={<Sign />} />
                 <Route path='*' element={<NotFound />} />
                 <Route path='account-settings' element={<MainSetting />}>

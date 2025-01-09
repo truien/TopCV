@@ -19,7 +19,8 @@ public partial class Jobpost
     public string? Location { get; set; }
 
     public DateOnly? PostDate { get; set; }
-
+    public DateOnly? ApplyDeadline { get; set;}
+    public int? JobOpeningCount { get; set; }
     public int? Status { get; set; }
 
     public string UserEmployer { get; set; } = null!;
