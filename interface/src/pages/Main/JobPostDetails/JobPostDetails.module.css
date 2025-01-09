@@ -1,5 +1,5 @@
 .bg_customer {
-    background-color: #f3f5f7;
+    background-color: #f3f5f7 !important;
 }
 .bg_company {
     background: linear-gradient(90deg, #212f3f, #00b14f);
@@ -16,6 +16,7 @@
 }
 .activite {
     color: #00b14f !important;
+    border: #00b14f solid 1px !important;
 }
 .jobCard {
     border-radius: 8px;

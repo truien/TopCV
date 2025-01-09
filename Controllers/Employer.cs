@@ -58,8 +58,10 @@ namespace TopCV.Controllers
         [HttpGet("get-jobpost/{username}")]
         public IActionResult GetJobPost(string username)
         {
+            var baseUrl = $"{Request.Scheme}://{Request.Host}/";
             var jobposts = from i in _context.Jobposts
                 join j in _context.Useremployers on i.UserEmployer equals j.UserName
+                join k in _context.Users on i.UserEmployer equals k.UserName
                 where j.UserName == username && i.Status ==1 || i.Status ==2
                 select new 
                 {
@@ -71,7 +73,8 @@ namespace TopCV.Controllers
                     i.SalaryRange,
                     i.Status,
                     i.ApplyDeadline,
-                    i.JobOpeningCount
+                    i.JobOpeningCount,
+                    Avatar = string.IsNullOrEmpty(k.Avatar) ? "" : baseUrl + "avatar/" + k.Avatar,
                 };
             var jobpostsList = jobposts.ToList();
 

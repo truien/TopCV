@@ -9,11 +9,13 @@ import {
     FaBriefcase,
     FaRegCalendarAlt,
 } from 'react-icons/fa';
+import DOMPurify from 'dompurify';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 function JobPostDetails() {
     const { id } = useParams();
     const [jobPost, setJobPost] = useState(null);
+    const [activeSection, setActiveSection] = useState('');
     const detailsRef = useRef(null);
     const companyJobsRef = useRef(null);
     const relatedJobsRef = useRef(null);
@@ -31,6 +33,28 @@ function JobPostDetails() {
         };
         fetchJobPostDetails();
     }, [id]);
+
+    useEffect(() => {
+        const handleScroll = () => {
+            const sectionRefs = [
+                { id: 'details', ref: detailsRef },
+                { id: 'companyJobs', ref: companyJobsRef },
+                { id: 'relatedJobs', ref: relatedJobsRef },
+            ];
+
+            // Lấy phần tử hiện tại trong viewport
+            for (const section of sectionRefs) {
+                const rect = section.ref.current.getBoundingClientRect();
+                if (rect.top <= 150 && rect.bottom >= 150) {
+                    setActiveSection(section.id);
+                    break;
+                }
+            }
+        };
+
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
 
     if (!jobPost) {
         return (
@@ -71,7 +95,7 @@ function JobPostDetails() {
                             }
                         >
                             <img
-                                src= {jobPost.employer.avatar}
+                                src={jobPost.employer.avatar}
                                 alt='Logo'
                                 className={styles['logo'] + ' rounded-circle'}
                             />
@@ -116,7 +140,9 @@ function JobPostDetails() {
                                     <FaMoneyBillWave
                                         className={styles.jobCard_icon}
                                     />
-                                    <span className='ms-2'>{jobPost.salaryRange}</span>
+                                    <span className='ms-2'>
+                                        {jobPost.salaryRange}
+                                    </span>
                                 </div>
 
                                 {/* Địa điểm */}
@@ -124,7 +150,9 @@ function JobPostDetails() {
                                     <FaMapMarkerAlt
                                         className={styles.jobCard_icon}
                                     />
-                                    <span className='ms-2'>Hồ Chí Minh</span>
+                                    <span className='ms-2'>
+                                        {jobPost.location}
+                                    </span>
                                 </div>
 
                                 {/* Kinh nghiệm */}
@@ -144,7 +172,7 @@ function JobPostDetails() {
                                     className={styles.jobCard_icon}
                                 />
                                 <span className='ms-2'>
-                                    Hạn nộp hồ sơ: 03/02/2025
+                                    Hạn nộp hồ sơ: {jobPost.applyDeadline}
                                 </span>
                             </div>
 
@@ -161,30 +189,41 @@ function JobPostDetails() {
                             </div>
                         </div>
                     </div>
-                    <nav className='navbar sticky-top mt-3 bg-light '>
-                        <div>
+                    <nav className=' navbar sticky-top mt-3 bg-body w-auto' >
+                        <div >
                             <div
                                 onClick={() => scrollToSection(detailsRef)}
-                                className={
-                                    styles['activite'] + ' btn fw-bold me-3'
-                                }
+                                className={`btn fw-bold me-3 ${
+                                    activeSection === 'details'
+                                        ? styles['activite']
+                                        : ''
+                                }`}
                             >
                                 Chi tiết công việc
                             </div>
                             <div
                                 onClick={() => scrollToSection(companyJobsRef)}
-                                className='btn  fw-bold me-3'
+                                className={`btn fw-bold me-3 ${
+                                    activeSection === 'companyJobs'
+                                        ? styles['activite']
+                                        : ''
+                                }`}
                             >
                                 Việc làm khác của công ty
                             </div>
                             <div
                                 onClick={() => scrollToSection(relatedJobsRef)}
-                                className='btn  fw-bold'
+                                className={`btn fw-bold ${
+                                    activeSection === 'relatedJobs'
+                                        ? styles['activite']
+                                        : ''
+                                }`}
                             >
                                 Việc làm liên quan
                             </div>
                         </div>
                     </nav>
+
                     <div className='row'>
                         <div className='col-8'>
                             <section
@@ -201,15 +240,30 @@ function JobPostDetails() {
                                     </h5>
 
                                     <div className='my-3'>
-                                        <button className='btn btn-outline-secondary btn-sm me-2'>
-                                            Chuyên môn Chăm sóc khách hàng
-                                        </button>
-                                        <button className='btn btn-outline-secondary btn-sm me-2'>
-                                            Thương mại điện tử
-                                        </button>
-                                        <button className='btn btn-outline-secondary btn-sm me-2'>
-                                            Marketing / Quảng cáo
-                                        </button>
+                                        {jobPost.fields &&
+                                            Array.isArray(jobPost.fields) &&
+                                            jobPost.fields.map(
+                                                (field, index) => (
+                                                    <button
+                                                        key={index}
+                                                        className='btn btn-outline-secondary btn-sm me-2'
+                                                    >
+                                                        {field}
+                                                    </button>
+                                                )
+                                            )}
+                                        {jobPost.employment &&
+                                            Array.isArray(jobPost.employment) &&
+                                            jobPost.employment.map(
+                                                (employment, index) => (
+                                                    <button
+                                                        key={index}
+                                                        className='btn btn-outline-secondary btn-sm me-2'
+                                                    >
+                                                        {employment}
+                                                    </button>
+                                                )
+                                            )}
                                     </div>
 
                                     {/* Mô tả công việc */}
@@ -217,28 +271,13 @@ function JobPostDetails() {
                                         <h6 className='text-black fw-medium'>
                                             Mô tả công việc
                                         </h6>
-                                        <p>
-                                            - Tiếp nhận và giải đáp, tư vấn, hỗ
-                                            trợ thông tin cho khách hàng thông
-                                            qua các kênh liên lạc của công ty.
-                                        </p>
-                                        <p>
-                                            - Tiếp cận và quản lý khối lượng dữ
-                                            liệu, các vấn đề cần giải quyết của
-                                            khách hàng và cung cấp thông tin từ
-                                            các bộ phận liên quan xử lý.
-                                        </p>
-                                        <p>
-                                            - Tìm hiểu nhu cầu của khách hàng,
-                                            đưa ra giải pháp tốt nhất để hỗ trợ
-                                            khách hàng về sản phẩm, dịch vụ, giá
-                                            cả.
-                                        </p>
-                                        <p>
-                                            - Quảng bá các chương trình khuyến
-                                            mại, giới thiệu ưu đãi tới khách
-                                            hàng.
-                                        </p>
+                                        <div
+                                            dangerouslySetInnerHTML={{
+                                                __html: DOMPurify.sanitize(
+                                                    jobPost.jobDescription
+                                                ),
+                                            }}
+                                        ></div>
                                     </div>
 
                                     {/* Yêu cầu ứng viên */}
@@ -246,20 +285,13 @@ function JobPostDetails() {
                                         <h6 className='text-black fw-medium'>
                                             Yêu cầu ứng viên
                                         </h6>
-                                        <p>
-                                            <strong>- Yêu cầu đặc biệt:</strong>{' '}
-                                            Tiếng Trung giao tiếp ổn
-                                        </p>
-                                        <p>
-                                            - Làm ca đêm cố định 23:00-07:00 (8
-                                            tiếng/ca), làm việc 6 ngày trong 1
-                                            tuần, tùy chọn ngày off
-                                        </p>
-                                        <p>- Biết sử dụng máy tính cơ bản</p>
-                                        <p>
-                                            - Không cần kinh nghiệm sẽ có nhân
-                                            viên tận tình hướng dẫn đào tạo.
-                                        </p>
+                                        <div
+                                            dangerouslySetInnerHTML={{
+                                                __html: DOMPurify.sanitize(
+                                                    jobPost.requirements
+                                                ),
+                                            }}
+                                        ></div>
                                     </div>
 
                                     {/* Quyền lợi */}
@@ -267,36 +299,13 @@ function JobPostDetails() {
                                         <h6 className='text-black fw-medium'>
                                             Quyền lợi
                                         </h6>
-                                        <ul>
-                                            <li>
-                                                Doanh thu trung bình mỗi tháng:
-                                                15.000.000 - 25.000.000 VNĐ
-                                            </li>
-                                            <li>
-                                                Lương cứng 15 triệu + % hoa hồng
-                                            </li>
-                                            <li>
-                                                Được hỗ trợ BHXH / BHYT / BHTN
-                                                theo quy định nhà nước
-                                            </li>
-                                            <li>
-                                                Môi trường làm việc chuyên
-                                                nghiệp, thoải mái, hỗ trợ tốt,
-                                                chịu áp lực
-                                            </li>
-                                            <li>
-                                                Thưởng Tết, lễ 1x lương tháng
-                                                13...
-                                            </li>
-                                        </ul>
-                                    </div>
-
-                                    {/* Thiết bị làm việc */}
-                                    <div className='my-4'>
-                                        <h6 className='text-black fw-medium'>
-                                            Thiết bị làm việc
-                                        </h6>
-                                        <p>- Được cấp máy tính, tai nghe</p>
+                                        <div
+                                            dangerouslySetInnerHTML={{
+                                                __html: DOMPurify.sanitize(
+                                                    jobPost.interest
+                                                ),
+                                            }}
+                                        ></div>
                                     </div>
 
                                     {/* Địa điểm làm việc */}
@@ -307,8 +316,7 @@ function JobPostDetails() {
                                         <div className='d-flex align-items-center'>
                                             <FaMapMarkerAlt className='me-2 text-success' />
                                             <p className='mb-0'>
-                                                Hồ Chí Minh: 1487 Nguyễn Văn
-                                                Linh, Phường Tân Phong, Quận 7
+                                                {jobPost.location}
                                             </p>
                                         </div>
                                     </div>
@@ -325,7 +333,8 @@ function JobPostDetails() {
                                         </p>
                                         <p className='text-muted d-flex align-items-center'>
                                             <FaRegCalendarAlt className='me-2' />{' '}
-                                            Hạn nộp hồ sơ: 03/02/2025
+                                            Hạn nộp hồ sơ:{' '}
+                                            {jobPost.applyDeadline}
                                         </p>
                                     </div>
 
@@ -359,10 +368,76 @@ function JobPostDetails() {
                                     styles['boder_custum'] + ' section mt-3 p-3'
                                 }
                             >
-                                <h5 className='fw-bolder'>
+                                <h5 className={styles['title']}>
                                     Việc khác của công ty
                                 </h5>
                                 <p>Danh sách các việc khác...</p>
+                                <div>
+                                    Lorem ipsum dolor sit amet consectetur
+                                    adipisicing elit. Officiis cum rem veritatis
+                                    fugiat aliquid sapiente odio, error
+                                    consequatur perspiciatis, optio iusto
+                                    adipisci maxime reprehenderit aliquam
+                                    assumenda autem! Doloremque, pariatur
+                                    incidunt.
+                                    <hr />
+                                    Lorem ipsum dolor sit amet consectetur
+                                    adipisicing elit. Architecto perspiciatis
+                                    qui pariatur laborum beatae, illo quibusdam
+                                    a totam, necessitatibus inventore, quos
+                                    tenetur! Recusandae unde nostrum
+                                    consequuntur blanditiis quod nisi beatae.
+                                    <hr />
+                                    Lorem ipsum dolor sit amet consectetur
+                                    adipisicing elit. Architecto perspiciatis
+                                    qui pariatur laborum beatae, illo quibusdam
+                                    a totam, necessitatibus inventore, quos
+                                    tenetur! Recusandae unde nostrum
+                                    consequuntur blanditiis quod nisi beatae.
+                                    <hr />
+                                    Lorem ipsum dolor sit amet consectetur
+                                    adipisicing elit. Architecto perspiciatis
+                                    qui pariatur laborum beatae, illo quibusdam
+                                    a totam, necessitatibus inventore, quos
+                                    tenetur! Recusandae unde nostrum
+                                    consequuntur blanditiis quod nisi beatae.
+                                    <hr />
+                                    Lorem ipsum dolor sit amet consectetur
+                                    adipisicing elit. Architecto perspiciatis
+                                    qui pariatur laborum beatae, illo quibusdam
+                                    a totam, necessitatibus inventore, quos
+                                    tenetur! Recusandae unde nostrum
+                                    consequuntur blanditiis quod nisi beatae.
+                                    <hr />
+                                    Lorem ipsum dolor sit amet consectetur
+                                    adipisicing elit. Architecto perspiciatis
+                                    qui pariatur laborum beatae, illo quibusdam
+                                    a totam, necessitatibus inventore, quos
+                                    tenetur! Recusandae unde nostrum
+                                    consequuntur blanditiis quod nisi beatae.
+                                    <hr />
+                                    Lorem ipsum dolor sit amet consectetur
+                                    adipisicing elit. Architecto perspiciatis
+                                    qui pariatur laborum beatae, illo quibusdam
+                                    a totam, necessitatibus inventore, quos
+                                    tenetur! Recusandae unde nostrum
+                                    consequuntur blanditiis quod nisi beatae.
+                                    <hr />
+                                    Lorem ipsum dolor sit amet consectetur
+                                    adipisicing elit. Architecto perspiciatis
+                                    qui pariatur laborum beatae, illo quibusdam
+                                    a totam, necessitatibus inventore, quos
+                                    tenetur! Recusandae unde nostrum
+                                    consequuntur blanditiis quod nisi beatae.
+                                    <hr />
+                                    Lorem ipsum dolor sit amet consectetur
+                                    adipisicing elit. Architecto perspiciatis
+                                    qui pariatur laborum beatae, illo quibusdam
+                                    a totam, necessitatibus inventore, quos
+                                    tenetur! Recusandae unde nostrum
+                                    consequuntur blanditiis quod nisi beatae.
+                                    <hr />
+                                </div>
                             </section>
 
                             <section
@@ -371,7 +446,7 @@ function JobPostDetails() {
                                     styles['boder_custum'] + ' section mt-3 p-3'
                                 }
                             >
-                                <h5 className='fw-bolder'>
+                                <h5 className={styles['title']}>
                                     Việc làm liên quan
                                 </h5>
                                 <p>Danh sách các việc làm liên quan...</p>

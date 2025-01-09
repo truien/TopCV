@@ -18,7 +18,7 @@ function RelatedJobs({ job }) {
     return (
         <div className={`d-flex align-items-center ${styles.jobCard}`}>
             {/* Logo */}
-            <img src={job.logo} alt='Logo' className={styles.logo} />
+            <img src={job.avatar} alt='Logo' className={styles.logo} />
 
             {/* Nội dung */}
             <div className='ms-3 flex-grow-1'>

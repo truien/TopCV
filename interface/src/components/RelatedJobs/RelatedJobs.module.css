@@ -1,0 +1,28 @@
+.jobCard {
+    border-bottom: 1px solid #ddd;
+    padding: 15px 0;
+    display: flex;
+    align-items: center;
+}
+
+.jobCard:last-child {
+    border-bottom: none;
+}
+
+.logo {
+    width: 60px;
+    height: 60px;
+    border-radius: 4px;
+}
+
+.jobTitle {
+    font-size: 1rem;
+    font-weight: bold;
+    color: #333;
+}
+
+.salary {
+    font-size: 1rem;
+    font-weight: bold;
+    color: #28a745;
+}
