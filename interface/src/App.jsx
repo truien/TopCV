@@ -14,6 +14,7 @@ import NotFound from './pages/NotFound/NotFound.jsx';
 import MainSetting from './layouts/MainSetting.jsx';
 import SettingAccount from './pages/Main/SettingAccount/SettingAccount.jsx';
 import JobPostDetails from './pages/Main/JobPostDetails/JobPostDetails';
+import EmployerInfo from './pages/Main/EmployerInfo/EmployerInfo.jsx'
 
 function App() {
     return (
@@ -41,6 +42,7 @@ function App() {
                 <Route path='*' element={<NotFound />} />
                 <Route path='account-settings' element={<MainSetting />}>
                     <Route index element={<SettingAccount />} />
+                    <Route path='settings-infor' element={<EmployerInfo />} />
                 </Route>
             </Routes>
         </Router>

@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import styles from './EditEmployerInfo.module.css';
+import styles from './EmployerInfo.module.css';
 import { toast } from 'react-toastify';
 import CombinedEditor from '@components/CombinedEditor/CombinedEditor.jsx';
 
-const EditEmployerInfo = ({ userName, onSave, setEmployerData }) => {
+const EmployerInfo = () => {
+    const Username = sessionStorage.getItem('username'); // Lấy Username từ sessionStorage
     const [employer, setEmployer] = useState({
         userName: '',
         companyName: '',
@@ -14,29 +15,31 @@ const EditEmployerInfo = ({ userName, onSave, setEmployerData }) => {
 
     const [error, setError] = useState('');
 
-    // Fetch employer data by username
     useEffect(() => {
         const fetchEmployer = async () => {
             try {
                 const response = await axios.get(
-                    `http://localhost:5224/api/Employer/infor/${userName}`
+                    `http://localhost:5224/api/Employer/infor/${Username}`
                 );
-                var Data = response.data;
-                Data.map((employ) => {
+                const data = response.data;
+                data.map((data) => {
                     setEmployer({
-                        userName: employ.userName || '',
-                        companyName: employ.companyName || '',
-                        companyInfo: employ.companyInfo || '',
-                        address: employ.address || '',
+                        userName: data.userName || '',
+                        companyName: data.companyName || '',
+                        companyInfo: data.companyInfo || '',
+                        address: data.address || '',
                     });
                 });
             } catch (err) {
-                console.error('Lỗi khi lấy dữ liệu:', err); // Hiển thị lỗi API
+                console.error('Lỗi khi lấy dữ liệu:', err);
                 setError('Không thể tải thông tin nhà tuyển dụng');
             }
         };
-        fetchEmployer();
-    }, [userName]);
+
+        if (Username) {
+            fetchEmployer();
+        }
+    }, [Username]); // Sử dụng Username làm dependency
 
     const handleChangetext = (field, value) => {
         setEmployer((prevData) => ({ ...prevData, [field]: value }));
@@ -52,25 +55,10 @@ const EditEmployerInfo = ({ userName, onSave, setEmployerData }) => {
 
         try {
             await axios.put(
-                `http://localhost:5224/api/Employer/${userName}`,
+                `http://localhost:5224/api/Employer/${Username}`,
                 employer
             );
             toast.success('Cập nhật thành công');
-            if (setEmployerData) {
-                setEmployerData((prevData) =>
-                    prevData.map((employerItem) =>
-                        employerItem.userName === userName
-                            ? {
-                                ...employerItem,
-                                companyName: employer.companyName,
-                                companyInfo: employer.companyInfo,
-                                address: employer.address,
-                                }
-                            : employerItem
-                    )
-                );
-            }
-            if (onSave) onSave();
         } catch (err) {
             setError('Lỗi khi cập nhật thông tin');
         }
@@ -149,4 +137,4 @@ const EditEmployerInfo = ({ userName, onSave, setEmployerData }) => {
     );
 };
 
-export default EditEmployerInfo;
+export default EmployerInfo;

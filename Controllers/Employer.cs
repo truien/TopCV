@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TopCV.Models;
+using TopCV.DTOs;
 
 namespace TopCV.Controllers
 {
@@ -85,6 +86,54 @@ namespace TopCV.Controllers
 
             return Ok(jobposts);
         }
-
+    [HttpPut("{userName}")]
+    public async Task<IActionResult> UpdateEmployer(string userName, [FromBody] UserEmployerUpdateDto updateDto)
+    {
+        if (string.IsNullOrEmpty(userName))
+        {
+            return BadRequest("Tên đăng nhập không hợp lệ.");
+        }
+        var employer = await _context.Useremployers
+            .Include(e => e.UserNameNavigation) 
+            .FirstOrDefaultAsync(e => e.UserName == userName);
+        if (employer == null)
+        {
+            return NotFound("Nhà tuyển dụng không tồn tại.");
+        }
+        employer.CompanyName = updateDto.CompanyName;
+        employer.CompanyInfo = updateDto.CompanyInfo;
+        employer.Address = updateDto.Address;
+        try
+        {
+            await _context.SaveChangesAsync();
+            return Ok("Cập nhật thông tin thành công.");
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, $"Đã xảy ra lỗi khi cập nhật: {ex.Message}");
+        }
+    }
+    [HttpGet("infor/{userName}")]
+    public async Task<IActionResult> GetInforEmployer(string userName)
+    {
+        if(string.IsNullOrEmpty(userName)){
+            return BadRequest("Tên đăng nhập không hợp lệ.");
+        }
+        var employer = await _context.Useremployers
+                        .Where(j=>j.UserName == userName)
+                        .Select(j => new {
+                            j.UserName,
+                            j.CompanyName,
+                            j.CompanyInfo,
+                            j.Address,
+                        })
+                        .ToListAsync();
+            
+        if (employer == null)
+        {
+            return NotFound("Nhà tuyển dụng không tồn tại.");
+        }
+        return Ok(employer);
+    }
     }
 }

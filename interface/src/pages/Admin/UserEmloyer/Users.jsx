@@ -3,29 +3,30 @@ import Axios from 'axios';
 import logo from '@images/avatar-default.jpg';
 import './styles.css';
 import ConfirmModal from '@components/ConfirmModal/ConfirmModal.jsx';
+import EditEmployerInfo from '@components/EditEmployerInfo/EditEmployerInfo.jsx';
 import { AiOutlineDelete, AiOutlineEdit } from 'react-icons/ai';
 function Users() {
     const [activeCollapse, setActiveCollapse] = useState(null);
     const [jobSeekerData, setJobSeekerData] = useState(null);
     const [EmployerData, setEmployerData] = useState(null);
-
-    const [isModalOpenSeekerJob, setIsModalOpenSeekerJob] = useState(false);  
-    const [isModalOpenEmployer, setIsModalOpenEmployer] = useState(false);  
+    const [currentEmployerId, setCurrentEmployerId] = useState('');
+    const [isModalOpenSeekerJob, setIsModalOpenSeekerJob] = useState(false);
+    const [isModalOpenEmployer, setIsModalOpenEmployer] = useState(false);
     const [userNameSeekerJob, setUserNameSeekerJob] = useState(null);
     const [userNameEmployer, setUserNameEmployer] = useState(null);
-    
+    const [isEditing, setIsEditing] = useState(false);
     const openDeleteSeekerJob = (userName) => {
-        document.getElementById("root").setAttribute("inert", "true");
+        document.getElementById('root').setAttribute('inert', 'true');
         setUserNameSeekerJob(userName);
         setIsModalOpenSeekerJob(true);
     };
     const openDeleteEmployer = (userName) => {
-        document.getElementById("root").setAttribute("inert", "true");
+        document.getElementById('root').setAttribute('inert', 'true');
         setUserNameEmployer(userName);
         setIsModalOpenEmployer(true);
     };
     const closeDeleteModal = () => {
-        document.getElementById("root").removeAttribute("inert");
+        document.getElementById('root').removeAttribute('inert');
         setIsModalOpenSeekerJob(false);
         setIsModalOpenEmployer(false);
         setUserNameEmployer(null);
@@ -61,14 +62,23 @@ function Users() {
         };
         fetchData();
     }, [activeCollapse, jobSeekerData, EmployerData]);
-
+    const onSavePost = () => {
+        setIsEditing(false);
+        setCurrentEmployerId(null);
+    };
+    const onEditPost = (userName) => {
+        setIsEditing(true);
+        setCurrentEmployerId(userName);
+    };
     const handleDeleteJobSeeker = async () => {
         try {
             await Axios.delete(
                 `http://localhost:5224/api/JobSeeker/delete/${userNameSeekerJob}`
             );
             setJobSeekerData((prevData) =>
-                prevData.filter((jobSeeker) => jobSeeker.userName !== userNameSeekerJob)
+                prevData.filter(
+                    (jobSeeker) => jobSeeker.userName !== userNameSeekerJob
+                )
             );
             closeDeleteModal();
         } catch (e) {
@@ -82,7 +92,9 @@ function Users() {
                 `http://localhost:5224/api/Employer/delete/${userNameEmployer}`
             );
             setEmployerData((prevData) =>
-                prevData.filter((employer) => employer.userName !== userNameEmployer)
+                prevData.filter(
+                    (employer) => employer.userName !== userNameEmployer
+                )
             );
             closeDeleteModal();
         } catch (e) {
@@ -92,7 +104,8 @@ function Users() {
     };
     return (
         <>
-            <div className='container-custome '>
+        {
+            !isEditing ? (<div className='container-custome '>
                 <div className='container manager container-fluid py-2 mb-5 mt-3  '>
                     <h1 className='text-custom fs-1'>Quản lý tài khoản</h1>
                 </div>
@@ -217,7 +230,10 @@ function Users() {
                                                         >
                                                             <AiOutlineDelete />
                                                         </button>
-                                                        <button className='btn btn-warning'>
+                                                        <button
+                                                            className='btn btn-warning'
+                                                            onClick={()=> onEditPost(employer.userName) }
+                                                        >
                                                             <AiOutlineEdit />
                                                         </button>
                                                     </div>
@@ -234,7 +250,11 @@ function Users() {
                         )}
                     </div>
                 </div>
-            </div>
+            </div>) : (
+                <EditEmployerInfo userName = {currentEmployerId} onSave ={onSavePost} setEmployerData = {setEmployerData}/>
+            )
+        }
+            
             <ConfirmModal
                 isOpen={isModalOpenEmployer}
                 onClose={closeDeleteModal}
