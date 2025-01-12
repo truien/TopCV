@@ -2,24 +2,30 @@ import { useRef, useState, useEffect } from 'react';
 import { Header } from '@mainlayout';
 import coverPhoto from '@images/company_cover.jpg';
 import styles from './JobPostDetails.module.css';
+import RelatedJobs from '@components/RelatedJobs/RelatedJobs.jsx';
 import { TbBuildings } from 'react-icons/tb';
+import { Footer } from '@mainlayout';
 import {
     FaMapMarkerAlt,
     FaMoneyBillWave,
     FaBriefcase,
     FaRegCalendarAlt,
 } from 'react-icons/fa';
+import { FaCircleQuestion } from 'react-icons/fa6';
 import DOMPurify from 'dompurify';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
+import easyapply from '@images/easy-apply.png';
 function JobPostDetails() {
     const { id } = useParams();
     const [jobPost, setJobPost] = useState(null);
+    const [relatedJobs, setRelatedJobs] = useState(null);
+    const [companyJobs, setCompanyJobs] = useState(null);
     const [activeSection, setActiveSection] = useState('');
     const detailsRef = useRef(null);
     const companyJobsRef = useRef(null);
     const relatedJobsRef = useRef(null);
-
+    const JobDetailCache = {};
     useEffect(() => {
         const fetchJobPostDetails = async () => {
             try {
@@ -31,7 +37,8 @@ function JobPostDetails() {
                 console.error('Lỗi khi tải dữ liệu bài đăng công việc:', error);
             }
         };
-        fetchJobPostDetails();
+        setTimeout(() => fetchJobPostDetails(), 1000);
+        // fetchJobPostDetails();
     }, [id]);
 
     useEffect(() => {
@@ -56,13 +63,74 @@ function JobPostDetails() {
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
+    useEffect(() => {
+        if (jobPost && jobPost.userEmployer) {
+            const fetchCompanyJobs = async () => {
+                try {
+                    const response = await axios.get(
+                        `http://localhost:5224/api/Employer/get-jobpost/${jobPost.userEmployer}`
+                    );
+                    setCompanyJobs(response.data);
+                } catch (error) {
+                    console.error(
+                        'Lỗi khi tải dữ liệu bài đăng liên quan:',
+                        error
+                    );
+                }
+            };
+            fetchCompanyJobs();
+        }
+    }, [jobPost]);
+
+    useEffect(() => {
+        if (jobPost) {
+            const fetchCompanyJobs = async () => {
+                try {
+                    const response = await axios.get(
+                        'http://localhost:5224/api/JobPosts/related',
+                        {
+                            params: {
+                                Fields: jobPost.fields[0],
+                                location: jobPost.location,
+                                employment: jobPost.employment[0],
+                                companyname: jobPost.employer.companyName,
+                                excludeId: jobPost.id,
+                                limitted: 10,
+                            },
+                        }
+                    );
+                    setRelatedJobs(response.data);
+                } catch (error) {
+                    console.error('Lỗi khi gọi API:', error);
+                }
+            };
+            fetchCompanyJobs();
+        }
+    }, [jobPost]);
+
+    const prefetchJobDetail = async (id) => {
+        if (!JobDetailCache[id]) {
+            try {
+                const response = await axios.get(
+                    `http://localhost:5224/api/JobPosts/get-jobpost/${id}`
+                );
+                JobDetailCache[id] = response.data;
+            } catch (error) {
+                console.error('Lỗi tải bài viết:', error);
+            }
+        }
+    };
+
     if (!jobPost) {
         return (
             <div className='text-center mt-5'>
                 <p>Đang tải thông tin...</p>
-                <div className='spinner-border' role='status'>
-                    {/* <span className='sr-only'>Loading...</span> */}
+                <div className='spinner-border ' role='status'>
+                    <span className='sr-only'>Loading...</span>
                 </div>
+                {/* <div class='spinner-grow text-success' role='status'>
+                    <span class='visually-hidden'>Loading...</span>
+                </div> */}
             </div>
         );
     }
@@ -189,8 +257,8 @@ function JobPostDetails() {
                             </div>
                         </div>
                     </div>
-                    <nav className=' navbar sticky-top mt-3 bg-body w-auto' >
-                        <div >
+                    <nav className=' navbar sticky-top mt-3 bg-body w-auto'>
+                        <div>
                             <div
                                 onClick={() => scrollToSection(detailsRef)}
                                 className={`btn fw-bold me-3 ${
@@ -371,73 +439,22 @@ function JobPostDetails() {
                                 <h5 className={styles['title']}>
                                     Việc khác của công ty
                                 </h5>
-                                <p>Danh sách các việc khác...</p>
-                                <div>
-                                    Lorem ipsum dolor sit amet consectetur
-                                    adipisicing elit. Officiis cum rem veritatis
-                                    fugiat aliquid sapiente odio, error
-                                    consequatur perspiciatis, optio iusto
-                                    adipisci maxime reprehenderit aliquam
-                                    assumenda autem! Doloremque, pariatur
-                                    incidunt.
-                                    <hr />
-                                    Lorem ipsum dolor sit amet consectetur
-                                    adipisicing elit. Architecto perspiciatis
-                                    qui pariatur laborum beatae, illo quibusdam
-                                    a totam, necessitatibus inventore, quos
-                                    tenetur! Recusandae unde nostrum
-                                    consequuntur blanditiis quod nisi beatae.
-                                    <hr />
-                                    Lorem ipsum dolor sit amet consectetur
-                                    adipisicing elit. Architecto perspiciatis
-                                    qui pariatur laborum beatae, illo quibusdam
-                                    a totam, necessitatibus inventore, quos
-                                    tenetur! Recusandae unde nostrum
-                                    consequuntur blanditiis quod nisi beatae.
-                                    <hr />
-                                    Lorem ipsum dolor sit amet consectetur
-                                    adipisicing elit. Architecto perspiciatis
-                                    qui pariatur laborum beatae, illo quibusdam
-                                    a totam, necessitatibus inventore, quos
-                                    tenetur! Recusandae unde nostrum
-                                    consequuntur blanditiis quod nisi beatae.
-                                    <hr />
-                                    Lorem ipsum dolor sit amet consectetur
-                                    adipisicing elit. Architecto perspiciatis
-                                    qui pariatur laborum beatae, illo quibusdam
-                                    a totam, necessitatibus inventore, quos
-                                    tenetur! Recusandae unde nostrum
-                                    consequuntur blanditiis quod nisi beatae.
-                                    <hr />
-                                    Lorem ipsum dolor sit amet consectetur
-                                    adipisicing elit. Architecto perspiciatis
-                                    qui pariatur laborum beatae, illo quibusdam
-                                    a totam, necessitatibus inventore, quos
-                                    tenetur! Recusandae unde nostrum
-                                    consequuntur blanditiis quod nisi beatae.
-                                    <hr />
-                                    Lorem ipsum dolor sit amet consectetur
-                                    adipisicing elit. Architecto perspiciatis
-                                    qui pariatur laborum beatae, illo quibusdam
-                                    a totam, necessitatibus inventore, quos
-                                    tenetur! Recusandae unde nostrum
-                                    consequuntur blanditiis quod nisi beatae.
-                                    <hr />
-                                    Lorem ipsum dolor sit amet consectetur
-                                    adipisicing elit. Architecto perspiciatis
-                                    qui pariatur laborum beatae, illo quibusdam
-                                    a totam, necessitatibus inventore, quos
-                                    tenetur! Recusandae unde nostrum
-                                    consequuntur blanditiis quod nisi beatae.
-                                    <hr />
-                                    Lorem ipsum dolor sit amet consectetur
-                                    adipisicing elit. Architecto perspiciatis
-                                    qui pariatur laborum beatae, illo quibusdam
-                                    a totam, necessitatibus inventore, quos
-                                    tenetur! Recusandae unde nostrum
-                                    consequuntur blanditiis quod nisi beatae.
-                                    <hr />
-                                </div>
+                                {companyJobs ? (
+                                    companyJobs
+                                        .filter((job) => job.id !== jobPost.id)
+                                        .map((job) => (
+                                            <RelatedJobs
+                                                key={job.id}
+                                                job={job}
+                                                fetchJobDetail={
+                                                    prefetchJobDetail
+                                                }
+                                                JobDetailCache={JobDetailCache}
+                                            />
+                                        ))
+                                ) : (
+                                    <div>Đang tải dữ liệu</div>
+                                )}
                             </section>
 
                             <section
@@ -449,15 +466,479 @@ function JobPostDetails() {
                                 <h5 className={styles['title']}>
                                     Việc làm liên quan
                                 </h5>
-                                <p>Danh sách các việc làm liên quan...</p>
+                                {relatedJobs ? (
+                                    relatedJobs.map((job) => (
+                                        <RelatedJobs
+                                            key={job.id}
+                                            job={job}
+                                            fetchJobDetail={prefetchJobDetail}
+                                            JobDetailCache={JobDetailCache}
+                                        />
+                                    ))
+                                ) : (
+                                    <div>Đang tải dữ liệu</div>
+                                )}
                             </section>
                         </div>
                         <div className='col-4 mt-3'>
-                            <div className='bg-light'>svsbd</div>
+                            <div className={styles['box-report-job']}>
+                                <div className='d-flex'>
+                                    <div>
+                                        <FaCircleQuestion
+                                            className='align-middle me-1'
+                                            style={{
+                                                color: '#00b14f',
+                                                fontSize: '17px',
+                                            }}
+                                        />
+                                    </div>
+                                    <h3 className={styles['Title']}>
+                                        Bí kíp Tìm việc an toàn
+                                    </h3>
+                                </div>
+                                <p
+                                    style={{
+                                        fontSize: '14px',
+                                        fontStyle: 'normal',
+                                        lineHeight: '22px',
+                                        marginBottom: '16px',
+                                    }}
+                                >
+                                    Dưới đây là những dấu hiệu của các tổ chức,
+                                    cá nhân tuyển dụng không minh bạch:
+                                </p>
+                                <section>
+                                    <h4
+                                        className={
+                                            styles['common-signal__title']
+                                        }
+                                    >
+                                        1. Dấu hiệu phổ biến:
+                                    </h4>
+                                    <div
+                                        id='carouselExampleIndicators'
+                                        className='carousel slide'
+                                        data-bs-ride='carousel'
+                                    >
+                                        <div className='carousel-indicators'>
+                                            <button
+                                                type='button'
+                                                data-bs-target='#carouselExampleIndicators'
+                                                data-bs-slide-to='0'
+                                                className='active'
+                                                aria-current='true'
+                                                aria-label='Slide 1'
+                                            ></button>
+                                            <button
+                                                type='button'
+                                                data-bs-target='#carouselExampleIndicators'
+                                                data-bs-slide-to='1'
+                                                aria-label='Slide 2'
+                                            ></button>
+                                            <button
+                                                type='button'
+                                                data-bs-target='#carouselExampleIndicators'
+                                                data-bs-slide-to='2'
+                                                aria-label='Slide 3'
+                                            ></button>
+                                            <button
+                                                type='button'
+                                                data-bs-target='#carouselExampleIndicators'
+                                                data-bs-slide-to='3'
+                                                aria-label='Slide 4'
+                                            ></button>
+                                            <button
+                                                type='button'
+                                                data-bs-target='#carouselExampleIndicators'
+                                                data-bs-slide-to='4'
+                                                aria-label='Slide 5'
+                                            ></button>
+                                            <button
+                                                type='button'
+                                                data-bs-target='#carouselExampleIndicators'
+                                                data-bs-slide-to='5'
+                                                aria-label='Slide 6'
+                                            ></button>
+                                        </div>
+                                        <div className='carousel-inner'>
+                                            <div className='carousel-item active'>
+                                                <div className='slider__item'>
+                                                    <img
+                                                        className='slider__image entered loaded'
+                                                        src='https://cdn-new.topcv.vn/unsafe/https://static.topcv.vn/v4/image/report/1.png'
+                                                        alt='Item 1'
+                                                    />
+                                                    <p
+                                                        className={
+                                                            styles[
+                                                                'slider__caption'
+                                                            ]
+                                                        }
+                                                    >
+                                                        Nội dung mô tả công việc
+                                                        sơ sài, không đồng nhất
+                                                        với công việc thực tế
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <div className='carousel-item'>
+                                                <div className='slider__item'>
+                                                    <img
+                                                        className='slider__image entered loaded'
+                                                        src='https://cdn-new.topcv.vn/unsafe/https://static.topcv.vn/v4/image/report/2.png'
+                                                        alt='Item 2'
+                                                    />
+                                                    <p
+                                                        className={
+                                                            styles[
+                                                                'slider__caption'
+                                                            ]
+                                                        }
+                                                    >
+                                                        Hứa hẹn "việc nhẹ lương
+                                                        cao", không cần bỏ nhiều
+                                                        công sức dễ dàng lấy
+                                                        tiền "khủng"
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <div className='carousel-item'>
+                                                <div className='slider__item'>
+                                                    <img
+                                                        className='slider__image entered loaded'
+                                                        src='https://cdn-new.topcv.vn/unsafe/https://static.topcv.vn/v4/image/report/3.png'
+                                                        alt='Item 3'
+                                                    />
+                                                    <p
+                                                        className={
+                                                            styles[
+                                                                'slider__caption'
+                                                            ]
+                                                        }
+                                                    >
+                                                        Yêu cầu tải app, nạp
+                                                        tiền, làm nhiệm vụ không
+                                                        rõ ràng
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <div className='carousel-item'>
+                                                <div className='slider__item'>
+                                                    <img
+                                                        className='slider__image entered loaded'
+                                                        src='https://cdn-new.topcv.vn/unsafe/https://static.topcv.vn/v4/image/report/4.png'
+                                                        alt='Item 4'
+                                                    />
+                                                    <p
+                                                        className={
+                                                            styles[
+                                                                'slider__caption'
+                                                            ]
+                                                        }
+                                                    >
+                                                        Yêu cầu nộp phí phỏng
+                                                        vấn, phí giữ chỗ không
+                                                        rõ ràng hoặc quá cao
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <div className='carousel-item'>
+                                                <div className='slider__item'>
+                                                    <img
+                                                        className='slider__image entered loaded'
+                                                        src='https://cdn-new.topcv.vn/unsafe/https://static.topcv.vn/v4/image/report/5.png'
+                                                        alt='Item 5'
+                                                    />
+                                                    <p
+                                                        className={
+                                                            styles[
+                                                                'slider__caption'
+                                                            ]
+                                                        }
+                                                    >
+                                                        Yêu cầu ký kết giấy tờ
+                                                        không rõ ràng hoặc nộp
+                                                        giấy tờ gốc
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <div className='carousel-item'>
+                                                <div className='slider__item'>
+                                                    <img
+                                                        className='slider__image entered loaded'
+                                                        src='https://cdn-new.topcv.vn/unsafe/https://static.topcv.vn/v4/image/report/6.png?v=1.0.0'
+                                                        alt='Item 6'
+                                                    />
+                                                    <p
+                                                        className={
+                                                            styles[
+                                                                'slider__caption'
+                                                            ]
+                                                        }
+                                                    >
+                                                        Địa điểm phỏng vấn bất
+                                                        bình thường hoặc không
+                                                        có địa chỉ cụ thể
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <button
+                                            className='carousel-control-prev'
+                                            type='button'
+                                            data-bs-target='#carouselExampleIndicators'
+                                            data-bs-slide='prev'
+                                        >
+                                            <span
+                                                className='carousel-control-prev-icon'
+                                                aria-hidden='true'
+                                            ></span>
+                                            <span className='visually-hidden'>
+                                                Previous
+                                            </span>
+                                        </button>
+                                        <button
+                                            className='carousel-control-next'
+                                            type='button'
+                                            data-bs-target='#carouselExampleIndicators'
+                                            data-bs-slide='next'
+                                        >
+                                            <span
+                                                className='carousel-control-next-icon'
+                                                aria-hidden='true'
+                                            ></span>
+                                            <span className='visually-hidden'>
+                                                Next
+                                            </span>
+                                        </button>
+                                    </div>
+                                    <h4
+                                        className={
+                                            styles['common-signal__title']
+                                        }
+                                    >
+                                        2. Cần làm gì khi gặp việc làm, công ty
+                                        không minh bạch::
+                                    </h4>
+                                    <div className='common-signal__content'>
+                                        <ul>
+                                            <li
+                                                className='mb-3'
+                                                style={{
+                                                    fontSize: '14px',
+                                                    letterSpacing: '.14px',
+                                                    lineHeight: '22px',
+                                                }}
+                                            >
+                                                Kiểm tra thông tin về công ty,
+                                                việc làm trước khi ứng tuyển
+                                            </li>
+                                            <li
+                                                className='mb-3'
+                                                style={{
+                                                    fontSize: '14px',
+                                                    letterSpacing: '.14px',
+                                                    lineHeight: '22px',
+                                                }}
+                                            >
+                                                Báo cáo tin tuyển dụng với TopCV
+                                                thông qua nút{' '}
+                                                <strong>
+                                                    "Báo cáo tin tuyển dụng"
+                                                </strong>{' '}
+                                                để được hỗ trợ và giúp các ứng
+                                                viên khác tránh được rủi ro
+                                            </li>
+                                            <li
+                                                className='mb-3'
+                                                style={{
+                                                    fontSize: '14px',
+                                                    letterSpacing: '.14px',
+                                                    lineHeight: '22px',
+                                                }}
+                                            >
+                                                Hoặc liên hệ với TopCV thông qua
+                                                kênh hỗ trợ ứng viên của TopCV:
+                                                <br />
+                                                Email:{' '}
+                                                <a
+                                                    className='text-highlight'
+                                                    href='mailto:trongtruyen04@gmail.com'
+                                                    style={{
+                                                        color: '#00b14f',
+                                                        textDecoration: 'none',
+                                                    }}
+                                                >
+                                                    trongtruyen04@gmail.com
+                                                </a>
+                                                <br />
+                                                Hotline:{' '}
+                                                <a
+                                                    className='text-highlight'
+                                                    href='tel:0559330875'
+                                                    style={{
+                                                        color: '#00b14f',
+                                                        textDecoration: 'none',
+                                                    }}
+                                                >
+                                                    0559330875
+                                                </a>
+                                                <br />
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div className='btn btn-outline-success d-flex justify-content-center'>
+                                        Báo cáo tin tuyển dụng{' '}
+                                    </div>
+                                </section>
+                            </div>
+                            <div className='mt-2'>
+                                <img
+                                    src={easyapply}
+                                    alt='dễ dàng ứng tuyển'
+                                    style={{ width: '100%' }}
+                                />
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
+            <div className='container'>
+                <div className={styles['content-seo-box'] + ' mt-3'}>
+                    <div id='seo-box'>
+                        <p>
+                            <strong>
+                                Cơ hội ứng tuyển việc làm với đãi ngộ hấp dẫn
+                                tại các công ty hàng đầu
+                            </strong>
+                        </p>
+                        <p>
+                            Trước sự phát triển vượt bậc của nền kinh tế, rất
+                            nhiều ngành nghề trở nên khan hiếm nhân lực hoặc
+                            thiếu nhân lực giỏi. Vì vậy, hầu hết các trường Đại
+                            học đều liên kết với các công ty, doanh nghiệp, cơ
+                            quan để tạo cơ hội cho các bạn sinh viên được học
+                            tập, rèn luyện bản thân và làm quen với môi trường
+                            làm việc từ sớm. Trong{' '}
+                            <a
+                                target='_blank'
+                                rel='noopener noreferrer'
+                                style={{
+                                    color: '#2db14f',
+                                    textDecoration: 'none',
+                                }}
+                            >
+                                <strong>danh sách việc làm </strong>
+                            </a>
+                            trên đây, TopCV mang đến cho bạn những cơ hội việc
+                            làm tại những môi trường làm việc năng động, chuyên
+                            nghiệp.
+                        </p>
+                        <p>
+                            <strong>
+                                Vậy tại sao nên tìm việc làm tại TopCV?
+                            </strong>
+                        </p>
+                        <p>
+                            <strong>Việc làm Chất lượng</strong>
+                        </p>
+                        <ul>
+                            <li>
+                                Hàng ngàn tin tuyển dụng chất lượng cao được cập
+                                nhật thường xuyên để đáp ứng nhu cầu tìm việc
+                                của ứng viên.
+                            </li>
+                            <li>
+                                Hệ thống thông minh tự động gợi ý các công việc
+                                phù hợp theo CV của bạn.
+                            </li>
+                        </ul>
+                        <p>
+                            <strong>Công cụ viết CV đẹp Miễn phí</strong>
+                        </p>
+                        <ul>
+                            <li>
+                                Nhiều mẫu CV đẹp, phù hợp nhu cầu ứng tuyển các
+                                vị trí khác nhau.
+                            </li>
+                            <li>
+                                Tương tác trực quan, dễ dàng chỉnh sửa thông
+                                tin, tạo CV online nhanh chóng trong vòng 5
+                                phút.
+                            </li>
+                        </ul>
+                        <p>
+                            <strong>Hỗ trợ Người tìm việc</strong>
+                        </p>
+                        <ul>
+                            <li>
+                                Nhà tuyển dụng chủ động tìm kiếm và liên hệ với
+                                bạn qua hệ thống kết nối ứng viên thông minh.
+                            </li>
+                            <li>
+                                Báo cáo chi tiết Nhà tuyển dụng đã xem CV và gửi
+                                offer tới bạn.
+                            </li>
+                        </ul>
+                        <p>
+                            Tại{' '}
+                            <a
+                                target='_blank'
+                                rel='noopener noreferrer'
+                                style={{
+                                    color: '#2db14f',
+                                    textDecoration: 'none',
+                                }}
+                            >
+                                <strong>TopCV</strong>
+                            </a>
+                            , bạn có thể tìm thấy những tin tuyển dụng việc làm
+                            với mức lương vô cùng hấp dẫn. Những nhà tuyển dụng
+                            kết nối với TopCV đều là những công ty lớn tại Việt
+                            Nam, nơi bạn có thể làm việc trong một môi trường
+                            chuyên nghiệp, năng động, trẻ trung. TopCV là nền
+                            tảng tuyển dụng công nghệ cao giúp các nhà tuyển
+                            dụng và ứng viên kết nối với nhau. Nhanh tay tạo CV
+                            để ứng tuyển vào các vị trí việc làm mới nhất hấp
+                            dẫn tại{' '}
+                            <a
+                                target='_blank'
+                                rel='noopener noreferrer'
+                                style={{
+                                    color: '#2db14f',
+                                    textDecoration: 'none',
+                                }}
+                            >
+                                <strong>việc làm mới nhất tại Hà Nội</strong>
+                            </a>
+                            ,{' '}
+                            <a
+                                target='_blank'
+                                rel='noopener noreferrer'
+                                style={{
+                                    color: '#2db14f',
+                                    textDecoration: 'none',
+                                }}
+                            >
+                                <strong>việc làm mới nhất tại TP.HCM</strong>
+                            </a>{' '}
+                            ở TopCV, bạn sẽ tìm thấy những{' '}
+                            <a
+                                target='_blank'
+                                rel='noopener noreferrer'
+                                style={{
+                                    color: '#2db14f',
+                                    textDecoration: 'none',
+                                }}
+                            >
+                                <strong>việc làm mới nhất</strong>
+                            </a>{' '}
+                            với mức lương tốt nhất!
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <Footer />
         </>
     );
 }

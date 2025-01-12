@@ -1,28 +1,41 @@
 .jobCard {
-    border-bottom: 1px solid #ddd;
-    padding: 15px 0;
+    border: 1px solid #ddd;
+    padding: 10px;
     display: flex;
     align-items: center;
+    background-color: #f2fbf6;
+    margin-top: 10px;
 }
 
-.jobCard:last-child {
+/* .jobCard:last-child {
     border-bottom: none;
-}
+} */
 
 .logo {
-    width: 60px;
-    height: 60px;
-    border-radius: 4px;
+    align-items: center;
+    aspect-ratio: 1 / 1;
+    background-color: #fff;
+    border: 1px solid #e9eaec;
+    border-radius: 8px;
+    display: flex;
+    height: 120px;
+    margin: 0 auto;
+    -o-object-fit: contain;
+    object-fit: contain;
+    padding: 8px;
+    position: relative;
+    width: 120px;
 }
 
 .jobTitle {
-    font-size: 1rem;
+    font-size: 16px;
     font-weight: bold;
     color: #333;
+    width: 75%;
 }
 
 .salary {
-    font-size: 1rem;
+    font-size: 14px;
     font-weight: bold;
     color: #28a745;
 }

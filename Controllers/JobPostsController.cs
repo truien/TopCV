@@ -249,6 +249,66 @@ namespace TopCV.Controllers
                 return StatusCode(500, $"Lỗi khi cập nhật bài đăng: {ex.Message}");
             }
         }
+        [HttpGet("related")]
+public async Task<IActionResult> GetRelatedJobPosts(
+    string? Fields = null,
+    string? location = null,
+    string? employment = null,
+    string? companyname = null,
+    int? excludeId = null,
+    int limitted = 10)
+{
+    var baseUrl = $"{Request.Scheme}://{Request.Host}/";
+    var query = from i in _context.Jobposts
+                join j in _context.Useremployers on i.UserEmployer equals j.UserName
+                join k in _context.Users on i.UserEmployer equals k.UserName
+                from f in _context.Jobpostfields.Where(f => f.IDJobPost == i.Id).DefaultIfEmpty()
+                from g in _context.Jobfields.Where(g => f != null && f.IDJobField == g.ID).DefaultIfEmpty()
+                from h in _context.Jobpostemployments.Where(h => h.IDJobPost == i.Id).DefaultIfEmpty()
+                from m in _context.Employmenttypes.Where(m => h != null && h.IDEmploymentType == m.Id).DefaultIfEmpty()
+                where i.Status == 1
+                orderby i.PostDate descending
+                select new RelatedJobPostDTO
+                {
+                    Id = i.Id,
+                    Title = i.Title,
+                    CompanyName = j.CompanyName,
+                    JobDescription = i.JobDescription,
+                    Requirements = i.Requirements,
+                    Interest = i.Interest,
+                    PostDate = i.PostDate,
+                    Location = i.Location,
+                    SalaryRange = i.SalaryRange,
+                    ApplyDeadline = i.ApplyDeadline,
+                    Avatar = string.IsNullOrEmpty(k.Avatar) ? "" : baseUrl + "avatar/" + k.Avatar,
+                    JobField = g != null ? g.JobField : null,
+                    EmploymentType = m != null ? m.EmploymentTypeName : null,
+                };
+
+            query = query.Where(j =>
+            (!string.IsNullOrEmpty(Fields) && !string.IsNullOrEmpty(j.JobField) && j.JobField.Contains(Fields!)) ||
+            (!string.IsNullOrEmpty(location) && !string.IsNullOrEmpty(j.Location) && j.Location.Contains(location!)) ||
+            (!string.IsNullOrEmpty(employment) && !string.IsNullOrEmpty(j.EmploymentType) && j.EmploymentType.Contains(employment!))
+        );
+
+
+    if (excludeId.HasValue)
+    {
+        query = query.Where(j => j.Id != excludeId);
+    }
+    if (!string.IsNullOrEmpty(companyname))
+    {
+        query = query.Where(j => j.CompanyName!=companyname);
+    }
+
+    var relatedJobPosts = await query
+            .Take(limitted)
+            .ToListAsync();
+    return Ok(relatedJobPosts);
+}
+
+
+
 
 
     }
