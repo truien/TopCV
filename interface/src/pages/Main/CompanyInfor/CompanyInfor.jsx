@@ -130,7 +130,7 @@ const CompanyInfor = () => {
     return (
         <>
             <Header />
-            <div style={{ backgroundColor: '#F3F5F7' }} className='my-5'>
+            <div style={{ backgroundColor: '#F3F5F7' }} className='mb-5'>
                 <div className='container py-2 '>
                     <ul className={styles['text'] + ' nav d-flex'}>
                         <li className='nav-item'>
@@ -169,7 +169,7 @@ const CompanyInfor = () => {
                             }
                         >
                             <img
-                                src={CompanyInfor.avatar}
+                                src={companyInfor.avatar}
                                 alt='Logo'
                                 className={styles['logo'] + ' rounded-circle'}
                             />

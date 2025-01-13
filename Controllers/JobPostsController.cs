@@ -360,7 +360,95 @@ namespace TopCV.Controllers
                         return Ok(query);
         }
 
+        [HttpGet("filter")]
+        public async Task<IActionResult> FilterJobPosts(
+            string? title = null,
+            string? companyName = null,
+            int? jobFieldId = null,
+            int? employmentTypeId = null,
+            string? location = null,
+            string? salaryrange = null,
+            int page = 1,
+            int pageSize = 10)
+        {
+            if (page <= 0 || pageSize <= 0)
+            {
+                return BadRequest(new { Message = "Page and pageSize must be greater than 0." });
+            }
 
+            var baseUrl = $"{Request.Scheme}://{Request.Host}/";
+            var query = from jobPost in _context.Jobposts
+                        join employer in _context.Useremployers on jobPost.UserEmployer equals employer.UserName
+                        join user in _context.Users on employer.UserName equals user.UserName
+                        join employment in _context.Jobpostemployments on jobPost.Id equals employment.IDJobPost
+                        join jobField in _context.Jobpostfields on jobPost.Id equals jobField.IDJobPost
+                        where jobPost.Status == 1
+                        select new
+                        {
+                            jobPost.Id,
+                            jobPost.Title,
+                            employer.CompanyName,
+                            jobPost.Location,
+                            SalaryRange = string.IsNullOrEmpty(jobPost.SalaryRange) ? "0-0" : jobPost.SalaryRange,
+                            jobPost.JobDescription,
+                            jobPost.PostDate,
+                            jobPost.Requirements,
+                            jobPost.ApplyDeadline,
+                            Avatar = string.IsNullOrEmpty(user.Avatar) ? "" : baseUrl + "avatar/" + user.Avatar,
+                            employment.IDEmploymentType,
+                            jobField.IDJobField
+                        };
+            
+            if (!string.IsNullOrEmpty(title))
+                query = query.Where(j => j.Title.Contains(title));
+            if (!string.IsNullOrEmpty(companyName))
+                query = query.Where(j => j.CompanyName.Contains(companyName));
+            if (!string.IsNullOrEmpty(location))
+                query = query.Where(j => j.Location.Contains(location));
+            if (jobFieldId.HasValue)
+                query = query.Where(j => j.IDJobField == jobFieldId);
+            if (employmentTypeId.HasValue)
+                query = query.Where(j => j.IDEmploymentType == employmentTypeId);
+
+            var jobPosts = await query.ToListAsync();
+
+            if (!string.IsNullOrEmpty(salaryrange))
+            {
+                var salaries = salaryrange.Replace("triệu", "").Trim().Split('-');
+                if (salaries.Length == 2 &&
+                    int.TryParse(salaries[0].Trim(), out int minSalary) &&
+                    int.TryParse(salaries[1].Trim(), out int maxSalary))
+                {
+                    jobPosts = jobPosts.Where(j => IsSalaryInRange(j.SalaryRange, minSalary, maxSalary)).ToList();
+                }
+            }
+
+            var totalCount = jobPosts.Count();
+            var results = jobPosts.GroupBy(j => j.Id).Select(g => g.First()).Skip((page - 1) * pageSize).Take(pageSize).ToList();
+
+            return Ok(new
+            {
+                TotalCount = totalCount,
+                Page = page,
+                PageSize = pageSize,
+                Data = results
+            });
+        }
+
+private bool IsSalaryInRange(string salaryRange, int minSalary, int maxSalary)
+{
+    if (string.IsNullOrEmpty(salaryRange) || !salaryRange.Contains('-'))
+        return false;
+
+    var range = salaryRange.Replace("triệu", "").Trim().Split('-');
+    if (range.Length != 2)
+        return false;
+
+    if (!int.TryParse(range[0].Trim(), out int jobMinSalary) || !int.TryParse(range[1].Trim(), out int jobMaxSalary))
+        return false;
+
+    return jobMinSalary >= minSalary && jobMaxSalary <= maxSalary;
+}
 
     }
 }

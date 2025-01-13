@@ -16,6 +16,12 @@
     height: 150px;
     width: 150px;
 }
+.top {
+    top: 42% !important;
+}
+.ps_6 {
+    padding-left: 6rem !important;
+}
 .title {
     background: linear-gradient(90deg, #1c4742, #22c96d);
     color: #fff;

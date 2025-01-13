@@ -21,7 +21,9 @@ import SettingAccount from './pages/Main/SettingAccount/SettingAccount.jsx';
 import JobPostDetails from './pages/Main/JobPostDetails/JobPostDetails';
 import EmployerInfo from './pages/Main/EmployerInfo/EmployerInfo.jsx';
 import EditJobSeekerForm from './components/EditJobSeekerForm/EditJobSeekerForm.jsx';
-import CompanyInfor from './pages/Main/CompanyInfor/CompanyInfor.jsx'
+import CompanyInfor from './pages/Main/CompanyInfor/CompanyInfor.jsx';
+import SearchJob from './pages/Main/SearchJob/SearchJob.jsx';
+
 function App() {
     const userType = sessionStorage.getItem('userType') || 'guest';
     const routesByUserType = {
@@ -34,6 +36,7 @@ function App() {
                 <Route path='/' element={<MainLayout />}>
                     <Route index element={<Home />} />
                     <Route path='job-post' element={<JobList />} />
+                    <Route path='jobs' element={<SearchJob />} />
                 </Route>
                 <Route path='/admin' element={<AdminLayout />}>
                     <Route index element={<Users />} />

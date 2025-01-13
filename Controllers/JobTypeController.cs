@@ -22,7 +22,13 @@ namespace TopCV.Controllers
         [HttpGet("jobfields")]
         public IActionResult GetJobFields()
         {
-            var jobFields = _context.Jobfields.ToList();
+            var jobFields = _context.Jobfields
+                                    .Select(j => new{
+                                        j.ID,
+                                        j.JobField
+                                    })
+            .ToList();
+            
             return Ok(jobFields);
         }
 
@@ -46,7 +52,12 @@ namespace TopCV.Controllers
         [HttpGet("employmenttypes")]
         public IActionResult GetEmploymentTypes()
         {
-            var employmentTypes = _context.Employmenttypes.ToList();
+            var employmentTypes = _context.Employmenttypes
+                                        .Select(j=> new{
+                                            j.Id,
+                                            j.EmploymentTypeName
+                                        })
+            .ToList();
             return Ok(employmentTypes);
         }
 
