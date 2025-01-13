@@ -6,6 +6,7 @@ import { useState } from 'react';
 
 const Header = () => {
     const navigate = useNavigate();
+    const username = sessionStorage.getItem('username');
     const avatar = sessionStorage.getItem('avatar');
     const userType = sessionStorage.getItem('userType');
     const displayAvatar = avatar || avatarDefault;
@@ -134,12 +135,17 @@ const Header = () => {
                                             zIndex: '1000',
                                         }}
                                     >
-                                        <Link
-                                            to='/account-settings'
-                                            className='dropdown-item'
-                                        >
-                                            Cài đặt tài khoản
-                                        </Link>
+                                        {username !== 'admin' ? (
+                                            <Link
+                                                to='/account-settings'
+                                                className='dropdown-item'
+                                            >
+                                                Cài đặt tài khoản
+                                            </Link>
+                                        ) : (
+                                            <div></div>
+                                        )}
+
                                         <button
                                             onClick={handleLogout}
                                             className='dropdown-item'

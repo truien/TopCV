@@ -1,14 +1,12 @@
 import { useState } from 'react';
 import styles from './styles.module.css';
 import { Link, useNavigate } from 'react-router-dom';
-import { useUserContext } from '@hooks/UserContext.js';
 import { toast } from "react-toastify";
 
 function SignInForm() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
-    const { setUserDetails } = useUserContext();
     const handleLogin = async (event) => {
         event.preventDefault();
         if (!email || !password) {
@@ -55,11 +53,6 @@ function SignInForm() {
                     ? '/employer'
                     : '/'
             );
-            setUserDetails({
-                username: email,
-                userType: data.userType,
-                avatar: data.avatar,
-            });
         } catch (error) {
             toast.error('Tài khoản hoặc mật khẩu không đúng.', {
                 position: 'top-right',

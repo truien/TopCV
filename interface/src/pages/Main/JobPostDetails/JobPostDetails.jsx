@@ -1,10 +1,10 @@
 import { useRef, useState, useEffect } from 'react';
-import { Header } from '@mainlayout';
+import { Header,Footer } from '@mainlayout';
 import coverPhoto from '@images/company_cover.jpg';
 import styles from './JobPostDetails.module.css';
 import RelatedJobs from '@components/RelatedJobs/RelatedJobs.jsx';
 import { TbBuildings } from 'react-icons/tb';
-import { Footer } from '@mainlayout';
+
 import {
     FaMapMarkerAlt,
     FaMoneyBillWave,

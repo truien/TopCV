@@ -3,7 +3,7 @@ import axios from 'axios';
 import styles from './ManageJobPosts.module.css';
 import { toast } from 'react-toastify';
 import DOMPurify from 'dompurify';
-import EditJobSeekerForm from '@components/EditJobSeekerForm/EditJobSeekerForm.jsx';
+import EditJobPostForm from '@components/EditJobPostForm/EditJobPostForm.jsx';
 import ConfirmModal from '@components/ConfirmModal/ConfirmModal.jsx';
 import {
     AiOutlineDelete,
@@ -465,7 +465,7 @@ function ManageJobPosts() {
                         </div>
                     </div>
                 ) : (
-                    <EditJobSeekerForm
+                    <EditJobPostForm
                         idPost={currentPostId}
                         onSave={onSavePost}
                         onCancel={onCancelEdit}

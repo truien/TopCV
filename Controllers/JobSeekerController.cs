@@ -86,10 +86,68 @@ namespace TopCV.Controllers
             return Ok(jobSeeker);
         }
 
-        // [HttpPost]
-        // public async Task<IActionResult> PostJobSeeker(JobSeekerDetailDto seekerDetailDto)
-        // {
-        //     if(await _context.Userjobseekers.AddAsync(u => u.UserName == seekerDetailDto.UserName))
-        // }
+        [HttpGet("/infor/{userName}")]
+            public async Task<IActionResult> GetJobSeeker(string userName)
+            {
+                var jobSeeker = await _context.Userjobseekers
+                    .Where(js=> js.UserName == userName)
+                    .Select(js => new
+                    {
+                        js.UserName,
+                        js.FullName,
+                        js.DateOfBirth,
+                        js.EducationLevel,
+                        js.ExperienceYears,
+                        js.Skills,
+                        js.Address,
+                        CVLink = js.CVFile != null ? $"{Request.Scheme}://{Request.Host}/cv/{Path.GetFileName(js.CVFile)}" : null
+                    })
+                    .FirstOrDefaultAsync();
+
+                if (jobSeeker == null)
+                {
+                    return NotFound("Người tìm việc không tồn tại");
+                }
+
+                return Ok(jobSeeker);
+            }
+        [HttpPut("/{userName}")]
+            public async Task<IActionResult> UpdateJobSeeker(string userName, [FromForm] UserJobSeekerDto updatedJobSeeker, IFormFile? cvFile)
+            {
+                var existingJobSeeker = await _context.Userjobseekers.FirstOrDefaultAsync(js => js.UserName == userName);
+
+                if (existingJobSeeker == null)
+                {
+                    return NotFound("Người tìm việc không tồn tại");
+                }
+
+                // Cập nhật thông tin không liên quan đến file
+                existingJobSeeker.FullName = updatedJobSeeker.FullName;
+                existingJobSeeker.DateOfBirth = updatedJobSeeker.DateOfBirth;
+                existingJobSeeker.EducationLevel = updatedJobSeeker.EducationLevel;
+                existingJobSeeker.ExperienceYears = updatedJobSeeker.ExperienceYears;
+                existingJobSeeker.Skills = updatedJobSeeker.Skills;
+                existingJobSeeker.Address = updatedJobSeeker.Address;
+
+
+                if (cvFile != null)
+                {
+                    var fileName = $"{Guid.NewGuid()}_{cvFile.FileName}";
+                    var filePath = Path.Combine("wwwroot/cv/", fileName);
+
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await cvFile.CopyToAsync(stream);
+                    }
+
+                    existingJobSeeker.CVFile = $"/cv/{fileName}";
+                }
+
+                await _context.SaveChangesAsync();
+
+                return NoContent(); 
+            }
+
+
     }
 }

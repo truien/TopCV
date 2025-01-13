@@ -8,6 +8,7 @@ using System.Text;
 using System.Linq;
 using System;
 using TopCV.Models;
+using TopCV.DTOs;
 using Microsoft.EntityFrameworkCore;
 
 namespace TopCV.Controllers
@@ -27,7 +28,7 @@ namespace TopCV.Controllers
 
 
         [HttpPost("login")]
-        public IActionResult Login([FromBody] User user)
+        public IActionResult Login([FromBody] LoginDto user)
         {
             var existingUser = _context.Users
             .FirstOrDefault(u => u.UserName == user.UserName && u.Password == user.Password);

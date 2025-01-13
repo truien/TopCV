@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "23wGKZYgbLf1VG6QDzYZiCsXutx4rtQSnlYE5ogH78w=",
+  "Hash": "KfRB/M3/iaslTTcORlwhuu/WPFxAJC5YTuHhkqKr43k=",
   "Source": "TopCV",
   "BasePath": "_content/TopCV",
   "Mode": "Default",
@@ -72,6 +72,25 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\avatar\\f5aa9fd6-5761-4479-9dbd-42f637ea8a99.jpg"
+    },
+    {
+      "Identity": "C:\\Users\\admin\\TopCV\\wwwroot\\cv\\f2352198-249d-42d5-a69c-143de68ec326_Báo cáo STKN N8 v2.docx",
+      "SourceId": "TopCV",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\admin\\TopCV\\wwwroot\\",
+      "BasePath": "_content/TopCV",
+      "RelativePath": "cv/f2352198-249d-42d5-a69c-143de68ec326_Báo cáo STKN N8 v2.docx",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\cv\\f2352198-249d-42d5-a69c-143de68ec326_Báo cáo STKN N8 v2.docx"
     }
   ]
 }

@@ -13,6 +13,10 @@
       "PackagePath": "staticwebassets\\avatar\\f5aa9fd6-5761-4479-9dbd-42f637ea8a99.jpg"
     },
     {
+      "Id": "C:\\Users\\admin\\TopCV\\wwwroot\\cv\\f2352198-249d-42d5-a69c-143de68ec326_Báo cáo STKN N8 v2.docx",
+      "PackagePath": "staticwebassets\\cv\\f2352198-249d-42d5-a69c-143de68ec326_Báo cáo STKN N8 v2.docx"
+    },
+    {
       "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.TopCV.Microsoft.AspNetCore.StaticWebAssets.props",
       "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
     },

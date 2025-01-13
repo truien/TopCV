@@ -1,5 +1,5 @@
 import ConfirmModal from '@components/ConfirmModal/ConfirmModal.jsx';
-import EditJobSeekerForm from '@components/EditJobSeekerForm/EditJobSeekerForm.jsx';
+import EditJobPostForm from '@components/EditJobPostForm/EditJobPostForm.jsx';
 import DOMPurify from 'dompurify';
 import axios from 'axios';
 import { toast } from 'react-toastify';
@@ -225,7 +225,7 @@ function JobPostManage() {
                     )}
                 </>
             ) : (
-                <EditJobSeekerForm
+                <EditJobPostForm
                     idPost={currentPostId}
                     onSave={onSavePost}
                     onCancel={onCancelEdit}
