@@ -73,14 +73,14 @@ const EmployerLayout = () => {
                         </span>
                     </Link>
                     <Link
-                        to='/employer/job-post-manage'
+                        to='/employer/manageprofiles'
                         className={`nav-link ${
                             activeLink === '/employer/job-post-manage'
                                 ? 'active'
                                 : ''
                         }`}
                         onClick={() =>
-                            handleLinkClick('/employer/job-post-manage')
+                            handleLinkClick('/employer/manageprofiles')
                         }
                     >
                         <FaBriefcase className='icon' />

@@ -1,19 +1,23 @@
 {
   "Files": [
     {
-      "Id": "C:\\Users\\admin\\TopCV\\wwwroot\\avatar\\20d3065e-319e-435f-a8e7-00749aa348fd.jpg",
+      "Id": "C:\\Users\\admin\\DoAn\\TopCV\\wwwroot\\avatar\\20d3065e-319e-435f-a8e7-00749aa348fd.jpg",
       "PackagePath": "staticwebassets\\avatar\\20d3065e-319e-435f-a8e7-00749aa348fd.jpg"
     },
     {
-      "Id": "C:\\Users\\admin\\TopCV\\wwwroot\\avatar\\685ed672-4728-4c13-8697-5f81d7fb76a4.jpg",
+      "Id": "C:\\Users\\admin\\DoAn\\TopCV\\wwwroot\\avatar\\685ed672-4728-4c13-8697-5f81d7fb76a4.jpg",
       "PackagePath": "staticwebassets\\avatar\\685ed672-4728-4c13-8697-5f81d7fb76a4.jpg"
     },
     {
-      "Id": "C:\\Users\\admin\\TopCV\\wwwroot\\avatar\\f5aa9fd6-5761-4479-9dbd-42f637ea8a99.jpg",
+      "Id": "C:\\Users\\admin\\DoAn\\TopCV\\wwwroot\\avatar\\f5aa9fd6-5761-4479-9dbd-42f637ea8a99.jpg",
       "PackagePath": "staticwebassets\\avatar\\f5aa9fd6-5761-4479-9dbd-42f637ea8a99.jpg"
     },
     {
-      "Id": "C:\\Users\\admin\\TopCV\\wwwroot\\cv\\f2352198-249d-42d5-a69c-143de68ec326_Báo cáo STKN N8 v2.docx",
+      "Id": "C:\\Users\\admin\\DoAn\\TopCV\\wwwroot\\cv\\201bd7ce-ce56-4d09-983f-b9c6917db1f8_8c1fe-Huong-dan-viet-do-an-tot-nghiep-he-CD.docx",
+      "PackagePath": "staticwebassets\\cv\\201bd7ce-ce56-4d09-983f-b9c6917db1f8_8c1fe-Huong-dan-viet-do-an-tot-nghiep-he-CD.docx"
+    },
+    {
+      "Id": "C:\\Users\\admin\\DoAn\\TopCV\\wwwroot\\cv\\f2352198-249d-42d5-a69c-143de68ec326_Báo cáo STKN N8 v2.docx",
       "PackagePath": "staticwebassets\\cv\\f2352198-249d-42d5-a69c-143de68ec326_Báo cáo STKN N8 v2.docx"
     },
     {

@@ -1,9 +1,4 @@
-import {
-    BrowserRouter as Router,
-    Routes,
-    Route,
-    Navigate,
-} from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import MainLayout from '@layouts/MainLayout';
 import AdminLayout from '@layouts/AdminLayout';
 import Home from './pages/Main/Home/Home.jsx';
@@ -15,6 +10,7 @@ import Sign from './components/Sign/Sign.jsx';
 import EmployerLayout from '@layouts/EmployerLayout';
 import JobPostManage from './pages/Employer/JobPostManage/JobPostManage.jsx';
 import CreateJobPost from './pages/Employer/CreateJobPost/CreateJobPost.jsx';
+import ManageCandidateProfiles from './pages/Employer/ManageCandidateProfiles/ManageCandidateProfiles';
 import NotFound from './pages/NotFound/NotFound.jsx';
 import MainSetting from './layouts/MainSetting.jsx';
 import SettingAccount from './pages/Main/SettingAccount/SettingAccount.jsx';
@@ -49,6 +45,10 @@ function App() {
                 <Route path='/employer' element={<EmployerLayout />}>
                     <Route index element={<JobPostManage />} />
                     <Route path='createjobpost' element={<CreateJobPost />} />
+                    <Route
+                        path='manageprofiles'
+                        element={<ManageCandidateProfiles />}
+                    />
                 </Route>
                 <Route path='/login' element={<Login />} />
                 <Route path='/jobposts/:id' element={<JobPostDetails />} />
@@ -59,9 +59,7 @@ function App() {
                     <Route index element={<SettingAccount />} />
                     <Route
                         path='settings-infor'
-                        element={
-                            routesByUserType[userType] || <Navigate to='*' />
-                        }
+                        element={routesByUserType[userType]}
                     />
                 </Route>
             </Routes>

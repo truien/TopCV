@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "OD4E++ypcXw=",
+  "dgSpecHash": "wln/+oaEoq8=",
   "success": true,
-  "projectFilePath": "C:\\Users\\admin\\TopCV\\TopCV.csproj",
+  "projectFilePath": "C:\\Users\\admin\\DoAn\\TopCV\\TopCV.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\admin\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
     "C:\\Users\\admin\\.nuget\\packages\\microsoft.aspnetcore.authentication.jwtbearer\\8.0.10\\microsoft.aspnetcore.authentication.jwtbearer.8.0.10.nupkg.sha512",

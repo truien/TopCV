@@ -147,7 +147,18 @@ namespace TopCV.Controllers
 
                 return NoContent(); 
             }
-
+        [HttpGet("/CVFile/{userName}")]
+        public async Task<IActionResult> GetCVFile(string userName)
+        {
+            var jobSeeker = await _context.Userjobseekers
+                    .Where(js=> js.UserName == userName)
+                    .Select(js => new
+                    {
+                        js.CVFile
+                    })
+                    .FirstOrDefaultAsync();
+                    return Ok(jobSeeker);
+        }
 
     }
 }

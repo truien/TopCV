@@ -2910,11 +2910,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\admin\\TopCV\\TopCV.csproj",
+      "projectUniqueName": "C:\\Users\\admin\\DoAn\\TopCV\\TopCV.csproj",
       "projectName": "TopCV",
-      "projectPath": "C:\\Users\\admin\\TopCV\\TopCV.csproj",
+      "projectPath": "C:\\Users\\admin\\DoAn\\TopCV\\TopCV.csproj",
       "packagesPath": "C:\\Users\\admin\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\admin\\TopCV\\obj\\",
+      "outputPath": "C:\\Users\\admin\\DoAn\\TopCV\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\admin\\AppData\\Roaming\\NuGet\\NuGet.Config"

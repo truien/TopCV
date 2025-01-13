@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "KfRB/M3/iaslTTcORlwhuu/WPFxAJC5YTuHhkqKr43k=",
+  "Hash": "LTQMzV5Bfh1DBTISfr+2szGXOH0Df7EpIojZLZCLa4o=",
   "Source": "TopCV",
   "BasePath": "_content/TopCV",
   "Mode": "Default",
@@ -10,17 +10,17 @@
     {
       "Name": "TopCV\\wwwroot",
       "Source": "TopCV",
-      "ContentRoot": "C:\\Users\\admin\\TopCV\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\admin\\DoAn\\TopCV\\wwwroot\\",
       "BasePath": "_content/TopCV",
       "Pattern": "**"
     }
   ],
   "Assets": [
     {
-      "Identity": "C:\\Users\\admin\\TopCV\\wwwroot\\avatar\\20d3065e-319e-435f-a8e7-00749aa348fd.jpg",
+      "Identity": "C:\\Users\\admin\\DoAn\\TopCV\\wwwroot\\avatar\\20d3065e-319e-435f-a8e7-00749aa348fd.jpg",
       "SourceId": "TopCV",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\admin\\TopCV\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\admin\\DoAn\\TopCV\\wwwroot\\",
       "BasePath": "_content/TopCV",
       "RelativePath": "avatar/20d3065e-319e-435f-a8e7-00749aa348fd.jpg",
       "AssetKind": "All",
@@ -36,10 +36,10 @@
       "OriginalItemSpec": "wwwroot\\avatar\\20d3065e-319e-435f-a8e7-00749aa348fd.jpg"
     },
     {
-      "Identity": "C:\\Users\\admin\\TopCV\\wwwroot\\avatar\\685ed672-4728-4c13-8697-5f81d7fb76a4.jpg",
+      "Identity": "C:\\Users\\admin\\DoAn\\TopCV\\wwwroot\\avatar\\685ed672-4728-4c13-8697-5f81d7fb76a4.jpg",
       "SourceId": "TopCV",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\admin\\TopCV\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\admin\\DoAn\\TopCV\\wwwroot\\",
       "BasePath": "_content/TopCV",
       "RelativePath": "avatar/685ed672-4728-4c13-8697-5f81d7fb76a4.jpg",
       "AssetKind": "All",
@@ -55,10 +55,10 @@
       "OriginalItemSpec": "wwwroot\\avatar\\685ed672-4728-4c13-8697-5f81d7fb76a4.jpg"
     },
     {
-      "Identity": "C:\\Users\\admin\\TopCV\\wwwroot\\avatar\\f5aa9fd6-5761-4479-9dbd-42f637ea8a99.jpg",
+      "Identity": "C:\\Users\\admin\\DoAn\\TopCV\\wwwroot\\avatar\\f5aa9fd6-5761-4479-9dbd-42f637ea8a99.jpg",
       "SourceId": "TopCV",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\admin\\TopCV\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\admin\\DoAn\\TopCV\\wwwroot\\",
       "BasePath": "_content/TopCV",
       "RelativePath": "avatar/f5aa9fd6-5761-4479-9dbd-42f637ea8a99.jpg",
       "AssetKind": "All",
@@ -74,10 +74,29 @@
       "OriginalItemSpec": "wwwroot\\avatar\\f5aa9fd6-5761-4479-9dbd-42f637ea8a99.jpg"
     },
     {
-      "Identity": "C:\\Users\\admin\\TopCV\\wwwroot\\cv\\f2352198-249d-42d5-a69c-143de68ec326_Báo cáo STKN N8 v2.docx",
+      "Identity": "C:\\Users\\admin\\DoAn\\TopCV\\wwwroot\\cv\\201bd7ce-ce56-4d09-983f-b9c6917db1f8_8c1fe-Huong-dan-viet-do-an-tot-nghiep-he-CD.docx",
       "SourceId": "TopCV",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\admin\\TopCV\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\admin\\DoAn\\TopCV\\wwwroot\\",
+      "BasePath": "_content/TopCV",
+      "RelativePath": "cv/201bd7ce-ce56-4d09-983f-b9c6917db1f8_8c1fe-Huong-dan-viet-do-an-tot-nghiep-he-CD.docx",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\cv\\201bd7ce-ce56-4d09-983f-b9c6917db1f8_8c1fe-Huong-dan-viet-do-an-tot-nghiep-he-CD.docx"
+    },
+    {
+      "Identity": "C:\\Users\\admin\\DoAn\\TopCV\\wwwroot\\cv\\f2352198-249d-42d5-a69c-143de68ec326_Báo cáo STKN N8 v2.docx",
+      "SourceId": "TopCV",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\admin\\DoAn\\TopCV\\wwwroot\\",
       "BasePath": "_content/TopCV",
       "RelativePath": "cv/f2352198-249d-42d5-a69c-143de68ec326_Báo cáo STKN N8 v2.docx",
       "AssetKind": "All",

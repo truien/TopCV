@@ -48,6 +48,22 @@
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       <OriginalItemSpec>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\avatar\f5aa9fd6-5761-4479-9dbd-42f637ea8a99.jpg))</OriginalItemSpec>
     </StaticWebAsset>
+    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\cv\201bd7ce-ce56-4d09-983f-b9c6917db1f8_8c1fe-Huong-dan-viet-do-an-tot-nghiep-he-CD.docx))">
+      <SourceType>Package</SourceType>
+      <SourceId>TopCV</SourceId>
+      <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
+      <BasePath>_content/TopCV</BasePath>
+      <RelativePath>cv/201bd7ce-ce56-4d09-983f-b9c6917db1f8_8c1fe-Huong-dan-viet-do-an-tot-nghiep-he-CD.docx</RelativePath>
+      <AssetKind>All</AssetKind>
+      <AssetMode>All</AssetMode>
+      <AssetRole>Primary</AssetRole>
+      <RelatedAsset></RelatedAsset>
+      <AssetTraitName></AssetTraitName>
+      <AssetTraitValue></AssetTraitValue>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <OriginalItemSpec>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\cv\201bd7ce-ce56-4d09-983f-b9c6917db1f8_8c1fe-Huong-dan-viet-do-an-tot-nghiep-he-CD.docx))</OriginalItemSpec>
+    </StaticWebAsset>
     <StaticWebAsset Include="$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\cv\f2352198-249d-42d5-a69c-143de68ec326_Báo cáo STKN N8 v2.docx))">
       <SourceType>Package</SourceType>
       <SourceId>TopCV</SourceId>

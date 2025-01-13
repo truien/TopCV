@@ -34,6 +34,7 @@ function RelatedJobs({ job, fetchJobDetail, JobDetailCache }) {
         (-new Date(job.postDate).getTime() + new Date().getTime()) /
             (1000 * 60 * 60 * 24)
     );
+    
 
     return (
         <>

@@ -1,9 +1,10 @@
 import { useRef, useState, useEffect } from 'react';
-import { Header,Footer } from '@mainlayout';
+import { Header, Footer } from '@mainlayout';
 import coverPhoto from '@images/company_cover.jpg';
 import styles from './JobPostDetails.module.css';
 import RelatedJobs from '@components/RelatedJobs/RelatedJobs.jsx';
 import { TbBuildings } from 'react-icons/tb';
+import { toast } from 'react-toastify';
 
 import {
     FaMapMarkerAlt,
@@ -13,9 +14,10 @@ import {
 } from 'react-icons/fa';
 import { FaCircleQuestion } from 'react-icons/fa6';
 import DOMPurify from 'dompurify';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import easyapply from '@images/easy-apply.png';
+import { string } from 'prop-types';
 function JobPostDetails() {
     const { id } = useParams();
     const [jobPost, setJobPost] = useState(null);
@@ -26,6 +28,8 @@ function JobPostDetails() {
     const companyJobsRef = useRef(null);
     const relatedJobsRef = useRef(null);
     const JobDetailCache = {};
+    const navigate = useNavigate();
+
     useEffect(() => {
         const fetchJobPostDetails = async () => {
             try {
@@ -118,6 +122,64 @@ function JobPostDetails() {
             } catch (error) {
                 console.error('Lỗi tải bài viết:', error);
             }
+        }
+    };
+
+    const handleApplyJob = async (selectedJobPostId) => {
+        const Username = sessionStorage.getItem('username');
+
+        if (!Username) {
+            toast.warning('Vui lòng đăng nhập để ứng tuyển!');
+            navigate('/login');
+            return;
+        }
+
+        try {
+            const cvResponse = await fetch(
+                `http://localhost:5224/CVFile/${Username}`
+            );
+            if (!cvResponse.ok) {
+                toast.error('Không thể tải CV. Vui lòng kiểm tra lại.');
+                return;
+            }
+
+            const cvData = await cvResponse.json();
+            const userCvFile = cvData.cvFile;
+
+            if (!userCvFile) {
+                toast.warning(
+                    'CV của bạn không tồn tại. Vui lòng tải lên CV trước.'
+                );
+                navigate('/account-settings/settings-infor');
+                return;
+            }
+            const applicationData = {
+                jobPostID: selectedJobPostId,
+                userJobseeker: Username,
+                cvfile: userCvFile,
+            };
+
+            const response = await fetch(
+                'http://localhost:5224/api/Applications',
+                {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(applicationData),
+                }
+            );
+
+            if (response.ok) {
+                toast.success('Ứng tuyển thành công!');
+            } else if (response.status === 409) {
+                toast.warning('Bạn đã ứng tuyển vào bài tuyển dụng này rồi!');
+            } else {
+                toast.error('Ứng tuyển thất bại, vui lòng thử lại.');
+            }
+        } catch (error) {
+            console.error('Lỗi khi ứng tuyển:', error);
+            toast.error('Đã xảy ra lỗi. Vui lòng thử lại.');
         }
     };
 
@@ -246,7 +308,12 @@ function JobPostDetails() {
 
                             {/* Nút hành động */}
                             <div className='d-flex justify-content-start'>
-                                <button className='btn btn-success me-3'>
+                                <button
+                                    onClick={() => {
+                                        handleApplyJob(jobPost.id);
+                                    }}
+                                    className='btn btn-success me-3'
+                                >
                                     <FaRegCalendarAlt className='me-2' />
                                     Ứng tuyển ngay
                                 </button>
@@ -409,6 +476,9 @@ function JobPostDetails() {
                                     {/* Nút hành động */}
                                     <div className='my-4 d-flex '>
                                         <button
+                                            onClick={() => {
+                                                handleApplyJob(jobPost.id);
+                                            }}
                                             className={
                                                 styles[
                                                     'jobDetailsContainer_btn'
