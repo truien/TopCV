@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using TopCV.DTOs;
 using TopCV.Models;
 
@@ -116,6 +117,78 @@ namespace TopCV.Controllers
 
             return CreatedAtAction(nameof(PostJobPostEmployment), new { id = jobPostEmployment.IDJobPost }, jobPostEmployment);
         }
+
+[HttpPut("updateJobField/{id}")]
+public async Task<IActionResult> UpdateJobField(int id, [FromBody] UpdateJobFieldDto updateJobFieldDto)
+{
+    if (id != updateJobFieldDto.ID)
+    {
+        return BadRequest("ID không hợp lệ.");
+    }
+    var jobField = await _context.Jobfields.FindAsync(id);
+    if (jobField == null)
+    {
+        return NotFound("Danh mục ngành nghề không tìm thấy.");
+    }
+    jobField.JobField = updateJobFieldDto.JobField;
+    _context.Entry(jobField).State = EntityState.Modified;
+    
+    await _context.SaveChangesAsync();
+
+    return NoContent();
+}
+
+
+    // API sửa loại công việc
+    [HttpPut("updateEmploymentType/{id}")]
+public async Task<IActionResult> UpdateEmploymentType(int id, [FromBody] UpdateEmploymentTypeDto updateEmploymentTypeDto)
+{
+    if (id != updateEmploymentTypeDto.Id)
+    {
+        return BadRequest("ID không hợp lệ.");
+    }
+    var employmentType = await _context.Employmenttypes.FindAsync(id);
+    if (employmentType == null)
+    {
+        return NotFound("Loại công việc không tìm thấy.");
+    }
+    employmentType.EmploymentTypeName = updateEmploymentTypeDto.EmploymentTypeName;
+    _context.Entry(employmentType).State = EntityState.Modified;
+    await _context.SaveChangesAsync();
+    return NoContent(); 
+}
+
+    [HttpDelete("jobfields/{id}")]
+        public async Task<IActionResult> DeleteJobField(int id)
+        {
+            var field = await _context.Jobfields.FindAsync(id);
+            if (field == null)
+            {
+                return NotFound();
+            }
+
+            _context.Jobfields.Remove(field);
+            await _context.SaveChangesAsync();
+
+            return NoContent(); 
+        }
+[HttpDelete("employmenttypes/{id}")]
+        public async Task<IActionResult> DeleteEmploymentType(int id)
+        {
+            var employment = await _context.Employmenttypes.FindAsync(id);
+            if (employment == null)
+            {
+                return NotFound(); 
+            }
+
+            _context.Employmenttypes.Remove(employment);
+            await _context.SaveChangesAsync();
+
+            return NoContent(); 
+        }
+
+
+
         // PUT: api/JobType/update-jobpostcategories/{jobPostId}
         // [HttpPut("update-jobpostcategories/{jobPostId}")]
         // public async Task<IActionResult> UpdateJobPostCategories(int jobPostId, List<int> newJobFieldIds, List<int> newEmploymentTypeIds)

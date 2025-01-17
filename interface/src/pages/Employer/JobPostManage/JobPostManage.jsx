@@ -10,7 +10,7 @@ import {
     AiOutlineEye,
     AiOutlineFileAdd,
 } from 'react-icons/ai';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 function JobPostManage() {
     const navigate = useNavigate();
@@ -205,12 +205,13 @@ function JobPostManage() {
                                                             </button>
                                                         </li>
                                                         <li>
-                                                            <button
+                                                            <Link
+                                                                to = '/managecatery'
                                                                 className='dropdown-item'
-                                                                // onClick={onEditCategory}
+                                                                
                                                             >
                                                                 Sửa danh mục
-                                                            </button>
+                                                            </Link>
                                                         </li>
                                                     </ul>
                                                 </div>

@@ -9,6 +9,7 @@ import Login from './components/Login/Login.jsx';
 import Sign from './components/Sign/Sign.jsx';
 import EmployerLayout from '@layouts/EmployerLayout';
 import JobPostManage from './pages/Employer/JobPostManage/JobPostManage.jsx';
+import ManageCatery from './pages/Employer/ManageCatery/ManageCatery.jsx';
 import CreateJobPost from './pages/Employer/CreateJobPost/CreateJobPost.jsx';
 import ManageCandidateProfiles from './pages/Employer/ManageCandidateProfiles/ManageCandidateProfiles';
 import NotFound from './pages/NotFound/NotFound.jsx';
@@ -41,6 +42,7 @@ function App() {
                         element={<ManageJobPosts />}
                     />
                     <Route path='settings' element={<SettingAccount />} />
+                    <Route path='managecatery' element={<ManageCatery />} />
                 </Route>
                 <Route path='/employer' element={<EmployerLayout />}>
                     <Route index element={<JobPostManage />} />

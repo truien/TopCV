@@ -85,6 +85,18 @@ const AdminLayout = () => {
                         </span>
                     </Link>
                     <Link
+                        to='/admin/managecatery'
+                        className={`nav-link`}
+                        onClick={() =>
+                            handleLinkClick('/admin/job-post-manage')
+                        }
+                    >
+                        <FaBriefcase className='icon' />
+                        <span className='link-text fw-bolder'>
+                            Quản lý danh mục
+                        </span>
+                    </Link>
+                    <Link
                         to='/admin/settings'
                         className={`nav-link ${
                             activeLink === '/admin/settings' ? 'active' : ''

@@ -12,6 +12,7 @@ import {
     AiOutlineCloseCircle,
     AiOutlineEye,
 } from 'react-icons/ai';
+import { Link } from 'react-router-dom';
 
 function ManageJobPosts() {
     const [jobPosts, setJobPosts] = useState([]);
@@ -344,14 +345,13 @@ function ManageJobPosts() {
                                                                                             </button>
                                                                                         </li>
                                                                                         <li>
-                                                                                            <button
-                                                                                                className='dropdown-item'
+                                                                                            <Link
+                                                                                            to = '/admin/managecatery'
+                                                                                                className= 'btn dropdown-item'
                                                                                                 // onClick={onEditCategory}
                                                                                             >
-                                                                                                Sửa
-                                                                                                danh
-                                                                                                mục
-                                                                                            </button>
+                                                                                                Quản lý danh mục
+                                                                                            </Link>
                                                                                         </li>
                                                                                     </ul>
                                                                                 </div>
